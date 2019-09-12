@@ -12,8 +12,8 @@ void ImplAssembly::matrixAssemblyRoutine()
 	std::cout<<"BEGIN: MATRIX ASSEMBLY ROUTINE****\n";
 	globalK.matrixResize(disc->getTotalDOF(),disc->getTotalDOF());
 	std::cout<<"   THE GLOBAL K HAS BEEN INITILIZED:";
-	std::cout<<globalK;
-	std::cout<<"   THE NUMBER OF ELEMENTS IS: "<<E<<"\n\n";
+	//std::cout<<globalK;
+	//std::cout<<"   THE NUMBER OF ELEMENTS IS: "<<E<<"\n\n";
 	//iterate through every element
 	for(int e=0;e<E;++e)
 	{
@@ -44,7 +44,7 @@ void ImplAssembly::matrixAssemblyRoutine()
 	}
 	std::cout<<"RESULT GLOBAL MATRIX IS: \n";
 	std::cout<<globalK;
-	std::cout<<globalK;
+	
 	std::cout<<"END: MATRIX ASSEMBLY ROUTINE****\n";
 }
 void ImplAssembly::vectorAssemblyRoutine()
@@ -91,10 +91,10 @@ void ImplAssembly::vectorAssemblyRoutine()
 
 	std::cout<<"END: VECTOR ASSEMBLY ROUTINE******\n";
 }
-void ImplAssembly::localSolutionVectorAssemblyRoutine()
+void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolution)
 {
 	std::cout<<"BEGIN: LOCAL SOLUTION VECTOR ASSEMBLY ROUTINE******\n";
-	globalF.resize(disc->getTotalDOF());
+	//globalF.resize(disc->getTotalDOF());
 	int totalNodes=disc->getMesh().getNumNodes();
 	int dpn=disc->getDofPerNode();
 	int index;
@@ -107,7 +107,7 @@ void ImplAssembly::localSolutionVectorAssemblyRoutine()
 			int index=connectivityArray(el,i);
 			if(index>=0)
 			{
-				el->getElementSolutionVector()[i]=globalF[index];
+				el->getElementSolutionVector()[i]=globalSolution[index];
 			}
 		}
 	}

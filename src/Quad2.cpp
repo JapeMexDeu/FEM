@@ -74,7 +74,7 @@ void Quad2::calculateMatrix()
 		//std::cout<<"FOR GAUSS POINT"<<i+1<<"\n";
 		
 		GaussIntegration::setPoint2GPi(i);//must have an i
-		GaussIntegration::showCurrentPoint();
+		//GaussIntegration::showCurrentPoint();
 		calculateJacobian(Jacobian);
 		calculateG(G);
 		assembleA(A,Jacobian);

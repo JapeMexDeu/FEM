@@ -24,7 +24,7 @@ class Assembly
 		 */
 		virtual void matrixAssemblyRoutine()=0;
 		virtual void vectorAssemblyRoutine()=0;
-		virtual void localSolutionVectorAssemblyRoutine()=0;
+		virtual void localSolutionVectorAssemblyRoutine(Vector<double>& globalSolution)=0;
 	private:
 		/*!\brief Receives element and an index {0,dofsPerNode} -which is element type dependent, and returns the global Node number.
 		 *This function maps the received element el and an index i that goes from 0 to n-1 (number of dofs per element), to the dofNumber inside a 

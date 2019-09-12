@@ -31,7 +31,7 @@ class LinearIteration
 	public:
 		LinearIteration(Matrix<double>* A, Vector<double>* b, 
 						LinearIterator* iterator=nullptr, 
-						double tolerance=10e-12, int maxIterations=3000);
+						double tolerance=10e-3, int maxIterations=3000);
 		
 		//setters and getters
 		void setLinearIterator(LinearIterator* b);

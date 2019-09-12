@@ -13,7 +13,7 @@ double GaussIntegration::evaluate(Function& func)
 	double result=0;
 	for(int i=0;i<4;++i)
 	{
-		std::cout<<i<<" ksi: "<<points[i][0]<<", eta: "<<points[i][1]<<"\n";
+		//std::cout<<i<<" ksi: "<<points[i][0]<<", eta: "<<points[i][1]<<"\n";
 		result+=func.eval(points[i][0],points[i][1]);
 	}
 	return result;

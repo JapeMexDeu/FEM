@@ -9,13 +9,14 @@
 #ifndef IMPLASSEMBLY_H
 #define IMPLASSEMBLY_H
 #include"Assembly.h"
+
 class ImplAssembly:public Assembly
 {
 	public:
 		ImplAssembly(Discretization* disc);
 		virtual void matrixAssemblyRoutine()override;
 		virtual void vectorAssemblyRoutine()override;
-		virtual void localSolutionVectorAssemblyRoutine() override;
+		virtual void localSolutionVectorAssemblyRoutine(Vector<double>& globalSolution) override;
 		void printImplAssembly();
 		//Setters and getters
 		Matrix<double>& getGlobalMatrix();

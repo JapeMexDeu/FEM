@@ -34,6 +34,8 @@ set(SOURCES src/Vector.h
 			src/solver/Solver.cpp
 			src/plotter/gnuplot_i.cpp
 			src/CustomMesh.cpp
+			src/tensors/Tensor.cpp
+			src/tensors/Stress.cpp
 )
 
 #location of include directories

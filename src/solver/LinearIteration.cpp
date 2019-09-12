@@ -21,7 +21,7 @@ void LinearIteration::iterate()
 	calculateResiduum(residuum);
 	
 	double max=residuum.norm();
-	std::cout<<"ITERATION"<<"    RESIDUUM NORM\n";
+	//std::cout<<"ITERATION"<<"    RESIDUUM NORM\n";
 	
 	//std::setprecision(5);
 	
@@ -29,14 +29,14 @@ void LinearIteration::iterate()
 	while(residuum.norm()>tolerance&&count<maxIterations)
 	{
 		
-		std::cout<<"     "<<count<<"              ";
+		//std::cout<<"     "<<count<<"              ";
 		iterates.push_back(count);
-		std::cout<<residuum.norm()/max<<"\n";
+		//std::cout<<residuum.norm()<<"\n";
 		error.push_back(residuum.norm());
 		//calculate corrector
 		calculateCorrector(residuum, c);
-		c*=.90;
-		u+=c;
+		c*=0.9;
+		this->u+=c;
 		//std::cout<<"        "<<u<<residuum<<c;
 		//update residuum
 		//residuum_temp=(*A)*c;
@@ -47,10 +47,10 @@ void LinearIteration::iterate()
 		
 	}
 	
-	std::cout<<"SIZE OF ERROR IS: "<<error.size()<<"\n";
-	std::cout<<"SIZE OF COUNT IS: "<<iterates.size()<<"\n";
+	//std::cout<<"SIZE OF ERROR IS: "<<error.size()<<"\n";
+	//std::cout<<"SIZE OF COUNT IS: "<<iterates.size()<<"\n";
 	std::cout<<"SOLUTION VECTOR IS: \n"<<u;
-	std::cout<<(*A);
+	//std::cout<<(*A);
 	std::cout<<(*b);
 }
 //SETTERS AND GETTERS

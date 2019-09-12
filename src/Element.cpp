@@ -11,8 +11,13 @@ void Element::print()
 	{
 		std::cout<<nodes[i]->getNodeNumber()<<" ";
 	}
+	
+	if(!solution.empty())
+	{
+		std::cout<<"NODAL VALUES ARE:\n";
+		std::cout<<solution;
+	}
 	std::cout<<"\n";
-
 }
 
 
@@ -77,6 +82,11 @@ else
 		for(int i=0;i<el.nodes.size();++i)
 	{
 		out<<el.getElementNodes()[i]->getNodeNumber()<<"  ";
+	}
+	if(!el.solution.empty())
+	{
+		out<<"NODAL VALUES ARE:\n";
+		out<<el.solution;
 	}
 	out<<"\n";
 }
