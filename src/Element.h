@@ -19,6 +19,7 @@
 #include"Node.h"
 #include"Function.h"
 #include"GaussIntegration.h"
+#include"Tensors/Stress.h"
 class Element
 {
 	public:
