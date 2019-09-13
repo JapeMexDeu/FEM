@@ -40,6 +40,7 @@ class Element
 		//FUNCTIONS THAT CALCULATE
 		virtual void calculateMatrix()=0;
 		void resizeElementSolutionVector(int n);
+		void computeTensorialResults();
 		//OPERATOR OVERLOAD
 		friend std::ostream& operator<<(std::ostream &out, Element& el);
 		
@@ -61,7 +62,7 @@ class Element
 		static int totalElements;/**<Elements in whole structure*/
 	
 	private:
-		void computeTensorialResults();
+		
 		virtual void calculateBReducedIntegration()=0;
 		/*!\brief Type-dependent implementation, every element declares the jacobian matrix elements as Function instances and call Gauss integration
 		 */

@@ -27,13 +27,14 @@ void PlaneStress::assembleTensors(Vector<double>& v, Tensor& strains, Tensor& st
 	//vector s is the vectorial stress
 	Vector<double> s;
 	s=C*v;
+	//std::cout<<s<<v;
 	strains[0]=v[0];
 	strains[1]=v[1];
-	strains[3]=v[3];
+	strains[3]=v[2];
 	
 	stresses[0]=s[0];
 	stresses[1]=s[1];
-	stresses[3]=s[3];
+	stresses[3]=s[2];
 	
 	strains[2]=(-1*mu)*(s[0]+s[1])/E;
 }

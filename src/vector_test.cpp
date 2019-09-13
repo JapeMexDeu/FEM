@@ -23,6 +23,7 @@
 using std::cout;
 int main(int argc, char* argv[])
 {
+	/*
 	std::vector<double> v{1,2,3,4,5};
 	Vector<double> v1{1,2,3,4};
 	//Vector<double> v2=v;
@@ -46,7 +47,8 @@ int main(int argc, char* argv[])
 	cout<<t2;
 	cout<<mat1.getConstitutiveMatrix()*t1;
 	cout<<t2.hydrostaticPressure();
-	/*
+	*/
+	PlaneStress mat1(0.2,3000000);
 	CustomMesh cm(8,3);
 	cm.getNodes()[0].setPosition(0,5,0);
 	cm.getNodes()[1].setPosition(0,12,0);
@@ -114,7 +116,7 @@ int main(int argc, char* argv[])
 	 g1.cmd("set yrange[0:1]");
 	g1.plot_xy(solver.getLinearIteration().getIterates(), solver.getLinearIteration().getError(),"funny");
 	sleep(15);
-		*/
+		
 	
 	return 0;
 }

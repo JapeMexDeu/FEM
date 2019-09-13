@@ -94,6 +94,10 @@ else
 	{
 		out<<"NODAL VALUES ARE:\n";
 		out<<el.solution;
+		out<<"STRAINS ARE: \n";
+		out<<el.strain;
+		out<<"STRESSES ARE: \n";
+		out<<el.stress;
 	}
 	out<<"\n";
 }

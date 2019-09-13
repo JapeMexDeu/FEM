@@ -110,6 +110,7 @@ void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolu
 				el->getElementSolutionVector()[i]=globalSolution[index];
 			}
 		}
+		el->computeTensorialResults();
 	}
 	std::cout<<"END: LOCAL SOLUTION VECTOR ASSEMBLY ROUTINE******\n";
 }
