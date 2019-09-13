@@ -123,6 +123,18 @@ void Quad2::calculateMatrix()
 	
 }
 /*PRIVATE METHODS FOR CALCULATION OF STIFFNESS MATRIX AND OTHER STUFF*/
+void Quad2::calculateBReducedIntegration()
+{
+	GaussIntegration::setPoint(0,0);
+	Matrix<double> Jacobian(2,2);
+	Matrix<double> G(4,8);
+	Matrix<double> A(3,4);
+	calculateJacobian(Jacobian);
+	calculateG(G);
+	assembleA(A, Jacobian);
+	
+	B=A*G;
+}
 void Quad2::calculateJacobian(Matrix<double>& Jacobian)
 {
 	//For the first row

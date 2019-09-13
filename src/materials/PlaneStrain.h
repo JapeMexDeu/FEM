@@ -5,6 +5,7 @@ class PlaneStrain:public ElasticMaterial
 {
 	public:
 		PlaneStrain(double mu, double E);
+		virtual void assembleTensors(Vector<double>& v, Tensor& strains, Tensor& stresses)override;
 		virtual std::string getType()override;
 	private:
 	

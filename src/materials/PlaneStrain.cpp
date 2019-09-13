@@ -22,3 +22,19 @@ std::string PlaneStrain::getType()
 {
 	return type;
 }
+
+void PlaneStrain::assembleTensors(Vector<double>& v, Tensor& strains, Tensor& stresses)
+{
+	//vector s is the vectorial stress
+	Vector<double> s;
+	s=C*v;
+	strains[0]=v[0];
+	strains[1]=v[1];
+	strains[3]=v[3];
+	
+	stresses[0]=s[0];
+	stresses[1]=s[1];
+	stresses[3]=s[3];
+	
+	stresses[2]=E*mu*(v[0]+v[1])/((1+mu)*(1-2*mu));
+}

@@ -66,6 +66,12 @@ void Element::resizeElementSolutionVector(int n)
 {
 	solution.resize(n);
 }
+void Element::computeTensorialResults()
+{
+	calculateBReducedIntegration();
+	Vector<double> sol=B*solution;
+	material->assembleTensors(sol, strain, stress);
+}
 std::ostream& operator<<(std::ostream& out, Element& el)
 {
 out<<"MATERIAL: ";

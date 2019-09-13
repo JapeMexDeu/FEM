@@ -19,7 +19,7 @@
 #include"Node.h"
 #include"../fem/Function.h"
 #include"../fem/GaussIntegration.h"
-#include"../Tensors/Stress.h"
+#include"../tensors/Tensor.h"
 class Element
 {
 	public:
@@ -44,7 +44,9 @@ class Element
 		friend std::ostream& operator<<(std::ostream &out, Element& el);
 		
 	protected:
-	
+		//Stresses and strains
+		Tensor stress;/**<Default sized to 6 elements*/
+		Tensor strain;
 		Element(ElasticMaterial* mat=nullptr);
 		ElasticMaterial* material;/**<Material mode, pointer of non-instantiable class*/
 		GaussIntegration g;
@@ -59,6 +61,8 @@ class Element
 		static int totalElements;/**<Elements in whole structure*/
 	
 	private:
+		void computeTensorialResults();
+		virtual void calculateBReducedIntegration()=0;
 		/*!\brief Type-dependent implementation, every element declares the jacobian matrix elements as Function instances and call Gauss integration
 		 */
 		virtual void calculateJacobian(Matrix<double>& Jacobian)=0;
