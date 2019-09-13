@@ -1,7 +1,7 @@
 #ifndef NAIVEMESH_H
 #define NAIVEMESH_H
 #include"Mesh.h"
-#include"Quad2.h"
+#include"../elements/Quad2.h"
 class NaiveMesh:public Mesh
 {
 	public:

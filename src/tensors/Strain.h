@@ -1,18 +1,16 @@
-#ifndef STRESS_H
-#define STRESS_H
+#ifndef STRAIN_H
+#define STRAIN_H
 
 #include"Tensor.h"
 
-class Stress:public Tensor
+class Strain: public Tensor
 {
-	public: 
-		Stress(std::size_t sz=6);
-		Stress deviatoricTensor();
+	public:
+		Strain(std::size_t sz=6);
+		Strain deviatoricTensor();
 		virtual double hydrostaticPressure()override;
-		
 	public:
 		using Tensor::Tensor;
 		using Tensor::operator=;
 };
-
 #endif

@@ -8,7 +8,7 @@
 #ifndef TENSOR_H
 #define TENSOR_H
 
-#include"../Vector.h"
+#include"../algebra/Vector.h"
 
 
 class Tensor:public Vector<double> 

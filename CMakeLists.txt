@@ -7,35 +7,44 @@ message(${ROOT_DIR}})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/lib)
-#compiler flags
-#SET(GCC_COVERAGE_COMPILE_FLAGS "-DDEBUGGA")
-#SET(CMAKE_CXX_FLAGS  "${GCC_COVERAGE_COMPILE_FLAGS}")
+
 #adding the sources manually
-set(SOURCES src/Vector.h
-			src/Node.cpp
-			src/Mesh.cpp
-			src/Element.cpp
-			src/NaiveMesh.cpp
-			src/Quad2.cpp
-			src/Matrix.h
-			src/Discretization.cpp
-			src/BoundaryConditions.cpp
-			src/MechanicalBoundaryConditions.cpp
-			src/Function.h
-			src/TestFunction.h
-			src/GaussIntegration.cpp
-			src/ElasticMaterial.cpp
-			src/PlaneStress.cpp
-			src/PlaneStrain.cpp
-			src/ImplAssembly.cpp
-			src/Force.cpp
+set(SOURCES src/algebra/Vector.h
+			src/algebra/Matrix.h
+			
+			src/meshing/Mesh.cpp
+			src/meshing/NaiveMesh.cpp
+			src/meshing/CustomMesh.cpp
+			
+			src/elements/Element.cpp
+			src/elements/Quad2.cpp
+			src/elements/Node.cpp
+			
+			src/materials/ElasticMaterial.cpp
+			src/materials/PlaneStress.cpp
+			src/materials/PlaneStrain.cpp
+			
 			src/solver/Jacobi.cpp
 			src/solver/LinearIteration.cpp
 			src/solver/Solver.cpp
-			src/plotter/gnuplot_i.cpp
-			src/CustomMesh.cpp
+			
 			src/tensors/Tensor.cpp
 			src/tensors/Stress.cpp
+			
+			src/fem/Function.h
+			src/fem/TestFunction.h
+			src/fem/GaussIntegration.cpp
+			src/fem/Discretization.cpp
+			src/fem/Discretization.cpp
+			src/fem/ImplAssembly.cpp
+			
+			src/plotter/gnuplot_i.cpp
+			
+			
+			src/physics/BoundaryConditions.cpp
+			src/physics/MechanicalBoundaryConditions.cpp
+			src/physics/Force.cpp
+						
 )
 
 #location of include directories

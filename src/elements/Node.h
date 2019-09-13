@@ -1,8 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include"Vector.h"
-#include"Force.h"
+#include"../algebra/Vector.h"
+#include"../physics/Force.h"
 class Node
 {
 	public:

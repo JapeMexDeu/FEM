@@ -14,12 +14,12 @@
 */
 #ifndef ELEMENT_H
 #define ELEMENT_H
-#include"ElasticMaterial.h"
-#include"Matrix.h"
+#include"../materials/ElasticMaterial.h"
+#include"../algebra/Matrix.h"
 #include"Node.h"
-#include"Function.h"
-#include"GaussIntegration.h"
-#include"Tensors/Stress.h"
+#include"../fem/Function.h"
+#include"../fem/GaussIntegration.h"
+#include"../Tensors/Stress.h"
 class Element
 {
 	public:

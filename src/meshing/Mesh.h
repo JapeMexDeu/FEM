@@ -13,9 +13,9 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include"Element.h"
-#include"Node.h"
-#include"Vector.h"
+#include"../elements/Element.h"
+#include"../elements/Node.h"
+#include"../algebra/Vector.h"
 
 class Mesh
 {

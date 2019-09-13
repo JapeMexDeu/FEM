@@ -1,22 +1,22 @@
-#include"Vector.h"
-#include"Node.h"
-#include"Quad2.h"
+#include"algebra/Vector.h"
+#include"elements/Node.h"
+#include"elements/Quad2.h"
 #include<cstdlib>
-#include"Matrix.h"
-#include"NaiveMesh.h"
-#include"Discretization.h"
-#include"TestFunction.h"
-#include"GaussIntegration.h"
+#include"algebra/Matrix.h"
+#include"meshing/NaiveMesh.h"
+#include"fem/Discretization.h"
+#include"fem/TestFunction.h"
+#include"fem/GaussIntegration.h"
 
-#include"MechanicalBoundaryConditions.h"
-#include"PlaneStrain.h"
-#include"PlaneStress.h"
+#include"physics/MechanicalBoundaryConditions.h"
+#include"materials/PlaneStrain.h"
+#include"materials/PlaneStress.h"
 #include"plotter/gnuplot_i.hpp"
-#include"ImplAssembly.h"
+#include"fem/ImplAssembly.h"
 #include"solver/Solver.h"
 #include"solver/Jacobi.h"
 #include <unistd.h>
-#include"CustomMesh.h"
+#include"meshing/CustomMesh.h"
 
 #include"tensors/Tensor.h"
 #include"tensors/Stress.h"
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	
 	cout<<s1;
 	cout<<s1[0];
-	cout<<s1.deviatoricStress();
+	cout<<s1.deviatoricTensor();
 	Tensor t1{1,2,3};
 	t1=20.0;
 	cout<<t1;

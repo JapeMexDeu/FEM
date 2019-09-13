@@ -9,8 +9,8 @@
 
 #ifndef LINEARITERATOR_H
 #define LINEARITERATOR_H
-#include"../Matrix.h"
-#include"../Vector.h"
+#include"../algebra/Matrix.h"
+#include"../algebra/Vector.h"
 class LinearIterator
 {
 	public:

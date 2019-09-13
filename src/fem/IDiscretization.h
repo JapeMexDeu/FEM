@@ -1,8 +1,8 @@
 #ifndef IDISCRETIZATION_H
 #define IDISCRETIZATION_H
 
-#include"Mesh.h"
-#include"BoundaryConditions.h"
+#include"../meshing/Mesh.h"
+#include"../physics/BoundaryConditions.h"
 
 class IDiscretization
 {

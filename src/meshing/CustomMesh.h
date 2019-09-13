@@ -1,7 +1,7 @@
 #ifndef CUSTOM_MESH
 #define CUSTOM_MESH
 #include"Mesh.h"
-#include"Quad2.h"
+#include"../elements/Quad2.h"
 class CustomMesh:public Mesh
 {
 	public:

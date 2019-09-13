@@ -14,7 +14,7 @@
 
 #ifndef BOUNDARYCONDITIONS_H
 #define BOUNDARYCONDITIONS_H
-#include"Node.h"
+#include"../elements/Node.h"
 class BoundaryConditions
 {
 	public:

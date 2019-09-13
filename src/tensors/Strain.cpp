@@ -1,10 +1,10 @@
-#include"Stress.h"
+#include"Strain.h"
 
-Stress::Stress(std::size_t sz/*=6*/):Tensor(sz)
+Strain::Strain(std::size_t sz/*=6*/):Tensor(sz)
 {
 	
 }
-double Stress::hydrostaticPressure()
+double Strain::hydrostaticPressure()
 {
 	double hp=0;
 	int s=size();
@@ -19,10 +19,10 @@ double Stress::hydrostaticPressure()
 	}
 	return 0;
 }
-Stress Stress::deviatoricTensor()
+Strain Strain::deviatoricTensor()
 {
-	Stress deviatoric;
-	Stress mean{1,1,1,0,0,0};
+	Strain deviatoric;
+	Strain mean{1,1,1,0,0,0};
 	mean*=hydrostaticPressure();
 	
 	deviatoric=(*this)-mean;

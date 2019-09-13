@@ -12,7 +12,7 @@
 #ifndef FORCE_H
 #define FORCE_H
 
-#include"Vector.h"
+#include"../algebra/Vector.h"
 
 class Force
 {

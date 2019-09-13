@@ -11,8 +11,8 @@
 #define IMATERIAL_H
 #include<iostream>
 #include<string>
-#include"Matrix.h"
-#include"vector.h"
+#include"../algebra/Matrix.h"
+#include"../algebra/Vector.h"
 
 class IMaterial
 {
