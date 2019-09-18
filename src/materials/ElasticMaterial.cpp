@@ -4,7 +4,6 @@ ElasticMaterial::ElasticMaterial(double mu, double E):mu(mu),E(E)
 {
 	//left empty
 }
-
 double ElasticMaterial::getPoisson()
 {
 	return this->mu;

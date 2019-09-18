@@ -27,7 +27,9 @@ set(SOURCES src/algebra/Vector.h
 			src/solver/Jacobi.cpp
 			src/solver/LinearIteration.cpp
 			src/solver/Solver.cpp
-			
+			src/solver/descent/DescentMethod.cpp
+			src/solver/descent/GradientDescent.cpp
+			src/solver/descent/ConjugateGradientDescent.cpp
 			src/tensors/Tensor.cpp
 			src/tensors/Stress.cpp
 			

@@ -16,3 +16,15 @@ void Solver::solve()
 {
 	iteration.iterate();
 }
+Vector<double>& Solver::getU()
+{
+	return iteration.getU();
+} 
+std::vector<double> Solver::getIterates()
+{
+	return iteration.getIterates();
+}
+std::vector<double> Solver::getError()
+{
+	return iteration.getError();
+}

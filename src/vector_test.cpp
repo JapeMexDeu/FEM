@@ -15,6 +15,9 @@
 #include"fem/ImplAssembly.h"
 #include"solver/Solver.h"
 #include"solver/Jacobi.h"
+#include"solver/descent/ConjugateGradientDescent.h"
+#include"solver/descent/GradientDescent.h"
+#include"solver/descent/DescentMethod.h"
 #include <unistd.h>
 #include"meshing/CustomMesh.h"
 
@@ -106,16 +109,16 @@ int main(int argc, char* argv[])
 	//std::cout<<ass.getGlobalVector();
 	//std::cout<<ass.getGlobalMatrix();
 	Jacobi jac(&(ass.getGlobalMatrix()));
-	Solver solver(&(ass.getGlobalMatrix()), &(ass.getGlobalVector()), &jac);
-	
-	solver.solve();
-	ass.localSolutionVectorAssemblyRoutine(solver.getLinearIteration().getU());
+	//Solver solver(&(ass.getGlobalMatrix()), &(ass.getGlobalVector()), &jac);
+	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector());
+	solver.solve();//solver2.solve();
+	ass.localSolutionVectorAssemblyRoutine(solver.getU());
 	cm.print();
-	Gnuplot g1=Gnuplot("points");
+	Gnuplot g1=Gnuplot("lines");
 	 g1.reset_plot();
 	 g1.cmd("set yrange[0:1]");
-	g1.plot_xy(solver.getLinearIteration().getIterates(), solver.getLinearIteration().getError(),"funny");
-	sleep(15);
+	g1.plot_xy(solver.getIterates(), solver.getError(),"funny");
+	sleep(50);
 		
 	
 	return 0;

@@ -129,6 +129,18 @@ class Vector:public std::vector<T>
 			}
 			return *this;
 		}
+		/*!\brief Vector-scalar mutiplication returning result inside different vector
+		 */
+		Vector operator*(double scalar)
+		{
+			std::size_t s=size();
+			Vector new_vector(s);
+			for(std::size_t i=0;i<size();++i)
+			{
+				new_vector[i]=scalar*operator[](i);
+			}
+			return new_vector;
+		}
 		/*!\brief DOT PRODUCT operation
 		 */
 		double operator*(const Vector &v)
