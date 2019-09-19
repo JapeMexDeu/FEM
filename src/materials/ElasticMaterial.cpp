@@ -1,9 +1,10 @@
 #include"ElasticMaterial.h"
 
-ElasticMaterial::ElasticMaterial(double mu, double E):mu(mu),E(E)
+ElasticMaterial::ElasticMaterial(double E, double mu):Material(E,mu)
 {
 	//left empty
 }
+/*
 double ElasticMaterial::getPoisson()
 {
 	return this->mu;
@@ -23,3 +24,4 @@ std::ostream& operator<<(std::ostream& out, ElasticMaterial& mat)
 	out<<mat.C;
 	out<<"\n";
 }
+*/

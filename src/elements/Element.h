@@ -14,7 +14,7 @@
 */
 #ifndef ELEMENT_H
 #define ELEMENT_H
-#include"../materials/ElasticMaterial.h"
+#include"../materials/Material.h"
 #include"../algebra/Matrix.h"
 #include"Node.h"
 #include"../fem/Function.h"
@@ -32,8 +32,8 @@ class Element
 		int getElementNum();
 	    void setNode(Node* n, int i);
 		Vector<Node*> getElementNodes();
-		void setMaterial(ElasticMaterial* mat);
-		ElasticMaterial* getMaterial();
+		void setMaterial(Material* mat);
+		Material* getMaterial();
 		Matrix<double>& getMatrix();
 		Vector<double>& getElementSolutionVector();
 		
@@ -48,8 +48,8 @@ class Element
 		//Stresses and strains
 		Tensor stress;/**<Default sized to 6 elements*/
 		Tensor strain;
-		Element(ElasticMaterial* mat=nullptr);
-		ElasticMaterial* material;/**<Material mode, pointer of non-instantiable class*/
+		Element(Material* mat=nullptr);
+		Material* material;/**<Material mode, pointer of non-instantiable class*/
 		GaussIntegration g;
 		Matrix<double> K;/**<Stiffness Matrix of the Element, calculation is derived-class-dependent*/
 		Matrix<double> B;/**<B-operator matrix*/

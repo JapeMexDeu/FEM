@@ -33,7 +33,7 @@ class Mesh
 		int getNumNodes();
 		Vector<Node>& getNodes();
 		Vector<Element*>& getElements();
-		virtual void setElementMaterial(ElasticMaterial* mat)=0;
+		virtual void setElementMaterial(Material* mat)=0;
 	protected:
 		//Structures to store our data
 		Vector<Node> nodes;/**<Stores nodes in MESH*/

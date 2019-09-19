@@ -23,6 +23,8 @@ set(SOURCES src/algebra/Vector.h
 			src/materials/ElasticMaterial.cpp
 			src/materials/PlaneStress.cpp
 			src/materials/PlaneStrain.cpp
+			src/materials/Material.cpp
+			
 			
 			src/solver/Jacobi.cpp
 			src/solver/LinearIteration.cpp

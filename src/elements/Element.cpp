@@ -22,7 +22,7 @@ void Element::print()
 }
 
 
-Element::Element(ElasticMaterial* mat):material(mat)
+Element::Element(Material* mat):material(mat)
 {
 	
 }
@@ -34,11 +34,11 @@ Vector<double>& Element::getElementSolutionVector()
 {
 	return solution;
 }
-void Element::setMaterial(ElasticMaterial* mat)
+void Element::setMaterial(Material* mat)
 {
 	this->material=mat;
 }
-ElasticMaterial* Element::getMaterial()
+Material* Element::getMaterial()
 {
 	return material;
 }

@@ -27,7 +27,7 @@ void CustomMesh::setNumNodes(int n, int m)
 {
 	numElements=n;
 }
-void CustomMesh::setElementMaterial(ElasticMaterial* mat)
+void CustomMesh::setElementMaterial(Material* mat)
 {
 	for(int i=0;i<local_elements.size();++i)
 	{

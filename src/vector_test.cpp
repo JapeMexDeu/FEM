@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	cout<<mat1.getConstitutiveMatrix()*t1;
 	cout<<t2.hydrostaticPressure();
 	*/
-	PlaneStress mat1(0.2,3000000);
+	PlaneStress mat1(3000000,0.2);
 	CustomMesh cm(8,3);
 	cm.getNodes()[0].setPosition(0,5,0);
 	cm.getNodes()[1].setPosition(0,12,0);

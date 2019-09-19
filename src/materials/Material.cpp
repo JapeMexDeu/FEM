@@ -5,7 +5,7 @@ Material::Material(double E_, double mu_, double yS/*=0*/, double pM/*=0*/):E(E_
 {
 	//Left empty
 }
-Matrix<double>& getConstitutiveMatrix()
+Matrix<double>& Material::getConstitutiveMatrix()
 {
 	return C;
 }

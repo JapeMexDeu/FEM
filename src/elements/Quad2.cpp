@@ -2,7 +2,7 @@
 
 std::string Element::type="4-NODE QUAD";
 
-Quad2::Quad2(Node* n1, Node* n2, Node* n3, Node* n4, ElasticMaterial* mat):Element(mat)
+Quad2::Quad2(Node* n1, Node* n2, Node* n3, Node* n4, Material* mat):Element(mat)
 {
 	nodes.resize(4);
 	nodes[0]=n1;

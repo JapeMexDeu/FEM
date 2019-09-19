@@ -17,7 +17,7 @@ class NaiveMesh:public Mesh
 		//virtual Vector<Element> getElements()override;
 		virtual void setNumElements(int n, int m)override;
  		virtual void setNumNodes(int n, int m)override;
-		virtual void setElementMaterial(ElasticMaterial* mat)override;
+		virtual void setElementMaterial(Material* mat)override;
 	//protected:
 		
 	private:

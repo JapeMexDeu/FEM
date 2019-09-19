@@ -12,7 +12,7 @@ class CustomMesh:public Mesh
 		//virtual Vector<Element> getElements()override;
 		virtual void setNumElements(int n, int m=0)override;
 		virtual void setNumNodes(int n, int m=0)override;
-		virtual void setElementMaterial(ElasticMaterial* mat)override;
+		virtual void setElementMaterial(Material* mat)override;
 		
 	private:
 		Vector<Quad2> local_elements;

@@ -43,7 +43,7 @@ void NaiveMesh::setNumNodes(int n, int m)
 {
 	numNodes=(n+1)*(m+1);
 }
-void NaiveMesh::setElementMaterial(ElasticMaterial* mat)
+void NaiveMesh::setElementMaterial(Material* mat)
 {
 	for(int i=0;i<local_elements.size();++i)
 	{

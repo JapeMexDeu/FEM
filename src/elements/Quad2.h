@@ -6,7 +6,7 @@
 class Quad2:public Element
 {
 	public:
-		Quad2(Node* n1=nullptr, Node* n2=nullptr, Node* n3=nullptr, Node* n4=nullptr, ElasticMaterial* mat=nullptr);
+		Quad2(Node* n1=nullptr, Node* n2=nullptr, Node* n3=nullptr, Node* n4=nullptr, Material* mat=nullptr);
 
 		virtual void print()override;
 		/*!\brief Stiffness matrix (K) generation

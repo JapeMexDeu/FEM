@@ -1,5 +1,20 @@
+/**
+  FILE: Material.h
+  AUTHOR: J Alfonso P Escobar
+  
+  DESCRIPTION: 
+  		   
+*/
+
 #ifndef MATERIAL_H
 #define MATERIAL_H
+
+#include<iostream>
+#include<string>
+#include"../algebra/Matrix.h"
+#include"../algebra/Vector.h"
+#include"../tensors/Tensor.h"
+
 class Material
 {
 	public:
@@ -14,7 +29,7 @@ class Material
 		/*!\brief Receives strain as vector and modifies tensors to 6x1 results
 		 */
 		virtual void assembleTensors(Vector<double>& v, Tensor& strains, Tensor& stresses)=0;
-		friend std::ostream& operator<<(std::ostream &out, ElasticMaterial& mat);
+		friend std::ostream& operator<<(std::ostream &out, Material& mat);
 		
 		//PLASTIC MODEL FUNCTIONS
 	private:
@@ -32,7 +47,7 @@ class Material
 		Matrix<double> C;
 		double mu;
 		double E;
-		std::string type;
+		
 		
 		//PLASTIC PARAMETERS
 		double yieldStress;
