@@ -55,6 +55,7 @@ set(SOURCES src/algebra/Vector.h
 add_library(FEM ${SOURCES})
 
 #creation of project
-add_executable(fem_test src/vector_test.cpp)
+add_executable(fem_test src/2dSquare.cpp)
+#add_executable(fem_test src/vector_test.cpp)
 target_link_libraries(fem_test FEM)
 target_include_directories(fem_test PUBLIC src/ src/plotter/)

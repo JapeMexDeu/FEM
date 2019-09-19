@@ -4,3 +4,7 @@ ElastoPlasticMaterial(double E, double mu, double yS, double pM):Material(E,mu,y
 {
 	//left empty
 }
+void ElastoPlasticMaterial::radialReturn()
+{
+	
+}

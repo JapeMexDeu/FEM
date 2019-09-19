@@ -47,7 +47,7 @@ class Element
 	protected:
 		//Stresses and strains
 		Tensor stress;/**<Default sized to 6 elements*/
-		Tensor strain;
+		Tensor strain;/**<Default sized to 6 elements*/
 		Element(Material* mat=nullptr);
 		Material* material;/**<Material mode, pointer of non-instantiable class*/
 		GaussIntegration g;

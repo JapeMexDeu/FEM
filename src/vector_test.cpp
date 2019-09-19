@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
 	//std::cout<<ass.getGlobalMatrix();
 	Jacobi jac(&(ass.getGlobalMatrix()));
 	//Solver solver(&(ass.getGlobalMatrix()), &(ass.getGlobalVector()), &jac);
-	GradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector());
+	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector());
 	solver.solve();//solver2.solve();
 	ass.localSolutionVectorAssemblyRoutine(solver.getU());
 	cm.print();

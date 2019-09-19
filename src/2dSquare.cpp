@@ -1,32 +1,40 @@
-#include"Vector.h"
-#include"Node.h"
-#include"Quad2.h"
+#include"algebra/Vector.h"
+#include"elements/Node.h"
+#include"elements/Quad2.h"
 #include<cstdlib>
-#include"Matrix.h"
-#include"NaiveMesh.h"
-#include"Discretization.h"
-#include"TestFunction.h"
-#include"GaussIntegration.h"
-//#include"BoundaryConditions.h"
-#include"MechanicalBoundaryConditions.h"
-#include"PlaneStrain.h"
-#include"PlaneStress.h"
+#include"algebra/Matrix.h"
+#include"meshing/NaiveMesh.h"
+#include"fem/Discretization.h"
+#include"fem/TestFunction.h"
+#include"fem/GaussIntegration.h"
+
+#include"physics/MechanicalBoundaryConditions.h"
+#include"materials/PlaneStrain.h"
+#include"materials/PlaneStress.h"
 #include"plotter/gnuplot_i.hpp"
-#include"ImplAssembly.h"
+#include"fem/ImplAssembly.h"
 #include"solver/Solver.h"
 #include"solver/Jacobi.h"
+#include"solver/descent/ConjugateGradientDescent.h"
+#include"solver/descent/GradientDescent.h"
+#include"solver/descent/DescentMethod.h"
 #include <unistd.h>
-#include"CustomMesh.h"
+#include"meshing/CustomMesh.h"
+
+#include"tensors/Tensor.h"
+#include"tensors/Stress.h"
+
 using std::cout;
+
 int main(int argc, char* argv[])
 {
 	
 	std::cout<<"\nTEST OF MATERIAL\n";
-	PlaneStrain mat1(0.25,600);
+	PlaneStrain mat1(300000,0.25);
     cout<<mat1;
 	
 	cout<<"*****CREATION OF MESH\n";
-	Force f(0,1);
+	Force f(1000,0);
 	NaiveMesh mesh(1,1);
 	mesh.setElementMaterial(&mat1);
 	mesh.getNode(2)->setPointForce(&f);
@@ -34,16 +42,16 @@ int main(int argc, char* argv[])
 
 	Discretization disc(2,mesh);
 	
-	MechanicalBoundaryConditions mbc(false,true,false);
+	MechanicalBoundaryConditions mbc(true,true,false);
 	
-	MechanicalBoundaryConditions mbc2(true,false,false);
-	Vector<int> indices={1};
+	//MechanicalBoundaryConditions mbc2(true,false,false);
+	Vector<int> indices={1,3};
 	Vector<int>indices2={4};
 	mbc.setNodes(indices);
-	mbc2.setNodes(indices2);
+	//mbc2.setNodes(indices2);
 	
 	disc.addBoundaryCondition(mbc);
-	disc.addBoundaryCondition(mbc2);
+	//disc.addBoundaryCondition(mbc2);
 	
 	disc.print();
 	disc.DOFenum();
@@ -60,9 +68,19 @@ int main(int argc, char* argv[])
 	
 	Jacobi jac(&(ass.getGlobalMatrix()));
 	
-	Solver solver(&(ass.getGlobalMatrix()), &(ass.getGlobalVector()), &jac);
+	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector());
 	
 	solver.solve();
+	
+	ass.localSolutionVectorAssemblyRoutine(solver.getU());
+	mesh.print();
+	Gnuplot g1=Gnuplot("lines");
+	 g1.reset_plot();
+	 g1.cmd("set yrange[0:1]");
+	g1.plot_xy(solver.getIterates(), solver.getError(),"funny");
+	sleep(50);
+	
+	
 	//
 	//
 	//
@@ -103,6 +121,6 @@ int main(int argc, char* argv[])
 	 g1.cmd("set yrange[0:1]");
 	g1.plot_xy(solver.getLinearIteration().getIterates(), solver.getLinearIteration().getError(),"funny");
 	sleep(15);
-	
+	*/
 return 0;
 }

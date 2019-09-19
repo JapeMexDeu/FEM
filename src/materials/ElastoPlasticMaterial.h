@@ -1,3 +1,13 @@
+/**
+  FILE: ElastoPlasticMaterial.h
+  AUTHOR: J Alfonso P Escobar
+  
+  DESCRIPTION: ELASTOPLASTICMATERIAL inherits from the super-class material. It is a non-instantiable ABSTRACT class. 
+			   Provides PLASTICITY functionalities, principally the calculation of the plastic stresses and strains in
+			   the form of material model implementations, however the radialReturn algorithm must be generalized so it 
+			   can be found here (hope it works). Some commented code is included as reference avoiding thus going back
+			   to the MATERIAL class. 
+*/
 #ifndef ELASTOPLASTICMATERIAL
 #define ELASTOPLASTICMATERIAL
 
@@ -14,6 +24,7 @@ class ElastoPlasticMaterial:public Material
 		//PLASTIC MODEL FUNCTIONS: these are to be used within assembleTensors function
 	private:
 		/*\brief Implements elastic predictor-plastic corrector algorithm
+		 * The outcome of this algorithm must be the plastic strains and the updating 
 		 */
 		virtual void radialReturn()=0;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
