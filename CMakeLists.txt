@@ -45,8 +45,7 @@ set(SOURCES src/algebra/Vector.h
 			
 			src/physics/BoundaryConditions.cpp
 			src/physics/MechanicalBoundaryConditions.cpp
-			src/physics/Force.cpp
-						
+			src/physics/Force.cpp						
 )
 
 #location of include directories

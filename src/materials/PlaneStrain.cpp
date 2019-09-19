@@ -37,4 +37,5 @@ void PlaneStrain::assembleTensors(Vector<double>& v, Tensor& strains, Tensor& st
 	stresses[3]=s[2];
 	
 	stresses[2]=E*mu*(v[0]+v[1])/((1+mu)*(1-2*mu));
+	
 }

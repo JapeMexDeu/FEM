@@ -2,7 +2,8 @@
   FILE: ElasticMaterial.h
   AUTHOR: J Alfonso P Escobar
   
-  DESCRIPTION: 
+  DESCRIPTION: ELASTICMATERIAL inherits from the super-class material. It is a non-instantiable ABSTRACT class. Provides ELASTICITY
+			   functionalities. 
   		 
 */
 #ifndef ELASTICMATERIAL_H
