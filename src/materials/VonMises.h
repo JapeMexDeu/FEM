@@ -14,7 +14,7 @@ class VonMises:public ElastoPlasticMaterial
 {
 	public:
 		//lets decide for no constructor...keep it pure
-		//VonMises(double E, double mu=0, double yS=0, double pM=0);
+		VonMises(double E, double mu=0, double yS=0, double pM=0):ElastoPlasticMaterial(E,mu,yS,pM){}
 		//THIS IS WHY THIS CLASS MUST REMAIN BEING ABSTRACT; HAS TO BE CONVERTED INTO PLANE STRESS OR STRAIN
 		//virtual void assembleTensors(Vector<double>& v, Tensor& strains, Tensor& stresses)=0;
 	private:
@@ -23,6 +23,6 @@ class VonMises:public ElastoPlasticMaterial
 		//virtual void radialReturn()override;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
 		 */
-		virtual double yieldFunction()override;
+		//virtual double yieldFunction()=0;
 };
 #endif

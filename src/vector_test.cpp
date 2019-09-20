@@ -7,10 +7,11 @@
 #include"fem/Discretization.h"
 #include"fem/TestFunction.h"
 #include"fem/GaussIntegration.h"
-
+#
 #include"physics/MechanicalBoundaryConditions.h"
 #include"materials/PlaneStrain.h"
 #include"materials/PlaneStress.h"
+#include"materials/VonMisesPlaneStress.h"
 #include"plotter/gnuplot_i.hpp"
 #include"fem/ImplAssembly.h"
 #include"solver/Solver.h"
@@ -51,6 +52,7 @@ int main(int argc, char* argv[])
 	cout<<mat1.getConstitutiveMatrix()*t1;
 	cout<<t2.hydrostaticPressure();
 	*/
+	VonMisesPlaneStress mat2(3000000,0.2)
 	PlaneStress mat1(3000000,0.2);
 	CustomMesh cm(8,3);
 	cm.getNodes()[0].setPosition(0,5,0);

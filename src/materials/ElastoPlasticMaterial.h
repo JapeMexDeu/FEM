@@ -26,10 +26,10 @@ class ElastoPlasticMaterial:public Material
 		/*\brief Implements elastic predictor-plastic corrector algorithm
 		 * The outcome of this algorithm must be the plastic strains and the updating 
 		 */
-		virtual void radialReturn()=0;
+		//virtual void radialReturn()=0;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
 		 */
-		virtual double yieldFunction()=0;
+		//virtual double yieldFunction()=0;
 	protected:
 		/*ALL ARE INHERITED FROM MATERIAL
 		std::string type;
@@ -47,6 +47,6 @@ class ElastoPlasticMaterial:public Material
 		
 		
 	private:
-		virtual void setConstitutiveMatrix()=0;
+		//virtual void setConstitutiveMatrix()=0;
 };
 #endif
