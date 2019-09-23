@@ -15,7 +15,7 @@
 class ElastoPlasticMaterial:public Material
 {
 	public:
-		ElastoPlasticMaterial(double E, double mu=0, double yS=0, double pM=0);
+		ElastoPlasticMaterial(double E, double mu, double yS, double pM);
 		
 		/*!\brief Receives strain as vector and modifies tensors to 6x1 results
 		 */
@@ -31,6 +31,7 @@ class ElastoPlasticMaterial:public Material
 		 */
 		//virtual double yieldFunction()=0;
 	protected:
+		
 		/*ALL ARE INHERITED FROM MATERIAL
 		std::string type;
 		

@@ -14,15 +14,45 @@ class VonMises:public ElastoPlasticMaterial
 {
 	public:
 		//lets decide for no constructor...keep it pure
-		VonMises(double E, double mu=0, double yS=0, double pM=0):ElastoPlasticMaterial(E,mu,yS,pM){}
+		VonMises(double E, double mu, double yS, double pM);
 		//THIS IS WHY THIS CLASS MUST REMAIN BEING ABSTRACT; HAS TO BE CONVERTED INTO PLANE STRESS OR STRAIN
 		//virtual void assembleTensors(Vector<double>& v, Tensor& strains, Tensor& stresses)=0;
-	private:
+	protected:
+		/*ALL ARE INHERITED FROM MATERIAL
+		std::string type;
+		
+		//ELASTIC PARAMETERS
+		Matrix<double> C;
+		double mu;
+		double E;
+		std::string type;
+		
+		//PLASTIC PARAMETERS
+		double yieldStress;
+		double plasticModulus;
+		*/
+		/*\brief Implements sqrt[3J2]: second invariant of deviatoric stress
+		 *
+		 */
+		double equivalentStress(Tensor& stress);
+		/*\brief Implements strain-hardening dK
+		 *
+		 */
+		double hardeningEvolution(Tensor& strain);
 		/*\brief Implements elastic predictor-plastic corrector algorithm
 		 */
 		//virtual void radialReturn()override;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
 		 */
-		//virtual double yieldFunction()=0;
+		//virtual double yieldFunction()=0
+	//ALL THE AMOUNTS FOR THE CALCULATIONS
+	protected:
+		Vector<double> dF_dSigma=Vector<double>(6);
+		double df_dK;
+		Matrix<double> Cel=Matrix<double>(6);
+	protected:
+		void initializeModel();
+		void derivativeFSigma();
+		
 };
 #endif

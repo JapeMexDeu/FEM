@@ -29,13 +29,13 @@ using std::cout;
 
 int main(int argc, char* argv[])
 {
-	VonMisesPlaneStress mat1(300000,0.25);
+	VonMisesPlaneStress mat1(300,0.25, 4000);
 	std::cout<<"\nTEST OF MATERIAL\n";
 	//PlaneStrain mat1(300000,0.25);
     cout<<mat1;
 	
 	cout<<"*****CREATION OF MESH\n";
-	Force f(100000,0);
+	Force f(1000,0);
 	NaiveMesh mesh(1,1);
 	mesh.setElementMaterial(&mat1);
 	mesh.getNode(2)->setPointForce(&f);
