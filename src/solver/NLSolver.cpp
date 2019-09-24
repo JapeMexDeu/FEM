@@ -1,8 +1,7 @@
 #include"NLSolver.h"
 
-NLSolver::NLSolver(ImplAssembly& assembly, int stps/*=20*/,
-				   double tol/*=10e-10*/,int iterations/*=100*/)
-				   :Assembly(assembly),numSteps(stps),tolerance(tol), maxIterations(iterations)
+NLSolver::NLSolver(ImplAssembly& assembly,double tol/*=10e-10*/,int iterations/*=100*/, int stps/*=20*/)
+				   :Assembly(assembly),numSteps(stps),tolerance(tol),lSolver=nullptr
 {
 	steps.resize(numSteps);
 	//WE ALSO KNOW NOW THE SIZE OF THE PROBLEM...right??

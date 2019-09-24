@@ -1,16 +1,15 @@
-#include"LinearIteration.h"
-LinearIteration::LinearIteration(Matrix<double>& A, Vector<double>& b, 
-								 LinearIterator* iterator, 
-								 double tolerance/*=10e-9*/, int maxIterations/*=100*/)
-								 :A(A),b(b),B(iterator),tolerance(tolerance),maxIterations(maxIterations)
+#include"LinearIterativeSolver.h"
+
+LinearIterativeSolver::LinearIterativeSolver(Matrix<double>& A, Vector<double>& b, 
+											 LinearIterator* iterator):LSolver(A,b),iterator(iterator)
 {
-	if(b!=nullptr)
-	{
-		u.resize(b->size());
-	}
-	           
+	//left empty
 }
-void LinearIteration::iterate()
+void LinearIterativeSolver::setLinearIterator(LinearIterator* linearit)
+{
+	iteration.setLinearIterator(linearit);
+}
+void LinearIterativeSolver::solve()
 {
 	int count=1;
 	std::cout<<"BEGIN:ITERATION\n";
@@ -53,40 +52,6 @@ void LinearIteration::iterate()
 	//std::cout<<(*A);
 	std::cout<<(*b);
 }
-//SETTERS AND GETTERS
-void LinearIteration::setLinearIterator(LinearIterator* iterator)
-{
-	this->B=iterator;
-	u.resize(this->b->size());
-}
-LinearIterator* LinearIteration::getLinearIterator()
-{
-	return B;
-}
-double LinearIteration::getTolerance()
-{
-	return tolerance;
-}
-void LinearIteration::setTolerance(double t)
-{
-	tolerance=t;
-}
-int LinearIteration::getMaxIterations()
-{
-	return maxIterations;
-}
-void LinearIteration::setMaxIterations(int m)
-{
-	maxIterations=m;
-}
-void LinearIteration::setU(double s)
-{
-	u=s;
-}
-Vector<double>& LinearIteration::getU()
-{
-	return u;
-}
 //PRIVATE METHODS
 void LinearIteration::calculateResiduum(Vector<double>& r)
 {
@@ -97,13 +62,4 @@ void LinearIteration::calculateResiduum(Vector<double>& r)
 void LinearIteration::calculateCorrector(Vector<double>& r, Vector<double>& c)
 {
 	B->inverseMultiply(r,c);
-}
-
-std::vector<double> LinearIteration::getIterates()
-{
-	return iterates;
-}
-std::vector<double> LinearIteration::getError()
-{
-	return error;
 }

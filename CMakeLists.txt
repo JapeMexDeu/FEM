@@ -29,13 +29,13 @@ set(SOURCES src/algebra/Vector.h
 			src/materials/ElastoPlasticMaterial.cpp
 			
 			src/solver/Jacobi.cpp
-			src/solver/LinearIteration.cpp
-			src/solver/Solver.cpp
+			#src/solver/LinearIteration.cpp
+			src/solver/LinearIterativeSolver.cpp
 			src/solver/descent/DescentMethod.cpp
 			src/solver/descent/GradientDescent.cpp
 			src/solver/descent/ConjugateGradientDescent.cpp
-			src/solver/NLSolver.cpp
-			
+			#src/solver/NLSolver.cpp
+			src/solver/LSolver.cpp
 			
 			
 			src/tensors/Tensor.cpp

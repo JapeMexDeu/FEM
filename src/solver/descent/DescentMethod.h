@@ -1,10 +1,10 @@
+
 #ifndef DESCENTMETHOD_H
 #define DESCENTMETHOD_H
 
-#include"../../algebra/Vector.h"
-#include"../../algebra/Matrix.h"
 
-class DescentMethod
+#include"../LSolver.h"
+class DescentMethod:public LSolver
 {
 	protected:
 		DescentMethod(Matrix<double>& A_, Vector<double>& b_,
@@ -13,26 +13,33 @@ class DescentMethod
 		virtual void setDescentDirection()=0;
 		
 	protected:
-		Matrix<double>& A;
+	//INHERITED FROM LSOLVER
+/* 		Matrix<double>& A;
 		Vector<double>& b;
 		Vector<double> u;
-		Vector<double> residuum;
-		Vector<double> descentDirection;
 		int maxIterations;
-		double tolerance;
-	//FOR PLOTTING SOME SHIT
-	protected:
+		double tolerance; 
+		//FOR PLOTTING SOME SHIT
 		std::vector<double> iterates;
 		std::vector<double> error;
+*/
+	protected:
+	//PROPER OF THIS CLASS
+		Vector<double> residuum;
+		Vector<double> descentDirection;
+		
+	//FOR PLOTTING SOME SHIT
+		
 	//SETTERS AND GETTERS	
 	public:
-		Vector<double>& getU();
+	//INHERITED FROM LSOLVER
+/* 		Vector<double>& getU();
 		void setTolerance(double e);
 		double getTolerance();
 		void setMaxIterations(int m);
 		int getMaxIterations();
 		std::vector<double> getIterates();
-		std::vector<double> getError();
-		virtual void solve()=0;
+		std::vector<double> getError(); */
+		//virtual void solve()=0;
 };
 #endif
