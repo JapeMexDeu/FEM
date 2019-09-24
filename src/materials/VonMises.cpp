@@ -25,8 +25,6 @@ double VonMises::equivalentStress(Tensor& stress)
 	P(0,2)=P(2,0);
 	P(2,1)=P(0,1);
 	P(1,2)=P(1,0);
-	std::cout<<"\nP IS: "<<P;
-	std::cout<<"\nTENSOR IS"<<stress<<"\n";
 	return sqrt((stress*(P*stress))*(3.0/2.0)); 
 }
 double VonMises::hardeningEvolution(Tensor& strain)

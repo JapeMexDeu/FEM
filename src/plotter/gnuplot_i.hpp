@@ -23,6 +23,8 @@
 #ifndef _GNUPLOT_PIPES_H_
 #define _GNUPLOT_PIPES_H_
 
+#define"../algebra/Vector.h"
+
 #include <stdarg.h>
 #include <unistd.h>
 
@@ -103,6 +105,7 @@ class Gnuplot
                 const string  & // title
                 );
 		
+		//void plot_xy(Vector<double> x, Vector<double> y, const string& title);
         // plot an equation of the form: y = ax + b
         // You supply a and b
         void plot_slope(

@@ -5,10 +5,11 @@ ConjugateGradientDescent::ConjugateGradientDescent(Matrix<double>& A_, Vector<do
 {
 	residuum.resize(b_.size());
 	u.resize(b_.size());	
+	type="CONJUGATE GRADIENT DESCENT\n";
 }
 void ConjugateGradientDescent::solve()
 {
-	std::cout<<"BEGIN: GRADIENT DESCENT METHOD\n";
+	std::cout<<"\nBEGIN: LINEAR SOLVER: GRADIENT DESCENT METHOD\n";
 		
 	residuum=b-A*u;
 	Vector<double> z(residuum.size());
@@ -17,8 +18,10 @@ void ConjugateGradientDescent::solve()
 	norm=residuum.norm();
 	double max=norm;
 	setDescentDirection();
+	std::cout<<"LINEAR ITERATION "<<" RESIDUUM NORM\n";
 	while(residuum.norm()>tolerance && count<maxIterations)
 	{
+		std::cout<<"        "<<count<<"                "<<residuum.norm()<<"\n";
 		z=A*descentDirection;
 		
 		error.push_back(norm/max);
@@ -42,9 +45,10 @@ void ConjugateGradientDescent::solve()
 		
 		count++;
 	}
+	std::cout<<"        "<<count<<"                "<<residuum.norm()<<"\n";
 	error.push_back(norm/max);
 	iterates.push_back(count);
-	std::cout<<"AFTER "<<iterates.size()<<" ITERATIONS\n";
+	std::cout<<"AFTER "<<count<<" ITERATIONS\n";
 	std::cout<<"SOLUTION VECTOR IS: \n";
 	std::cout<<u;
 	std::cout<<"END: DESCENT METHOD\n";

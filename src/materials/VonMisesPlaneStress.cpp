@@ -21,7 +21,7 @@ void VonMisesPlaneStress::assembleTensors(Vector<double>& v, Tensor& strains, Te
 	stresses[3]=s[2];
 	
 	strains[2]=(-1*mu)*(s[0]+s[1])/E;
-	std::cout<<"\nTHE EQUIVALENT STRESS IS: "<<equivalentStress(stresses)<<"\n";
+	//std::cout<<"\nTHE EQUIVALENT STRESS IS: "<<equivalentStress(stresses)<<"\n";
 	//Once the two tensors have been assembled (evaluated on 1 Gauss Point for now) we correct everything
 	//Mind you this is not the correct place to have this function, it must be at the place where we calculate the
 	//values of the displacements...but we have to start somewhere

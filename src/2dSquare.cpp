@@ -19,6 +19,8 @@
 #include"solver/descent/ConjugateGradientDescent.h"
 #include"solver/descent/GradientDescent.h"
 #include"solver/descent/DescentMethod.h"
+#include"solver/NLSolverCG.h"
+
 #include <unistd.h>
 #include"meshing/CustomMesh.h"
 
@@ -73,13 +75,17 @@ int main(int argc, char* argv[])
 	
 	solver.solve();
 	
-	ass.localSolutionVectorAssemblyRoutine(solver.getU());
+/* 	ass.localSolutionVectorAssemblyRoutine(solver.getU());
 	mesh.print();
 	Gnuplot g1=Gnuplot("lines");
 	 g1.reset_plot();
 	 g1.cmd("set yrange[0:1]");
-	g1.plot_xy(solver.getIterates(), solver.getError(),"funny");
-	sleep(50);
+	g1.plot_xy(solver.getIterates(), solver.getError(),"funny"); */
+	
+	NLSolverCG nlCG(ass,10e-10,100,4);
+	nlCG.printNLSolver();
+	nlCG.solve();
+	//sleep(50);
 	
 	
 	//

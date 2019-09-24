@@ -463,7 +463,7 @@ void Gnuplot::plot_xy(vector<double> x, vector<double> y, const string &title)
     tmp.open(name);
     if (tmp.bad())
       {
-        cerr << "Cannot create temorary 2 file: exiting plot" << endl;
+        cerr << "Cannot create temporary 2 file: exiting plot" << endl;
         return;
       }
 	

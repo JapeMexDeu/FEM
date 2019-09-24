@@ -9,7 +9,7 @@ ImplAssembly::ImplAssembly(Discretization* d):disc(d)
 }
 void ImplAssembly::matrixAssemblyRoutine()
 {
-	std::cout<<"BEGIN: MATRIX ASSEMBLY ROUTINE****\n";
+	std::cout<<"\nBEGIN: MATRIX ASSEMBLY ROUTINE****\n";
 	globalK.matrixResize(disc->getTotalDOF(),disc->getTotalDOF());
 	std::cout<<"   THE GLOBAL K HAS BEEN INITILIZED:";
 	//std::cout<<globalK;
@@ -49,7 +49,7 @@ void ImplAssembly::matrixAssemblyRoutine()
 }
 void ImplAssembly::vectorAssemblyRoutine()
 {
-	std::cout<<"BEGIN: VECTOR ASSEMBLY ROUTINE******\n";
+	std::cout<<"\nBEGIN: VECTOR ASSEMBLY ROUTINE******\n";
 	globalF.resize(disc->getTotalDOF());
 	int totalNodes=disc->getMesh().getNumNodes();
 	int dpn=disc->getDofPerNode();
@@ -93,7 +93,7 @@ void ImplAssembly::vectorAssemblyRoutine()
 }
 void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolution)
 {
-	std::cout<<"BEGIN: LOCAL SOLUTION VECTOR ASSEMBLY ROUTINE******\n";
+	std::cout<<"\nBEGIN: LOCAL SOLUTION VECTOR ASSEMBLY ROUTINE******\n";
 	//globalF.resize(disc->getTotalDOF());
 	int totalNodes=disc->getMesh().getNumNodes();
 	int dpn=disc->getDofPerNode();

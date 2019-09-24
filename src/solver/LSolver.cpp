@@ -35,3 +35,15 @@ int LSolver::getMaxIterations()
 {
 	return maxIterations;
 }
+std::string LSolver::getType()
+{
+	return type;
+}
+/* void LSolver::setMatrix(Matrix<double>& A_)
+{
+	A=A_;
+}
+void LSolver::setVector(Vector<double>& b_)
+{
+	b=b_;
+} */
