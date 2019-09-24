@@ -8,7 +8,7 @@ class DescentMethod
 {
 	protected:
 		DescentMethod(Matrix<double>& A_, Vector<double>& b_,
-					  double tolerance=10e-3, int maxIterations=3000);
+					  double tolerance=10e-4, int maxIterations=3000);
 	private:
 		virtual void setDescentDirection()=0;
 		

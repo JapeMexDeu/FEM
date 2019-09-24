@@ -143,3 +143,7 @@ Vector<double>& ImplAssembly::getGlobalVector()
 {
 	return this->globalF;
 }
+int ImplAssembly::getTotalDOF()
+{
+	return disc->getTotalDOF();
+}

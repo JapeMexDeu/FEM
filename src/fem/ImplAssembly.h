@@ -21,6 +21,7 @@ class ImplAssembly:public Assembly
 		//Setters and getters
 		Matrix<double>& getGlobalMatrix();
 		Vector<double>& getGlobalVector();
+		int getTotalDOF();
 	private:
 		/*!\brief Receives element and an index {0,dofsPerNode} -which is element type dependent, and returns the global Node number
 		 */

@@ -34,6 +34,10 @@ set(SOURCES src/algebra/Vector.h
 			src/solver/descent/DescentMethod.cpp
 			src/solver/descent/GradientDescent.cpp
 			src/solver/descent/ConjugateGradientDescent.cpp
+			src/solver/NLSolver.cpp
+			
+			
+			
 			src/tensors/Tensor.cpp
 			src/tensors/Stress.cpp
 			

@@ -3,6 +3,7 @@
 
 #include"LinearIteration.h"
 
+
 class Solver
 {
 	protected:

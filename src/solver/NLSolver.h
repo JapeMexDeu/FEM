@@ -9,35 +9,37 @@
 #ifndef NLSOLVER
 #define NLSOLVER
 
+#include"../fem/ImplAssembly.h"
 #include"Solver.h"
 
 class NLSolver
 {
 	public: 
-		NLSolver();
+		NLSolver(ImplAssembly& assembly, int stps=20, double tol=10e-10, int maxIterations=100);
 		
 	public:
 		Vector<Vector<double>> steps;/**<Stores the solution increment vector from every step*/
-		
+		void solve();
 	protected:
+		//MEMBER ATTRIBUTES PROPER TO A NONLINEAR INCREMENTAL APPROACH
+		ImplAssembly& Assembly;
 		int numSteps;/**<Total increments for the solution process*/
-		Solver lSolver;/**<Linear Solver (based on linear iteration) that solves linearized problem*/
-		Vector<double> u_total;/**<Accumulation of solution vectors per step*/
+		Solver* lSolver;/**<Linear Solver that solves linearized problem, must be implemented in derived classes*/
+		Vector<double> u_total;/**<Accumulation of solution vectors per step*///also called u_current
 		Vector<double> r;/**<Represents \f$f_ext-f_int\f$*/
-		
-	private:
-		void incrementLoad();
-		void calculateR();
+		double tolerance;/**<minimal value of norm searched for*/
+		int maxIterations;/**<control max amount of iterations*/
+	
 		
 	public:
 		
-		struct Step
+		/* struct Step
 		{
 			public:
 				Vector<double> u_step;
 				Vector<double> f;
 				
-		}
+		} */
 	
 };
 #endif
