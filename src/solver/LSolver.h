@@ -21,8 +21,8 @@ class LSolver
 	public:
 		LSolver(Matrix<double>& A, Vector<double>& b, double tolerance, int maxIterations);
 		Vector<double>& getU();
-		std::vector<double> getIterates();
-		std::vector<double> getError();
+		std::vector<double>& getIterates();
+		std::vector<double>& getError();
 		//void setMatrix(Matrix<double>& A_);
 		//void setVector(Vector<double>& b_);
 		void setTolerance(double e);

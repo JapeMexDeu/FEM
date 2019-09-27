@@ -75,17 +75,17 @@ int main(int argc, char* argv[])
 	
 	solver.solve();
 	
-/* 	ass.localSolutionVectorAssemblyRoutine(solver.getU());
+ 	ass.localSolutionVectorAssemblyRoutine(solver.getU());
 	mesh.print();
 	Gnuplot g1=Gnuplot("lines");
-	 g1.reset_plot();
-	 g1.cmd("set yrange[0:1]");
-	g1.plot_xy(solver.getIterates(), solver.getError(),"funny"); */
+	g1.reset_plot();
+	g1.cmd("set yrange[0:1]");
+	g1.plot_xy(solver.getIterates(), solver.getError(),"funny"); 
 	
 	NLSolverCG nlCG(ass,10e-10,100,4);
 	nlCG.printNLSolver();
 	nlCG.solve();
-	//sleep(50);
+	sleep(50);
 	
 	
 	//

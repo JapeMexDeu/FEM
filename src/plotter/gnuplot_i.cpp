@@ -375,7 +375,7 @@ void Gnuplot::plot_equation(const string &equation, const string &title)
     return;
 }
 
-void Gnuplot::plot_x(vector<double> d, const string &title)
+void Gnuplot::plot_x(vector<double>& d, const string &title)
 {
     ofstream tmp;
     ostringstream cmdstr;
@@ -436,7 +436,7 @@ void Gnuplot::plot_x(vector<double> d, const string &title)
     return;
 }
     
-void Gnuplot::plot_xy(vector<double> x, vector<double> y, const string &title)
+void Gnuplot::plot_xy(vector<double>& x, vector<double>& y, const string &title)
 {
     ofstream tmp;
     ostringstream cmdstr;

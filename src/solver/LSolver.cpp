@@ -11,11 +11,11 @@ Vector<double>& LSolver::getU()
 {
 	return u;
 } 
-std::vector<double> LSolver::getIterates()
+std::vector<double>& LSolver::getIterates()
 {
 	return iterates;
 }
-std::vector<double> LSolver::getError()
+std::vector<double>& LSolver::getError()
 {
 	return error;
 }

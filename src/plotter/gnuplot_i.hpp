@@ -23,7 +23,7 @@
 #ifndef _GNUPLOT_PIPES_H_
 #define _GNUPLOT_PIPES_H_
 
-#define"../algebra/Vector.h"
+#include"../algebra/Vector.h"
 
 #include <stdarg.h>
 #include <unistd.h>
@@ -96,13 +96,13 @@ class Gnuplot
         void set_xlabel(const string &);
 
         // plot a single vector
-        void plot_x(vector<double>, 
+        void plot_x(vector<double>&, 
                 const string & // title
                 );
 
         // plot x,y pairs
-        void plot_xy(vector<double>, vector<double>, 
-                const string  & // title
+        void plot_xy(vector<double>& x, vector<double>& y, 
+                const string& title // title
                 );
 		
 		//void plot_xy(Vector<double> x, Vector<double> y, const string& title);
