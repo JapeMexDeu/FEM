@@ -44,9 +44,11 @@ void NLSolver::solve()
 			nlIterations++;
 			current_iForce=Assembly.getGlobalMatrix()*steps[step-1];//update of internal force vector
 			r=current_Force-current_iForce;//update of residuum within same load step
-			std::cout<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
+			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
 		}
 		u_total=steps[step-1];
+		//here the K matrix would be generated again...since its a reference it will change value here as well
+		//assembleGlobalMatrix();
 		std::cout<<"\nIN STEP: "<< step<<" THE DISPLACEMENT SO FAR: "<<steps[step-1]<<"\n";
 		if(step<numSteps)
 			steps[step]=u_total;
