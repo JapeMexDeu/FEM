@@ -64,13 +64,17 @@ Vector<Node*> Element::getElementNodes()
 }
 void Element::resizeElementSolutionVector(int n)
 {
+	if(solution.size()==n)
+	{
+		return;
+	}
 	solution.resize(n);
 }
 void Element::computeTensorialResults()
 {
 	calculateBReducedIntegration();
-	Vector<double> sol=B*solution;
-	material->assembleTensors(sol, strain, stress);
+	Vector<double> strain_vec=B*solution;
+	material->assembleTensors(strain_vec, strain, stress);
 }
 std::ostream& operator<<(std::ostream& out, Element& el)
 {

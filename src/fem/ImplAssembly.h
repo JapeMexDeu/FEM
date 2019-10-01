@@ -18,6 +18,9 @@ class ImplAssembly:public Assembly
 		virtual void vectorAssemblyRoutine()override;
 		virtual void localSolutionVectorAssemblyRoutine(Vector<double>& globalSolution) override;
 		void printImplAssembly();
+		/*!\brief Call mesh printing method, we can see nodal values and element-wise results
+		 */
+		void printMesh();
 		//Setters and getters
 		Matrix<double>& getGlobalMatrix();
 		Vector<double>& getGlobalVector();

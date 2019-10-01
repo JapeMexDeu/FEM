@@ -26,6 +26,7 @@ set(SOURCES src/algebra/Vector.h
 			src/materials/Material.cpp
 			src/materials/VonMises.cpp
 			src/materials/VonMisesPlaneStress.cpp
+			src/materials/VonMisesPlaneStrain.cpp
 			src/materials/ElastoPlasticMaterial.cpp
 			
 			src/solver/Jacobi.cpp

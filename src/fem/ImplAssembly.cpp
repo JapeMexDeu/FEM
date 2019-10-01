@@ -101,6 +101,7 @@ void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolu
 	for(int e=0;e<E;++e)
 	{
 		Element* el=disc->getMesh().getElements()[e];
+		//********HUGE PROBLEM: THIS MUST BE DONE SOMEWHRE ELSE; THIS CAN MODIFY OUR LOCAL VALUES,AND ITS STUPID WORK
 		el->resizeElementSolutionVector(n);
 		for(int i=0;i<n;++i)
 		{
@@ -134,6 +135,10 @@ void ImplAssembly::printImplAssembly()
 	std::cout<<"   EVERY ELEMENT HAS: "<<n<<" DOFS\n";
 	std::cout<<"   EVERY NODE HAS: "<<disc->getDofPerNode()<<" DOFS\n";
 	std::cout<<"END: ASSEMBLY PROCEDURE****\n";
+}
+void ImplAssembly::printMesh()
+{
+	disc->getMesh().print();
 }
 Matrix<double>& ImplAssembly::getGlobalMatrix()
 {

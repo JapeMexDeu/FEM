@@ -11,7 +11,7 @@
 
 #include"../fem/ImplAssembly.h"
 #include"LSolver.h"
-
+#include"../plotter/gnuplot_i.hpp"
 class NLSolver
 {
 	public: 
@@ -21,7 +21,12 @@ class NLSolver
 		Vector<Vector<double>> steps;/**<Stores the solution increment vector from every step*/
 		void solve();
 		void printNLSolver();
+		Vector<double>& getAbscissae();
+		Vector<double>& getOrdinates();
 	protected:
+		//For Plotting
+		Vector<double> abscissae;
+		Vector<double> ordinates;
 		//MEMBER ATTRIBUTES PROPER TO A NONLINEAR INCREMENTAL APPROACH
 		ImplAssembly& Assembly;
 		int numSteps;/**<Total increments for the solution process*/

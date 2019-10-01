@@ -82,11 +82,15 @@ int main(int argc, char* argv[])
 	g1.cmd("set yrange[0:1]");
 	g1.plot_xy(solver.getIterates(), solver.getError(),"funny"); 
 	
-	NLSolverCG nlCG(ass,10e-10,100,4);
+	NLSolverCG nlCG(ass,10e-10,100,30);
 	nlCG.printNLSolver();
 	nlCG.solve();
+	//sleep(50);
+	cout<<nlCG.getAbscissae();
+	cout<<nlCG.getOrdinates();
+	Gnuplot g2=Gnuplot("lines");
+	g2.plot_xy(nlCG.getAbscissae(), nlCG.getOrdinates(),"funny");
 	sleep(50);
-	
 	
 	//
 	//

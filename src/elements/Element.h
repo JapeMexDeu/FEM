@@ -62,7 +62,8 @@ class Element
 		static int totalElements;/**<Elements in whole structure*/
 	
 	private:
-		
+		/*!\brief Calculates the B-operator only using 1 Gauss Point at (0,0) in the element
+		 */
 		virtual void calculateBReducedIntegration()=0;
 		/*!\brief Type-dependent implementation, every element declares the jacobian matrix elements as Function instances and call Gauss integration
 		 */

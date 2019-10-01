@@ -18,11 +18,11 @@
 				double yieldStress;
 				double plasticModulus;
 				
-				3.-INHERITED VRITUAL MEHTODS
+				3.-INHERITED VIRTUAL MEHTODS
 				virtual void setConstitutiveMatrix()=0;
 				virtual void assembleTensors(Vector<double>& v, Tensor& strains, Tensor& stresses)=0;
 				
-				NON INHERITED VRITUAL MEHTODS
+				INHERITED VRITUAL MEHTODS FROM ElastoPlasticMaterial.h
 				virtual double yieldFunction()=0;
 				virtual void radialReturn()=0;
 */
