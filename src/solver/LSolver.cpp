@@ -1,8 +1,8 @@
 #include"LSolver.h"
 
 LSolver::LSolver(Matrix<double>& A_, Vector<double>& b_,
-				 double tolerance, int maxIterations/*=3000*/)
-				 :A(A_),b(b_),tolerance(tolerance),maxIterations(maxIterations)
+				 double tolerance, int maxIterations/*=3000*/, bool verbose/*=false*/)
+				 :A(A_),b(b_),tolerance(tolerance),maxIterations(maxIterations),verbose(verbose)
 {
 	
 }
@@ -38,6 +38,10 @@ int LSolver::getMaxIterations()
 std::string LSolver::getType()
 {
 	return type;
+}
+void LSolver::setVerbose(bool type)
+{
+	verbose=type;
 }
 /* void LSolver::setMatrix(Matrix<double>& A_)
 {

@@ -3,7 +3,8 @@
   AUTHOR: J Alfonso P Escobar
   
   DESCRIPTION: VONMISES is an abstract class interface, NON-INSTANTIABLE, pure virtual. Its implementations must
-			   "implement" the assembleTensors method. Most likely it will be derived into Plane stress/strain. 
+			   "implement" the assembleTensors method. Most likely it will be derived into Plane stress/strain. In this class
+			   we are only implementing isotropic Hardening.
   SOME DETAILS: part of what is inherited from the Super class Material is:
 				
 				std::string type;
@@ -56,24 +57,30 @@ class VonMises:public ElastoPlasticMaterial
 		 *
 		 */
 		double equivalentStress(Tensor& stress);
-		/*\brief Implements strain-hardening dK
+		/*\brief Implements strain-hardening dK, must receive the plastic strain
 		 *
 		 */
-		double hardeningEvolution(Tensor& strain);
+		double plasticWork(Tensor& strain_ep);
 		/*!\brief Implements elastic predictor-plastic corrector algorithm
+		 *DESCRIPTION: 
+		 *Input stresses are already the trial stresses, the strains are needed for the plastic-work scalar
 		 */
-		//virtual void radialReturn()override;
+		virtual void radialReturn(Tensor& strains, Tensor& stresses)override;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
 		 */
-		//virtual double yieldFunction()=0
+		virtual double yieldFunction(Tensor& stress, Tensor& strain_ep);
 	//ALL THE AMOUNTS FOR THE CALCULATIONS
 	protected:
-		Vector<double> dF_dSigma=Vector<double>(6);
-		double df_dK;
-		Matrix<double> Cel=Matrix<double>(6);
+		Vector<double> dF_dSigma=Vector<double>(6);/**<Associative plastic flow direction, normal to yield surface*/
+		double df_dK;/**<Derivative of yield function wrt K, in isotropic hardening it is equal to plasticModulus (H)*/
+		double dLambda;/**<Plastic multiplier for plastic strain increment*/
+		double dK;/**<Delta lambda hardening increment dependent on plastic work*/
+		double eqStrain;/**<Equivalent Strain, we have to keep track of it to avoid starting from zero....maybe*/
+		Matrix<double> Cel=Matrix<double>(6);/**<Elastic Constitutive Matrix in 6x6 form*/
 	protected:
 		void initializeModel();
-		void derivativeFSigma();
-		
+		void derivativeFSigma(Tensor& stress);
+		double updateYieldStress();
+		void equationsSystem(Tensor& stress);
 };
 #endif

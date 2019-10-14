@@ -1,7 +1,7 @@
 #include"GradientDescent.h"
 
 GradientDescent::GradientDescent(Matrix<double>& A_, Vector<double>& b_,
-								 double tolerance, int maxIterations):DescentMethod(A_,b_,tolerance,maxIterations)
+								 double tolerance, int maxIterations, bool verbose):DescentMethod(A_,b_,tolerance,maxIterations, verbose)
 {
 	residuum.resize(b_.size());
 	u.resize(b_.size());	

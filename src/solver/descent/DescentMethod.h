@@ -8,7 +8,7 @@ class DescentMethod:public LSolver
 {
 	protected:
 		DescentMethod(Matrix<double>& A_, Vector<double>& b_,
-					  double tolerance=10e-4, int maxIterations=3000);
+					  double tolerance=10e-4, int maxIterations=3000, bool verbose=false);
 	private:
 		virtual void setDescentDirection()=0;
 		

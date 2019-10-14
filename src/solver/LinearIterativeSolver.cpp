@@ -1,9 +1,9 @@
 #include"LinearIterativeSolver.h"
 
 LinearIterativeSolver::LinearIterativeSolver(Matrix<double>& A, Vector<double>& b, 
-											 double tolerance, int maxIterations, 
+											 double tolerance, int maxIterations, bool verbose,
 											 LinearIterator* iterator)
-											 :LSolver(A,b,tolerance,maxIterations),iterator(iterator)
+											 :LSolver(A,b,tolerance,maxIterations,verbose),iterator(iterator)
 {
 	//left empty
 }
@@ -14,7 +14,8 @@ void LinearIterativeSolver::setLinearIterator(LinearIterator* linearit)
 void LinearIterativeSolver::solve()
 {
 	int count=1;
-	std::cout<<"BEGIN:ITERATION\n";
+	if(verbose)
+		std::cout<<"BEGIN:ITERATION\n";
 	//create and calculate residuum
 	
 	Vector<double> residuum(b.size());
@@ -51,7 +52,8 @@ void LinearIterativeSolver::solve()
 	
 	//std::cout<<"SIZE OF ERROR IS: "<<error.size()<<"\n";
 	//std::cout<<"SIZE OF COUNT IS: "<<iterates.size()<<"\n";
-	std::cout<<"SOLUTION VECTOR IS: \n"<<u;
+	if(verbose)
+		std::cout<<"SOLUTION VECTOR IS: \n"<<u;
 	//std::cout<<(*A);
 	std::cout<<b;
 }

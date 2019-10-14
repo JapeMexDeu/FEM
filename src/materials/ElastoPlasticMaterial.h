@@ -42,12 +42,15 @@ class ElastoPlasticMaterial:public Material
 		//PLASTIC MODEL FUNCTIONS: these are to be used within assembleTensors function
 	private:
 		/*\brief Implements elastic predictor-plastic corrector algorithm
-		 * The outcome of this algorithm must be the plastic strains and the updating 
+		 * The outcome of this algorithm must be the plastic strains and the updating of the stress state
+		 param@[in]
 		 */
-		//virtual void radialReturn()=0;
+		virtual void radialReturn(Tensor& strains, Tensor& stresses)=0;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
 		 */
 		//virtual double yieldFunction()=0;
+	public:
+	
 		
 		
 };

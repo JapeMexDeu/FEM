@@ -22,16 +22,15 @@ void NLSolver::solve()
 	Vector<double> current_Force (Assembly.getTotalDOF());//External force
 	Vector<double> current_iForce(Assembly.getTotalDOF());//Internal force
 	double step_ratio;//for setting the force increments
-	
+	current_iForce=0;
 	//HAVE TO DO FOR AS MANY INCREMENTS numSteps
 	for(int step=1;step<=numSteps;++step)
 	{
-		current_iForce=0;//we dont want the previous value in every new load step
+		//current_iForce;//we dont want the previous value in every new load step
 		std::cout<<"LOAD STEP "<<"NONLINEAR ITERATION "<<" RESIDUUM NORM"<<"\n";
 		std::cout<<"        "<<step;
 		step_ratio=(double)step/(double)numSteps;//make sure it is a double
 		current_Force=Assembly.getGlobalVector();
-		
 		current_Force*=step_ratio;
 		ordinates.push_back(current_Force.norm());
 		r=current_Force-current_iForce;
@@ -50,15 +49,15 @@ void NLSolver::solve()
 			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
 		}
 		//We have to disassemble the global displacement vector, and then calculate stresses and strains
-		Assembly.localSolutionVectorAssemblyRoutine(lSolver->getU());
+		Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);
 		std::cout<<"\n*********THE RESULTS FOR THIS LOAD STEP**********\n";
 		Assembly.printMesh();
 		u_total=steps[step-1];
 		//here the K matrix would be generated again...since its a reference it will change value within the algorithm
 		//assembleGlobalMatrix();
 		std::cout<<"\nIN STEP: "<< step<<" THE DISPLACEMENT SO FAR: "<<steps[step-1]<<"\n";
-		//if(step<numSteps)
-			//steps[step]=u_total;
+		if(step<numSteps)
+			steps[step]=steps[step-1];
 		abscissae.push_back(steps[step-1].norm());
 	}
 }

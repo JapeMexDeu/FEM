@@ -31,9 +31,9 @@ using std::cout;
 
 int main(int argc, char* argv[])
 {
-	VonMisesPlaneStress mat1(300,0.25, 4000);
+	//VonMisesPlaneStress mat1(210,0.25, 350, 10);
 	std::cout<<"\nTEST OF MATERIAL\n";
-	//PlaneStrain mat1(300000,0.25);
+	PlaneStrain mat1(300000,0.25);
     cout<<mat1;
 	
 	cout<<"*****CREATION OF MESH\n";
@@ -75,14 +75,15 @@ int main(int argc, char* argv[])
 	
 	solver.solve();
 	
- 	ass.localSolutionVectorAssemblyRoutine(solver.getU());
-	mesh.print();
+ 	//ass.localSolutionVectorAssemblyRoutine(solver.getU());
+	//mesh.print();
+	/*
 	Gnuplot g1=Gnuplot("lines");
 	g1.reset_plot();
 	g1.cmd("set yrange[0:1]");
 	g1.plot_xy(solver.getIterates(), solver.getError(),"funny"); 
-	
-	NLSolverCG nlCG(ass,10e-10,100,30);
+	*/
+	NLSolverCG nlCG(ass,10e-10,100,2);
 	nlCG.printNLSolver();
 	nlCG.solve();
 	//sleep(50);

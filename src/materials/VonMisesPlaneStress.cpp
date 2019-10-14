@@ -10,11 +10,12 @@ void VonMisesPlaneStress::assembleTensors(Vector<double>& v, Tensor& strains, Te
 {
 	//vector s is the vectorial stress
 	Vector<double> s;
+	//When necessary C should be the Cep
 	s=C*v;
 	//std::cout<<s<<v;
 	strains[0]=v[0];
 	strains[1]=v[1];
-	strains[3]=v[2];
+	strains[3]+=v[2];
 	
 	stresses[0]=s[0];
 	stresses[1]=s[1];
@@ -25,7 +26,9 @@ void VonMisesPlaneStress::assembleTensors(Vector<double>& v, Tensor& strains, Te
 	//Once the two tensors have been assembled (evaluated on 1 Gauss Point for now) we correct everything
 	//Mind you this is not the correct place to have this function, it must be at the place where we calculate the
 	//values of the displacements...but we have to start somewhere
-	//HERE WE CHECK
+	//HERE WE CHECK FOR PLASTICITY AND BEFORE FINISHING WE MUST RETURN A VALID STRESS STATE, AND AN INCREASE OF 
+	//PLASTIC STRAINS
+	radialReturn(strains, stresses);
 	
 }
 void VonMisesPlaneStress::setConstitutiveMatrix()

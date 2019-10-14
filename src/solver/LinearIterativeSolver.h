@@ -8,12 +8,12 @@ class LinearIterativeSolver: public LSolver
 {
 		
 	private:
-		LinearIterator* iterator;
+		LinearIterator* iterator;/**<Represents the B matrix*/
 		
 		
 	public:
 		LinearIterativeSolver(Matrix<double>& A, Vector<double>& b, 
-							  double tolerance=10e-4, int maxIterations=2000, LinearIterator* iterator=nullptr);
+							  double tolerance=10e-4, int maxIterations=2000, bool verbose=false, LinearIterator* iterator=nullptr);
 		virtual void solve()override;
 		void setLinearIterator(LinearIterator* it);
 	public:

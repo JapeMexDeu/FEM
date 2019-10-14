@@ -4,6 +4,7 @@
 Material::Material(double E_, double mu_, double yS/*=0*/, double pM/*=0*/):E(E_),mu(mu_),yieldStress(yS),plasticModulus(pM)
 {
 	//Left empty
+	//C_el
 }
 Matrix<double>& Material::getConstitutiveMatrix()
 {

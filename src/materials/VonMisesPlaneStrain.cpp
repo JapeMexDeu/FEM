@@ -8,18 +8,18 @@ VonMisesPlaneStrain::VonMisesPlaneStrain(double E, double mu/*=0*/,
 }
 void VonMisesPlaneStrain::assembleTensors(Vector<double>& v, Tensor& strains, Tensor& stresses)
 {
-	//vector s is the vectorial stress
-Vector<double> s;
+	//vector s is the vectorial stress increment
+	Vector<double> s;
 	s=C*v;
-	strains[0]=v[0];
-	strains[1]=v[1];
-	strains[3]=v[2];
+	strains[0]+=v[0];
+	strains[1]+=v[1];
+	strains[3]+=v[2];
 	
-	stresses[0]=s[0];
-	stresses[1]=s[1];
-	stresses[3]=s[2];
+	stresses[0]+=s[0];
+	stresses[1]+=s[1];
+	stresses[3]+=s[2];
 	
-	stresses[2]=E*mu*(v[0]+v[1])/((1+mu)*(1-2*mu));
+	stresses[2]+=E*mu*(v[0]+v[1])/((1+mu)*(1-2*mu));
 	//std::cout<<"\nTHE EQUIVALENT STRESS IS: "<<equivalentStress(stresses)<<"\n";
 	//Once the two tensors have been assembled (evaluated on 1 Gauss Point for now) we correct everything
 	//Mind you this is not the correct place to have this function, it must be at the place where we calculate the
