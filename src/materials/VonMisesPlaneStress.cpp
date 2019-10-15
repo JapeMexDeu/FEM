@@ -3,8 +3,10 @@
 VonMisesPlaneStress::VonMisesPlaneStress(double E, double mu/*=0*/, 
 										 double yS/*=0*/, double pM/*=0*/):VonMises(E,mu,yS,pM)
 {
+	std::cout<<"Creating Von Mises material\n";
 	type="PLASTIC-VON MISES PLANE STRESS";
 	setConstitutiveMatrix();
+	
 }
 void VonMisesPlaneStress::assembleTensors(Vector<double>& v, Tensor& strains, Tensor& stresses)
 {
@@ -28,7 +30,7 @@ void VonMisesPlaneStress::assembleTensors(Vector<double>& v, Tensor& strains, Te
 	//values of the displacements...but we have to start somewhere
 	//HERE WE CHECK FOR PLASTICITY AND BEFORE FINISHING WE MUST RETURN A VALID STRESS STATE, AND AN INCREASE OF 
 	//PLASTIC STRAINS
-	radialReturn(strains);
+	//radialReturn(strains);
 	
 }
 void VonMisesPlaneStress::setConstitutiveMatrix()

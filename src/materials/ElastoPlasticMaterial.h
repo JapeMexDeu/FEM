@@ -34,6 +34,8 @@
 
 #include"Material.h"
 #include"../solver/descent/ConjugateGradientDescent.h"
+#include"../solver/LinearIterativeSolver.h"
+#include"../solver/Jacobi.h"
 class ElastoPlasticMaterial:public Material
 {
 	protected:

@@ -57,7 +57,7 @@ class Material
 		
 		//ELASTIC PARAMETERS
 		Matrix<double> C;/**<Constitutive matrix for \f$ &sigma;=C&epsilon;\f$*/
-		Matrix<double> Cel;/**<Constitutive Matrix for Elastic behavior*/
+		Matrix<double> Cel=Matrix<double>(6,6);/**<Constitutive Matrix for Elastic behavior*/
 		double mu;/**<Poisson's ratio */
 		double E;/**<Young's modulus*/
 		

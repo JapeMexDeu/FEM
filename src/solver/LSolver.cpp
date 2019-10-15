@@ -4,7 +4,7 @@ LSolver::LSolver(Matrix<double>& A_, Vector<double>& b_,
 				 double tolerance, int maxIterations/*=3000*/, bool verbose/*=false*/)
 				 :A(A_),b(b_),tolerance(tolerance),maxIterations(maxIterations),verbose(verbose)
 {
-	
+	u.resize(b.size());
 }
 
 Vector<double>& LSolver::getU()

@@ -24,23 +24,26 @@ void LinearIterativeSolver::solve()
 	calculateResiduum(residuum);
 	
 	double max=residuum.norm();
-	//std::cout<<"ITERATION"<<"    RESIDUUM NORM\n";
+	if(verbose)
+		std::cout<<"ITERATION"<<"    RESIDUUM NORM\n";
 	
 	//std::setprecision(5);
 	
 	
 	while(residuum.norm()>tolerance&&count<maxIterations)
 	{
-		
-		//std::cout<<"     "<<count<<"              ";
+		if(verbose)
+			std::cout<<"     "<<count<<"              ";
 		iterates.push_back(count);
-		//std::cout<<residuum.norm()<<"\n";
+		if(verbose)
+			std::cout<<residuum.norm()<<"\n";
 		error.push_back(residuum.norm());
 		//calculate corrector
 		calculateCorrector(residuum, c);
-		c*=0.9;
+		c*=0.85;
 		this->u+=c;
-		//std::cout<<"        "<<u<<residuum<<c;
+		if(verbose)
+			//std::cout<<"        "<<u<<residuum<<c;
 		//update residuum
 		//residuum_temp=(*A)*c;
 		//residuum-=residuum_temp;
@@ -60,6 +63,7 @@ void LinearIterativeSolver::solve()
 //PRIVATE METHODS
 void LinearIterativeSolver::calculateResiduum(Vector<double>& r)
 {
+	
 	r=0;
 	r=b-A*u;
 	

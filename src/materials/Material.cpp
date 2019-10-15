@@ -3,6 +3,7 @@
 
 Material::Material(double E_, double mu_, double yS/*=0*/, double pM/*=0*/):E(E_),mu(mu_),yieldStress(yS),plasticModulus(pM)
 {
+	
 	//Left empty
 	Cel(0,0)=1-mu;
 	Cel(1,1)=C(0,0);
@@ -12,13 +13,14 @@ Material::Material(double E_, double mu_, double yS/*=0*/, double pM/*=0*/):E(E_
 	Cel(4,4)=Cel(3,3);
 	Cel(5,5)=Cel(4,4);
 	Cel(0,1)=mu;
-	Cel(1,0)=Cel(1,0);
+	Cel(1,0)=Cel(0,1);
 	Cel(2,0)=Cel(1,0);
 	Cel(0,2)=Cel(2,0);
 	
 	Cel(2,1)=Cel(0,1);
 	Cel(1,2)=Cel(2,1);
 	Cel*=E/((1+mu)*(1-2*mu));
+	
 }
 Matrix<double>& Material::getConstitutiveMatrix()
 {

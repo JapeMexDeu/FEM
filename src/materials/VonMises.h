@@ -39,6 +39,9 @@ class VonMises:public ElastoPlasticMaterial
 		VonMises(double E, double mu, double yS, double pM);
 		//THIS IS WHY THIS CLASS MUST REMAIN BEING ABSTRACT; HAS TO BE CONVERTED INTO PLANE STRESS OR STRAIN
 		//virtual void assembleTensors(Vector<double>& v, Tensor& strains, Tensor& stresses)=0;
+		void rr(Tensor& strain);
+		
+		
 	protected:
 		/*ALL ARE INHERITED FROM MATERIAL
 		std::string type;
@@ -78,8 +81,9 @@ class VonMises:public ElastoPlasticMaterial
 		Vector<double> residual=Vector<double>(7);
 		Matrix<double> A=Matrix<double>(7,7);
 		Vector<double> solution=Vector<double>(7);
-		ConjugateGradientDescent cg=ConjugateGradientDescent(A,residual,10e-12,1000,true);
-		
+		ConjugateGradientDescent cg=ConjugateGradientDescent(A,residual,10e-12,12,true);
+		Jacobi jac=Jacobi(&A);
+		LinearIterativeSolver lsolver=LinearIterativeSolver(A,residual,10e-4,100,true,&jac);
 		
 		//PLASTIC VALUES
 		double df_dK;/**<Derivative of yield function wrt K, in isotropic hardening it is equal to plasticModulus (H)*/
@@ -94,8 +98,11 @@ class VonMises:public ElastoPlasticMaterial
 		void derivativeFSigma(Tensor& stress);
 		double updateYieldStress();
 		void assembleA(Tensor& previousStress);
+		void calculatePlasticStrains();
 		void calculateResidual(Tensor& previousStress);
 		void updateSolution();
 		void dissasembleSolution();
+		
+		void linearProblemUpdate(Tensor& stressIncrements);
 };
 #endif

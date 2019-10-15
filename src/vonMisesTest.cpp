@@ -31,12 +31,14 @@ using std::cout;
 
 int main(int argc, char* argv[])
 {
+	cout<<"TESTING THE MATERIAL\n";
 	VonMisesPlaneStress mat1(210,0.25, 350, 10);
 	
-	Tensor strainState {0,0,0,0,0,0};
-
+	Tensor strainState {4,0,0,0,0,0};
+	cout<<"THE STRAIN STATE IS: "<<strainState;
+	cout<<mat1;
 	
-
+	mat1.rr(strainState);
 
 return 0;
 }
