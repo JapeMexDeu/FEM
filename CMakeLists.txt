@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(fem_test C CXX)
 
 get_filename_component(ROOT_DIR ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
-message(${ROOT_DIR}})
+
 #Setting the outputs
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/lib)
@@ -64,7 +64,8 @@ add_library(FEM ${SOURCES})
 
 #creation of project
 #add_executable(fem_test src/plot_test.cpp)
-add_executable(fem_test src/2dSquare.cpp)
+#add_executable(fem_test src/2dSquare.cpp)
 #add_executable(fem_test src/vector_test.cpp)
+add_executable(fem_test src/vonMisesTest.cpp)
 target_link_libraries(fem_test FEM)
 target_include_directories(fem_test PUBLIC src/ src/plotter/)

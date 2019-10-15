@@ -28,7 +28,7 @@ void VonMisesPlaneStress::assembleTensors(Vector<double>& v, Tensor& strains, Te
 	//values of the displacements...but we have to start somewhere
 	//HERE WE CHECK FOR PLASTICITY AND BEFORE FINISHING WE MUST RETURN A VALID STRESS STATE, AND AN INCREASE OF 
 	//PLASTIC STRAINS
-	radialReturn(strains, stresses);
+	radialReturn(strains);
 	
 }
 void VonMisesPlaneStress::setConstitutiveMatrix()

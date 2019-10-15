@@ -60,27 +60,42 @@ class VonMises:public ElastoPlasticMaterial
 		/*\brief Implements strain-hardening dK, must receive the plastic strain
 		 *
 		 */
-		double plasticWork(Tensor& strain_ep);
+		double plasticWork();
 		/*!\brief Implements elastic predictor-plastic corrector algorithm
 		 *DESCRIPTION: 
 		 *Input stresses are already the trial stresses, the strains are needed for the plastic-work scalar
 		 */
-		virtual void radialReturn(Tensor& strains, Tensor& stresses)override;
+		virtual void radialReturn(Tensor& strains)override;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
 		 */
-		virtual double yieldFunction(Tensor& stress, Tensor& strain_ep);
+		virtual double yieldFunction(Tensor& stress)override;
+		
 	//ALL THE AMOUNTS FOR THE CALCULATIONS
 	protected:
+		//ALGEBRAIC EXPRESSIONS
 		Vector<double> dF_dSigma=Vector<double>(6);/**<Associative plastic flow direction, normal to yield surface*/
+		Matrix<double> Jacobian=Matrix<double>(6,6);/**<Jacobian of dF_dSigma, it is a 6x6 matrix*/
+		Vector<double> residual=Vector<double>(7);
+		Matrix<double> A=Matrix<double>(7,7);
+		Vector<double> solution=Vector<double>(7);
+		ConjugateGradientDescent cg=ConjugateGradientDescent(A,residual,10e-12,1000,true);
+		
+		
+		//PLASTIC VALUES
 		double df_dK;/**<Derivative of yield function wrt K, in isotropic hardening it is equal to plasticModulus (H)*/
 		double dLambda;/**<Plastic multiplier for plastic strain increment*/
 		double dK;/**<Delta lambda hardening increment dependent on plastic work*/
 		double eqStrain;/**<Equivalent Strain, we have to keep track of it to avoid starting from zero....maybe*/
-		Matrix<double> Cel=Matrix<double>(6);/**<Elastic Constitutive Matrix in 6x6 form*/
+		Tensor trialStress;/**<Calculated using Cel*elastic_strains, used for the whole load step*/
+		Tensor stressIncrements;
 	protected:
+		//THIS FUNCTIONS SET UP THE VON MISES MODEL AND THE VALUES USED FOR THE ALGEBRAIC CALCULATIONS
 		void initializeModel();
 		void derivativeFSigma(Tensor& stress);
 		double updateYieldStress();
-		void equationsSystem(Tensor& stress);
+		void assembleA(Tensor& previousStress);
+		void calculateResidual(Tensor& previousStress);
+		void updateSolution();
+		void dissasembleSolution();
 };
 #endif

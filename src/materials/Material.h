@@ -57,11 +57,13 @@ class Material
 		
 		//ELASTIC PARAMETERS
 		Matrix<double> C;/**<Constitutive matrix for \f$ &sigma;=C&epsilon;\f$*/
+		Matrix<double> Cel;/**<Constitutive Matrix for Elastic behavior*/
 		double mu;/**<Poisson's ratio */
 		double E;/**<Young's modulus*/
 		
 		
 		//PLASTIC PARAMETERS
+		Tensor plasticStrain;
 		double yieldStress;/**<ONLY PLASTIC: stress before plastic behavior &sigma;_y*/
 		double plasticModulus;/**<ONLY LINEAR ISOTROPIC HARDENING: slope of yield stress increase*/
 };

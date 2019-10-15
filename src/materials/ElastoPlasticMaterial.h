@@ -33,6 +33,7 @@
 #define ELASTOPLASTICMATERIAL
 
 #include"Material.h"
+#include"../solver/descent/ConjugateGradientDescent.h"
 class ElastoPlasticMaterial:public Material
 {
 	protected:
@@ -45,12 +46,10 @@ class ElastoPlasticMaterial:public Material
 		 * The outcome of this algorithm must be the plastic strains and the updating of the stress state
 		 param@[in]
 		 */
-		virtual void radialReturn(Tensor& strains, Tensor& stresses)=0;
+		virtual void radialReturn(Tensor& strains)=0;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
 		 */
-		//virtual double yieldFunction()=0;
-	public:
-	
+		virtual double yieldFunction(Tensor& stress)=0;
 		
 		
 };
