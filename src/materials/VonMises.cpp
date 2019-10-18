@@ -14,42 +14,61 @@ void VonMises::rr(Tensor& strain)
 }
 void VonMises::radialReturn(Tensor& strains)
 {	
-	double tolerance=10e-10;
+	double tolerance=10e-12;
 	double yielding=0;
 	//Trial stress
 	cout<<"THE TRIAL STRESS IN THIS LOAD STEP IS: \n";
 	trialStress=Cel*strains;
 	cout<<trialStress;
-	//Take the trial Stress a our initial guess for the stress state
+	//Take the trial Stress a our initial guess for the stress state...TAKE ZERO...since we come from there
 	stressIncrements=trialStress;
 	//Check yield function
 	yielding=yieldFunction(trialStress);
 	cout<<"THE YIELD FUNCTIONS VALUE IS: \n";
-	cout<<yielding;
+	cout<<yielding<<"\n";
 	//IERTATIONS BEGIN HERE...
-	if(yielding>0)
+	int count=20;
+	//double tolerance=10e-10;
+	int i=0;
+	int a;
+	if(yielding>0 )
 	{
 		std::cout<<"\nELEMENT IS YIELDING, STRESS STATE INVALID, \nPROCEEDING TO SOLVE SYSTEM OF EQUATIONS\n";
-		//Have to increase plastic strains and calculate our new stress state
-		//CREATE SYSTEM OF EQUATIONS
 		linearProblemUpdate(stressIncrements);
 		updateSolution();
-		cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma;
-		cout<<"THE PLASTIC MULTIPLIER IS: "<<dLambda<<"\n";
-		cout<<"THE MATRIX IS: "<<A;
-		cout<<"THE RESIDUAL IS: "<<residual;
-		cout<<"THE SOLUTION VECTOR IS: "<<solution;
-		lsolver.solve();
-		solution-=lsolver.getU();
-		cout<<"THE SOLUTION VECTOR IS: "<<solution;
-		dissasembleSolution();
-		linearProblemUpdate(stressIncrements);
-		cout<<"THE STRESS INCREMENTS ARE: "<<stressIncrements;
-		cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma;
-		cout<<"THE PLASTIC MULTIPLIER IS: "<<dLambda<<"\n";
-		cout<<"THE MATRIX IS: "<<A;
-		cout<<"THE RESIDUAL IS: "<<residual;
-		lsolver.solve();
+		cout<<"THE SOLUTION IS: "<<solution;
+		while(i<count && residual.norm()>tolerance)
+		{
+			//cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n";
+			
+			//Have to increase plastic strains and calculate our new stress state
+			//CREATE SYSTEM OF EQUATIONS, SYMMETRIC SYSTEM 
+			ASym=(~A)*A;
+			residualSym=(~A)*residual;
+			//cout<<"THE SYMMETRIC PROBLEM IS: "<<ASym;
+			//cout<<residualSym;
+			cg.solve();
+			solution-=cg.getU();
+			//cout<<"THE SOLUTION VECTOR IS: "<<solution;
+			dissasembleSolution();
+			linearProblemUpdate(stressIncrements);
+			//updateSolution();
+
+			//std::cin>>a;
+			
+			i++;
+			cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n";
+			cout<<i<<"		"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
+				<<"  				 "<<dLambda<<"		"<<dK<<"\n";
+			//cout<<"THE SYMMETRIC PROBLEM IS: "<<ASym;
+			//cout<<residualSym;
+			
+			cout<<"THE MATRIX IS: "<<A;
+			cout<<"THE RESIDUAL IS: "<<residual;
+			cout<<"THE STRESS STATE IS: "<<stressIncrements;
+			cout<<"THE TRIAL STRESS STATE: "<<trialStress;
+			cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma;
+		}
 	}
 	if(yielding<tolerance)
 	{
@@ -62,8 +81,13 @@ double VonMises::yieldFunction(Tensor& stresses)
 	double sigmaHat=0;
 	eqStress=equivalentStress(stresses);
 	sigmaHat=yieldStress+plasticWork();
-	std::cout<<"THE EQUIVALENT STRESS IS: "<<eqStress<<"\n";
-	std::cout<<"THE SIGMA HAT IS: "<<sigmaHat<<"\n";
+	if(false)
+	{
+		std::cout<<"THE EQUIVALENT STRESS IS: "<<eqStress<<"\n";
+		std::cout<<"THE PLASTIC WORK IS: "<<plasticWork()<<"\n";
+		std::cout<<"THE SIGMA HAT IS: "<<sigmaHat<<"\n";
+	}
+	
 	return eqStress-sigmaHat;
 }
 double VonMises::equivalentStress(Tensor& stresses)
@@ -91,7 +115,7 @@ double VonMises::equivalentStress(Tensor& stresses)
 }
 double VonMises::plasticWork()
 {
-	Matrix<double> Q(6,6);
+/* 	Matrix<double> Q(6,6);
 	Q(0,0)=2.0/3.0;
 	Q(1,1)=Q(0,0);
 	Q(2,2)=Q(1,1);
@@ -105,7 +129,8 @@ double VonMises::plasticWork()
 	Q(2,1)=Q(0,1);
 	Q(1,2)=Q(1,0);
 	
-	return plasticModulus*sqrt((plasticStrain*(Q*plasticStrain))*(3.0/2.0)); 
+	return plasticModulus*sqrt((plasticStrain*(Q*plasticStrain))*(2.0/3.0));  */
+	return plasticModulus*dK;
 }
 void VonMises::derivativeFSigma(Tensor& stress)
 {
@@ -127,16 +152,22 @@ void VonMises::initializeModel()
 	df_dK=plasticModulus;
 	dLambda=0;
 	dK=0;
+	double scalar=0.5/yieldStress;
 	Jacobian(0,0)=2;
 	Jacobian(1,1)=2;
 	Jacobian(2,2)=2;
 	Jacobian(0,1)=-1;
 	Jacobian(0,2)=-1;
+	Jacobian(1,2)=-1;
+	Jacobian(2,1)=-1;
 	Jacobian(1,0)=Jacobian(0,1);
-	Jacobian(2,0)=Jacobian(2,0);
+	Jacobian(2,0)=Jacobian(0,2);
 	Jacobian(3,3)=6;
 	Jacobian(4,4)=6;
 	Jacobian(5,5)=6;
+	cout<<Jacobian;
+	Jacobian*=scalar;
+	
 }
 void VonMises::assembleA(Tensor& previousStress)
 {
@@ -160,6 +191,13 @@ void VonMises::assembleA(Tensor& previousStress)
 			A(i,j)=temp(i,j);
 		}
 	}
+	//WE NEED THE 6x1 VECTOR FROM Cel*dF_dSigma
+	Vector<double> temp2=Vector<double>(6);
+	temp2=Cel*dF_dSigma;
+	for(int i=0;i<6;++i)
+	{
+		A(i,6)=temp2[i];
+	}
 	//COPY NORMAL FLOW DIRECTIO dfdsigma
 	for(int i=0;i<6;++i)
 	{
@@ -168,12 +206,14 @@ void VonMises::assembleA(Tensor& previousStress)
 	//AND PLASTIC MODULUS
 	A(6,6)=-plasticModulus;
 	
+	
 }
 void VonMises::calculateResidual(Tensor& previousStress)
 {
 	Tensor temp;
 	//dF_dSigma MUST BE UPDATED EXTERNALLY
-	temp=previousStress-trialStress+Cel*dF_dSigma*dLambda;//this is a 6x1
+	temp=previousStress-trialStress+((Cel*dF_dSigma)*dLambda);//this is a 6x1
+	//cout<<"THE PLASTIC CORRECTOR IS: "<<Cel*dF_dSigma*dLambda<<"\n";
 	//COPY TEMP INTO 6 FIRST ELEMENTS OF RESIDUAL
 	for(int i=0;i<6;i++)
 	{
@@ -185,6 +225,7 @@ void VonMises::calculateResidual(Tensor& previousStress)
 
 void VonMises::linearProblemUpdate(Tensor& stressIncrements)
 {
+	//updateYieldStress();
 	derivativeFSigma(stressIncrements);
 	calculatePlasticStrains();
 	assembleA(stressIncrements);
@@ -206,9 +247,14 @@ void VonMises::dissasembleSolution()
 		stressIncrements[i]=solution[i];
 	}
 	dLambda=solution[6];
+	//dK=dK+solution[6];
 }
 
 void VonMises::calculatePlasticStrains()
 {
 	plasticStrain=dF_dSigma*dLambda;
+}
+void VonMises::updateYieldStress()
+{
+	yieldStress+=plasticModulus*dK;
 }

@@ -75,13 +75,16 @@ class VonMises:public ElastoPlasticMaterial
 		
 	//ALL THE AMOUNTS FOR THE CALCULATIONS
 	protected:
+		//SYMMETRIC EXPRESSIONS
+		Vector<double> residualSym=Vector<double>(7);
+		Matrix<double> ASym=Matrix<double>(7,7);
 		//ALGEBRAIC EXPRESSIONS
 		Vector<double> dF_dSigma=Vector<double>(6);/**<Associative plastic flow direction, normal to yield surface*/
 		Matrix<double> Jacobian=Matrix<double>(6,6);/**<Jacobian of dF_dSigma, it is a 6x6 matrix*/
 		Vector<double> residual=Vector<double>(7);
 		Matrix<double> A=Matrix<double>(7,7);
 		Vector<double> solution=Vector<double>(7);
-		ConjugateGradientDescent cg=ConjugateGradientDescent(A,residual,10e-12,12,true);
+		ConjugateGradientDescent cg=ConjugateGradientDescent(ASym,residualSym,10e-12,12,false);
 		Jacobi jac=Jacobi(&A);
 		LinearIterativeSolver lsolver=LinearIterativeSolver(A,residual,10e-4,100,true,&jac);
 		
@@ -96,7 +99,7 @@ class VonMises:public ElastoPlasticMaterial
 		//THIS FUNCTIONS SET UP THE VON MISES MODEL AND THE VALUES USED FOR THE ALGEBRAIC CALCULATIONS
 		void initializeModel();
 		void derivativeFSigma(Tensor& stress);
-		double updateYieldStress();
+		void updateYieldStress();
 		void assembleA(Tensor& previousStress);
 		void calculatePlasticStrains();
 		void calculateResidual(Tensor& previousStress);
