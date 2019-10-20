@@ -16,6 +16,10 @@ void VonMises::radialReturn(Tensor& strains)
 {	
 	double tolerance=10e-12;
 	double yielding=0;
+	Matrix<double> Ctemp;
+	Matrix<double> Num;
+	double den;
+	dLambda=0;
 	//Trial stress
 	cout<<"THE TRIAL STRESS IN THIS LOAD STEP IS: \n";
 	trialStress=Cel*strains;
@@ -33,11 +37,12 @@ void VonMises::radialReturn(Tensor& strains)
 	int a;
 	if(yielding>0 )
 	{
-		std::cout<<"\nELEMENT IS YIELDING, STRESS STATE INVALID, \nPROCEEDING TO SOLVE SYSTEM OF EQUATIONS\n";
+		Matrix<double> Ctemp=Matrix<double>(6,6);
+		std::cout<<"\nPLASTIC BEHAVIOR\n";
 		linearProblemUpdate(stressIncrements);
 		updateSolution();
 		cout<<"THE SOLUTION IS: "<<solution;
-		double pw;
+		
 		while(i<count && residual.norm()>tolerance)
 		{
 			//cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n";
@@ -71,11 +76,25 @@ void VonMises::radialReturn(Tensor& strains)
 			cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma; */
 		
 		}
+		cout<<"THE STRESS STATE IS: "<<stressIncrements;
+		cout<<"DLAMBDA: "<<dLambda<<"\n";
+		cout<<"NORMAL IS: "<<dF_dSigma;
+		cout<<"TESTING THE YIELD FUNCTION: "<<equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK<<"\n";
+		Ctemp.OuterProduct(dF_dSigma,dF_dSigma);
+		Num=Cel*Ctemp*Cel;
+		den=dF_dSigma*(Cel*dF_dSigma)-plasticModulus;
+		cout<<"THE NUMERATOR IS: "<<Num;
+		cout<<"THE CALCULATION OF OUTER PRODUCT IS: "<<Ctemp;
+		cout<<"THE DENOMINATOR IS: "<<den<<"\n";
+		Num*=den;
+		cout<<Cel-Num;
 	}
 	if(yielding<tolerance)
 	{
-		std::cout<<"\nELEMENT IS NOT YIELDING\n";
+		std::cout<<"\nELASTIC BEHAVIOR\n";
 	}
+	
+	
 }
 double VonMises::yieldFunction(Tensor& stresses)
 {

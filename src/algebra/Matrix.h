@@ -52,6 +52,20 @@ class Matrix
 				data[i].resize(c);
 			}
 		}
+		/*!\brief Outer Product of a columns vector times a row vector, i.e. u*v_t
+		 */
+		void OuterProduct(const Vector<T>& u, const Vector<T>& v)
+		{
+			this->matrixResize(u.size(),v.size());
+			for(int i=0;i<rows;++i)
+			{
+				for(int j=0;j<columns;++j)
+				{
+					data[i][j]=u[i]*v[j];
+				}
+			}
+			
+		}
 		//******OVERLOADED OPERATORS*******
 		/*!\brief Fills matrix with value in all entries
 		 */
