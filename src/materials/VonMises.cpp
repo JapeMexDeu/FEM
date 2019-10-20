@@ -27,7 +27,7 @@ void VonMises::radialReturn(Tensor& strains)
 	cout<<"THE YIELD FUNCTIONS VALUE IS: \n";
 	cout<<yielding<<"\n";
 	//IERTATIONS BEGIN HERE...
-	int count=20;
+	int count=50;
 	//double tolerance=10e-10;
 	int i=0;
 	int a;
@@ -37,6 +37,7 @@ void VonMises::radialReturn(Tensor& strains)
 		linearProblemUpdate(stressIncrements);
 		updateSolution();
 		cout<<"THE SOLUTION IS: "<<solution;
+		double pw;
 		while(i<count && residual.norm()>tolerance)
 		{
 			//cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n";
@@ -58,16 +59,17 @@ void VonMises::radialReturn(Tensor& strains)
 			
 			i++;
 			cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n";
-			cout<<i<<"		"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
-				<<"  				 "<<dLambda<<"		"<<dK<<"\n";
+			cout<<i<<"			"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
+				<<"  	  "<<dLambda<<"		"<<dK<<"\n";
 			//cout<<"THE SYMMETRIC PROBLEM IS: "<<ASym;
 			//cout<<residualSym;
 			
-			cout<<"THE MATRIX IS: "<<A;
+			/* cout<<"THE MATRIX IS: "<<A;
 			cout<<"THE RESIDUAL IS: "<<residual;
 			cout<<"THE STRESS STATE IS: "<<stressIncrements;
 			cout<<"THE TRIAL STRESS STATE: "<<trialStress;
-			cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma;
+			cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma; */
+		
 		}
 	}
 	if(yielding<tolerance)
@@ -115,7 +117,7 @@ double VonMises::equivalentStress(Tensor& stresses)
 }
 double VonMises::plasticWork()
 {
-/* 	Matrix<double> Q(6,6);
+ 	/* Matrix<double> Q(6,6);
 	Q(0,0)=2.0/3.0;
 	Q(1,1)=Q(0,0);
 	Q(2,2)=Q(1,1);
@@ -129,7 +131,7 @@ double VonMises::plasticWork()
 	Q(2,1)=Q(0,1);
 	Q(1,2)=Q(1,0);
 	
-	return plasticModulus*sqrt((plasticStrain*(Q*plasticStrain))*(2.0/3.0));  */
+	return plasticModulus*sqrt((plasticStrain*(Q*plasticStrain))*(2.0/3.0));  */ 
 	return plasticModulus*dK;
 }
 void VonMises::derivativeFSigma(Tensor& stress)
@@ -247,12 +249,12 @@ void VonMises::dissasembleSolution()
 		stressIncrements[i]=solution[i];
 	}
 	dLambda=solution[6];
-	//dK=dK+solution[6];
+	dK=dLambda;
 }
 
 void VonMises::calculatePlasticStrains()
 {
-	plasticStrain=dF_dSigma*dLambda;
+	plasticStrain+=dF_dSigma*dLambda;
 }
 void VonMises::updateYieldStress()
 {
