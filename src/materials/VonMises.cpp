@@ -22,13 +22,13 @@ void VonMises::radialReturn(Tensor& strains)
 	cout<<trialStress;
 	//Take the trial Stress a our initial guess for the stress state...TAKE ZERO...since we come from there
 	stressIncrements=trialStress;
-	//Check yield function
+	
 	yielding=yieldFunction(trialStress);
 	cout<<"THE YIELD FUNCTIONS VALUE IS: \n";
 	cout<<yielding<<"\n";
-	//IERTATIONS BEGIN HERE...
+	
 	int count=50;
-	//double tolerance=10e-10;
+	
 	int i=0;
 	int a;
 	if(yielding>0 )
@@ -40,23 +40,16 @@ void VonMises::radialReturn(Tensor& strains)
 		double pw;
 		while(i<count && residual.norm()>tolerance)
 		{
-			//cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n";
 			
-			//Have to increase plastic strains and calculate our new stress state
-			//CREATE SYSTEM OF EQUATIONS, SYMMETRIC SYSTEM 
 			ASym=(~A)*A;
 			residualSym=(~A)*residual;
-			//cout<<"THE SYMMETRIC PROBLEM IS: "<<ASym;
-			//cout<<residualSym;
 			cg.solve();
-			solution-=cg.getU();
-			//cout<<"THE SOLUTION VECTOR IS: "<<solution;
+			solution-=cg.getU();		
 			dissasembleSolution();
 			linearProblemUpdate(stressIncrements);
-			//updateSolution();
-
-			//std::cin>>a;
 			
+			//updateSolution();
+	
 			i++;
 			cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n";
 			cout<<i<<"			"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
@@ -94,12 +87,7 @@ double VonMises::yieldFunction(Tensor& stresses)
 }
 double VonMises::equivalentStress(Tensor& stresses)
 {
-/* 	Matrix<double> P {{2/3,-1/3,-1/3,0,0,0},
-		              {-1/3,2/3,-1/3,0,0,0},
-				      {-1/3,-1/3,2/3,0,0,0},
-					  {0,0,0,2,0,0},
-					  {0,0,0,0,2,0},
-					  {0,0,0,0,0,2}}; */
+
 	Matrix<double> P(6,6);
 	P(0,0)=2.0/3.0;
 	P(1,1)=P(0,0);
@@ -149,7 +137,6 @@ void VonMises::derivativeFSigma(Tensor& stress)
 void VonMises::initializeModel()
 {
 	//initialize full elastic tensor
-	//Cel is a member of super-class Material
 	//initialize plastic parameters
 	df_dK=plasticModulus;
 	dLambda=0;
@@ -200,7 +187,7 @@ void VonMises::assembleA(Tensor& previousStress)
 	{
 		A(i,6)=temp2[i];
 	}
-	//COPY NORMAL FLOW DIRECTIO dfdsigma
+	//COPY NORMAL FLOW DIRECTION dF_dSigma
 	for(int i=0;i<6;++i)
 	{
 		A(6,i)=dF_dSigma[i];
@@ -215,7 +202,7 @@ void VonMises::calculateResidual(Tensor& previousStress)
 	Tensor temp;
 	//dF_dSigma MUST BE UPDATED EXTERNALLY
 	temp=previousStress-trialStress+((Cel*dF_dSigma)*dLambda);//this is a 6x1
-	//cout<<"THE PLASTIC CORRECTOR IS: "<<Cel*dF_dSigma*dLambda<<"\n";
+	
 	//COPY TEMP INTO 6 FIRST ELEMENTS OF RESIDUAL
 	for(int i=0;i<6;i++)
 	{

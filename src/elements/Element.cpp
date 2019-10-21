@@ -73,7 +73,7 @@ void Element::resizeElementSolutionVector(int n)
 void Element::computeTensorialResults()
 {
 	calculateBReducedIntegration();
-	Vector<double> strain_vec=B*solution;
+	Vector<double> strain_vec=B*solution;//solution is the displacement
 	material->assembleTensors(strain_vec, strain, stress);
 }
 std::ostream& operator<<(std::ostream& out, Element& el)
