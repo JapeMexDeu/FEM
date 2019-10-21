@@ -74,6 +74,7 @@ class Vector:public std::vector<T>
 			}
 				
 		}
+		
 		//***OPERATOR OVERLOAD*****
 		//Vector& operator=(const Vector&);
 		Vector operator+(const Vector &v)

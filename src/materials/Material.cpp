@@ -6,8 +6,8 @@ Material::Material(double E_, double mu_, double yS/*=0*/, double pM/*=0*/):E(E_
 	
 	//Left empty
 	Cel(0,0)=1-mu;
-	Cel(1,1)=C(0,0);
-	Cel(2,2)=C(1,1);
+	Cel(1,1)=Cel(0,0);
+	Cel(2,2)=Cel(1,1);
 	
 	Cel(3,3)=(1-2*mu)/2;
 	Cel(4,4)=Cel(3,3);
@@ -48,7 +48,9 @@ double Material::getPlasticModulus()
 }
 std::ostream& operator<<(std::ostream& out, Material& mat)
 {
+
 	out<<mat.type<<"\n";
 	out<<mat.C;
+	out<<mat.Cel;
 	out<<"\n";
 }
