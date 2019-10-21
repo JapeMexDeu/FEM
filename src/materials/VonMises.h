@@ -105,7 +105,7 @@ class VonMises:public ElastoPlasticMaterial
 		void calculateResidual(Tensor& previousStress);
 		void updateSolution();
 		void dissasembleSolution();
-		
+		void assembleTangentModulus();
 		void linearProblemUpdate(Tensor& stressIncrements);
 };
 #endif

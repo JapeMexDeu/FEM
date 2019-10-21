@@ -49,10 +49,12 @@ class Material
 		//virtual void radialReturn()=0;
 		//virtual double yieldFunction()=0;
 		
-	private:
+	protected:
 		virtual void setConstitutiveMatrix()=0;
 	
 	protected:
+	
+		bool plastic;//false upon creation
 		std::string type;
 		
 		//ELASTIC PARAMETERS
@@ -63,6 +65,7 @@ class Material
 		
 		
 		//PLASTIC PARAMETERS
+		Matrix<double> Cep=Matrix<double>(6,6);/**<Constitutive Matrix for plastic behavior*/
 		Tensor plasticStrain;
 		double yieldStress;/**<ONLY PLASTIC: stress before plastic behavior &sigma;_y*/
 		double plasticModulus;/**<ONLY LINEAR ISOTROPIC HARDENING: slope of yield stress increase*/

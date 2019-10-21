@@ -31,12 +31,27 @@ void VonMisesPlaneStrain::assembleTensors(Vector<double>& v, Tensor& strains, Te
 void VonMisesPlaneStrain::setConstitutiveMatrix()
 {
 	C.matrixResize(3,3);
-	//Diagonal first
-	C(0,0)=(1-mu);
-	C(1,1)=1-mu;
-	C(2,2)=(1-2*mu)/2;
-	//Other terms
-	C(0,1)=mu;
-	C(1,0)=C(0,1);
-	C*=(E)/((1-(2*mu))*(1+mu));
+	if(plastic==false)//loading same values as Cel
+	{
+		//Diagonal first
+		C(0,0)=(1-mu);
+		C(1,1)=1-mu;
+		C(2,2)=(1-2*mu)/2;
+		//Other terms
+		C(0,1)=mu;
+		C(1,0)=C(0,1);
+		C*=(E)/((1-(2*mu))*(1+mu));
+	}
+	if(plastic==true)
+	{
+		//have to choose some values from Cep
+		C(0,0)=Cep(0,0);
+		C(1,1)=Cep(1,1);
+		C(2,2)=Cep(3,3);
+	
+		//Other terms
+		C(0,1)=Cep(0,1);
+		C(1,0)=C(0,1);
+		
+	}
 }

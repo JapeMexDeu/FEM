@@ -20,6 +20,7 @@ Material::Material(double E_, double mu_, double yS/*=0*/, double pM/*=0*/):E(E_
 	Cel(2,1)=Cel(0,1);
 	Cel(1,2)=Cel(2,1);
 	Cel*=E/((1+mu)*(1-2*mu));
+	plastic=false;
 	
 }
 Matrix<double>& Material::getConstitutiveMatrix()
