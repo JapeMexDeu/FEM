@@ -14,7 +14,7 @@
 #include"materials/VonMisesPlaneStress.h"
 #include"plotter/gnuplot_i.hpp"
 #include"fem/ImplAssembly.h"
-#include"solver/Solver.h"
+#include"solver/LSolver.h"
 #include"solver/Jacobi.h"
 #include"solver/descent/ConjugateGradientDescent.h"
 #include"solver/descent/GradientDescent.h"

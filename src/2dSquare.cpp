@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 {
 	//VonMisesPlaneStress mat1(210,0.25, 350, 10);
 	std::cout<<"\nTEST OF MATERIAL\n";
-	PlaneStrain mat1(300000,0.25);
+	PlaneStrain mat1(210,0.25);
     cout<<mat1;
 	
 	cout<<"*****CREATION OF MESH\n";
@@ -69,9 +69,8 @@ int main(int argc, char* argv[])
 	ass.vectorAssemblyRoutine();
 	
 	
-	Jacobi jac(&(ass.getGlobalMatrix()));
 	
-	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector());
+	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-10, 200, true);
 	
 	solver.solve();
 	
@@ -91,7 +90,7 @@ int main(int argc, char* argv[])
 	cout<<nlCG.getOrdinates();
 	Gnuplot g2=Gnuplot("lines");
 	g2.plot_xy(nlCG.getAbscissae(), nlCG.getOrdinates(),"funny");
-	sleep(50);
+	sleep(50); 
 	
 	//
 	//

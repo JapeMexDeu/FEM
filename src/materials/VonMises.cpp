@@ -192,7 +192,7 @@ void VonMises::initializeModel()
 	Jacobian(3,3)=6;
 	Jacobian(4,4)=6;
 	Jacobian(5,5)=6;
-	cout<<Jacobian;
+	//cout<<Jacobian;
 	Jacobian*=scalar;
 	
 }
