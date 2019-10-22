@@ -64,22 +64,26 @@ int main(int argc, char* argv[])
 	ass.printImplAssembly();
 	
 	ass.matrixAssemblyRoutine();
+		ass.matrixAssemblyRoutine();
+			ass.matrixAssemblyRoutine();
 	ass.vectorAssemblyRoutine();
 	
 	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-12, 200, true);
 	
 	solver.solve();
-	if(false)
+	if(true)
 	{
-		NLSolverCG nlCG(ass,10e-10,100,2);
+		NLSolverCG nlCG(ass,10e-10,10,2);
 		nlCG.printNLSolver();
 		nlCG.solve();
+		/* cout<<nlCG.getAbscissae();
+		cout<<nlCG.getOrdinates();
+		Gnuplot g2=Gnuplot("lines");
+		g2.plot_xy(nlCG.getAbscissae(), nlCG.getOrdinates(),"funny");
+		sleep(50); */  
+		
 	}
 	
-	/* //sleep(50);
-	cout<<nlCG.getAbscissae();
-	cout<<nlCG.getOrdinates();
-	Gnuplot g2=Gnuplot("lines");
-	g2.plot_xy(nlCG.getAbscissae(), nlCG.getOrdinates(),"funny");
-	sleep(50);  */
+	
+	
 }

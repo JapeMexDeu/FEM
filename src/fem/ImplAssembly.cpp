@@ -11,6 +11,7 @@ void ImplAssembly::matrixAssemblyRoutine()
 {
 	std::cout<<"\nBEGIN: MATRIX ASSEMBLY ROUTINE****\n";
 	globalK.matrixResize(disc->getTotalDOF(),disc->getTotalDOF());
+	globalK=0;
 	std::cout<<"   THE GLOBAL K HAS BEEN INITILIZED:";
 	//std::cout<<globalK;
 	//std::cout<<"   THE NUMBER OF ELEMENTS IS: "<<E<<"\n\n";

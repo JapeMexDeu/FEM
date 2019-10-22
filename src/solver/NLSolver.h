@@ -25,6 +25,7 @@ class NLSolver
 		Vector<double>& getOrdinates();
 	protected:
 		//For Plotting
+		
 		Vector<double> abscissae;
 		Vector<double> ordinates;
 		//MEMBER ATTRIBUTES PROPER TO A NONLINEAR INCREMENTAL APPROACH

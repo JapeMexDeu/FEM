@@ -55,7 +55,7 @@ class GnuplotException : public runtime_error
 
 class Gnuplot
 {
-    private:
+    protected:
         FILE            *gnucmd;
         string           pstyle;
         vector<string>   to_delete;
@@ -66,7 +66,7 @@ class Gnuplot
         Gnuplot();
 
         // set a style during construction
-        Gnuplot(const string &);
+        Gnuplot(const string &);//style
         
         // The equivilant of gnuplot_plot_once, the two forms
         // allow you to plot either (x,y) pairs or just a single
@@ -90,7 +90,7 @@ class Gnuplot
 
         // set line style
         void set_style(const string &);
-
+		
         // set y and x axis labels
         void set_ylabel(const string &);
         void set_xlabel(const string &);

@@ -62,6 +62,7 @@ void Quad2::calculateMatrix()
 */
 void Quad2::calculateMatrix()
 {
+	K=0;//Make sure it wont overlap different load step values
 	Matrix<double> Jacobian(2,2);
 	Matrix<double> G(4,8);
 	Matrix<double> A(3,4);
