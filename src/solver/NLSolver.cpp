@@ -45,23 +45,25 @@ void NLSolver::solve()
 			lSolver->solve();
 			steps[step-1]+=lSolver->getU();//Implements update, ,sum increment
 			//AFTER ITERATION WE UPDATE OUR WHOLE PROBLEM
-			//Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);//This will find the plastic behavior
+			Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);//This will find the plastic behavior
+			//HERE WE WILL HAVE TO UPDATE OUR PLOTTING DATA
+			//Assembly.printMesh();//See results for iteration
 			Assembly.matrixAssemblyRoutine();
 			
 			
 			current_iForce=Assembly.getGlobalMatrix()*steps[step-1];//update of internal force vector
 			nlIterations++;
 			
-			r=current_Force-current_iForce;//update of residuum within same load step
-			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
+			r=current_Force-current_iForce;//update of residuum within same load step, to see CONVERGENCE
+			//std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
 		}
+		std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
 		//We have to disassemble the global displacement vector, and then calculate stresses and strains
 		//Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);
 		std::cout<<"\n*********THE RESULTS FOR THIS LOAD STEP**********\n";
-		Assembly.printMesh();
+		//Assembly.printMesh();
 		u_total=steps[step-1];
-		//here the K matrix would be generated again...since its a reference it will change value within the algorithm
-		//assembly.assembleGlobalMatrix();
+		
 		std::cout<<"\nIN STEP: "<< step<<" THE DISPLACEMENT SO FAR: "<<steps[step-1]<<"\n";
 		if(step<numSteps)
 			steps[step]=steps[step-1];

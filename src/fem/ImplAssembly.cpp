@@ -55,19 +55,6 @@ void ImplAssembly::vectorAssemblyRoutine()
 	int totalNodes=disc->getMesh().getNumNodes();
 	int dpn=disc->getDofPerNode();
 	int index;
-	//the point loads are added directly to global vector
-	//for(int f=0;f<disc->getTotalDOF();++f)
-	//{
-		// for(int i=1;i<=totalNodes;++i)
-		// {
-			// if(disc->getMesh().getNode(i)->getPointForce()!=nullptr)
-			// {
-				// globalF[i*(disc->getDofPerNode())-2]=disc->getMesh().getNode(i)->getPointForce()->getComponent1();//x
-				// globalF[i*(disc->getDofPerNode())-1]=disc->getMesh().getNode(i)->getPointForce()->getComponent2();//Y
-			// }
-			
-		// }
-	//}
 	/*
 	 1.-First we access the nodes
 	 2.-Check if the node actually has an assigned point force

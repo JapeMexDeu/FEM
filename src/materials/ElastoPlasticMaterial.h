@@ -48,7 +48,7 @@ class ElastoPlasticMaterial:public Material
 		 * The outcome of this algorithm must be the plastic strains and the updating of the stress state
 		 param@[in]
 		 */
-		virtual void radialReturn(Tensor& strains)=0;
+		virtual Tensor radialReturn(Tensor& strains)=0;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
 		 */
 		virtual double yieldFunction(Tensor& stress)=0;

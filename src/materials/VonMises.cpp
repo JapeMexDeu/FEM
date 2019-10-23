@@ -12,14 +12,15 @@ void VonMises::rr(Tensor& strain)
 {
 	radialReturn(strain);
 }
-void VonMises::radialReturn(Tensor& strains)
+Tensor VonMises::radialReturn(Tensor& strains)
 {	cout<<"BEFORE CALCULATION: "<<C;
-	double tolerance=10e-12;
+	double tolerance=10e-8;
 	double yielding=0;
 	//Matrix<double> Ctemp;
 	//Matrix<double> Num;
 	//double den;
 	dLambda=0;
+	dK=0;
 	//Trial stress
 	cout<<"THE TRIAL STRESS IN THIS LOAD STEP IS: \n";
 	trialStress=Cel*strains;
@@ -28,22 +29,20 @@ void VonMises::radialReturn(Tensor& strains)
 	stressIncrements=trialStress;
 	
 	yielding=yieldFunction(trialStress);
-	cout<<"THE YIELD FUNCTIONS VALUE IS: \n";
-	cout<<yielding<<"\n";
+	//cout<<"THE YIELD FUNCTIONS VALUE IS: \n";
+	//cout<<yielding<<"\n";
 	
-	int count=50;
+	int count=100;
 	
 	int i=0;
 	int a;
 	if(yielding>0 )
-	{
-		
-		
+	{	
 		std::cout<<"\nPLASTIC BEHAVIOR\n";
 		plastic=true;
 		linearProblemUpdate(stressIncrements);
 		updateSolution();
-		cout<<"THE SOLUTION IS: "<<solution;
+		//cout<<"THE SOLUTION IS: "<<solution;
 		
 		while(i<count && residual.norm()>tolerance)
 		{
@@ -58,9 +57,9 @@ void VonMises::radialReturn(Tensor& strains)
 			//updateSolution();
 	
 			i++;
-			cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n"
+			/* cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n"
 			<<i<<"			"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
-				<<"  	  "<<dLambda<<"		"<<dK<<"\n";
+				<<"  	  "<<dLambda<<"		"<<dK<<"\n"; */ 
 			//cout<<"THE SYMMETRIC PROBLEM IS: "<<ASym;
 			//cout<<residualSym;
 			
@@ -71,29 +70,31 @@ void VonMises::radialReturn(Tensor& strains)
 			cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma; */
 		
 		}
+		cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n"
+			<<i<<"			"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
+				<<"  	  "<<dLambda<<"		"<<dK<<"\n";
+		
 		cout<<"THE STRESS STATE IS: "<<stressIncrements;
 		cout<<"DLAMBDA: "<<dLambda<<"\n";
 		cout<<"NORMAL IS: "<<dF_dSigma;
 		cout<<"TESTING THE YIELD FUNCTION: "<<equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK<<"\n";
-		//Ctemp.OuterProduct(dF_dSigma,dF_dSigma);
-		//Num=Cel*Ctemp*Cel;
-		//den=dF_dSigma*(Cel*dF_dSigma)-plasticModulus;
-		//cout<<"THE NUMERATOR IS: "<<Num;
-		//cout<<"THE CALCULATION OF OUTER PRODUCT IS: "<<Ctemp;
-		//cout<<"THE DENOMINATOR IS: "<<den<<"\n";
-		//Num*=(1/den);
-		//cout<<Cel-Num;
+		updateYieldStress();
+		cout<<"THE YIELD STRESS IS: "<<yieldStress<<"\n";
+		//updateYieldStress();
 		assembleTangentModulus();
-		cout<<Cep;
+		//cout<<Cep;
+		
+		//return stressIncrements;
 	}
 	if(yielding<0)
 	{
 		plastic=false;
 		std::cout<<"\nELASTIC BEHAVIOR\n";
+		return trialStress;
 	}
 	setConstitutiveMatrix();
 	cout<<"AFTER CALCULATION: "<<C;
-	
+	return stressIncrements;
 }
 void VonMises::assembleTangentModulus()
 {
@@ -107,6 +108,14 @@ void VonMises::assembleTangentModulus()
 	Num=Cel*Ctemp*Cel;
 	Num*=(1/den);
 	Cep=Cel-Num;
+	for(int i=0;i<Cep.getColumns();++i)
+	{
+		for(int j=0;j<Cep.getColumns();++j)
+		{
+			if(abs(Cep(i,j))<1e-5)
+				Cep(i,j)=0;
+		}
+	}
 }
 double VonMises::yieldFunction(Tensor& stresses)
 {
@@ -265,6 +274,7 @@ void VonMises::updateSolution()
 	{
 		solution[i]=stressIncrements[i];
 	}
+	solution[6]=dLambda;
 	solution[6]=dLambda;
 }
 void VonMises::dissasembleSolution()

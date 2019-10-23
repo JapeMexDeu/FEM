@@ -34,6 +34,10 @@ Vector<double>& Element::getElementSolutionVector()
 {
 	return solution;
 }
+Vector<double>& Element::getInternalForce()
+{
+	return internalForce;
+}
 void Element::setMaterial(Material* mat)
 {
 	this->material=mat;
@@ -73,6 +77,7 @@ void Element::resizeElementSolutionVector(int n)
 void Element::computeTensorialResults()
 {
 	calculateBReducedIntegration();
+	calculateInternalForce();
 	Vector<double> strain_vec=B*solution;//solution is the displacement
 	material->assembleTensors(strain_vec, strain, stress);
 }
@@ -103,6 +108,8 @@ else
 		out<<el.strain;
 		out<<"STRESSES ARE: \n";
 		out<<el.stress;
+		out<<"INTERNAL FORCE IS: \n";
+		out<<el.internalForce;
 	}
 	out<<"\n";
 }

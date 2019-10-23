@@ -37,6 +37,7 @@ class ImplAssembly:public Assembly
 		Discretization* disc;/**<Number of degrees of freedom per Node, comes from Discretization or from size of nodes vector in element*/
 		Matrix<double> globalK;/**<Global stiffness matrix of the given discretized model*/
 		Vector<double> globalF;/**<Global force vector of the given discretized model*/
+		Vector<double> globalFint;/**<Global internal force vector of the model*/
 		
 };
 #endif

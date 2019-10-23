@@ -111,6 +111,7 @@ void Quad2::calculateMatrix()
 	/**/
 	//K*=4;
 	//std::cout<<K;
+	//This eliminates calculation sheeeeeeeiit...nigga
 	for(int i=0;i<K.getColumns();++i)
 	{
 		for(int j=0;j<K.getColumns();++j)
@@ -135,6 +136,17 @@ void Quad2::calculateBReducedIntegration()
 	assembleA(A, Jacobian);
 	
 	B=A*G;
+}
+void Quad2::calculateInternalForce()
+{
+	internalForce.resize(8);//NOT NECESSARY BUT STILL...
+	GaussIntegration::setPoint(0,0);
+	Matrix<double> Jacobian(2,2);
+	calculateJacobian(Jacobian);
+	double detJ=Jacobian(0,0)*Jacobian(1,1)-Jacobian(0,1)*Jacobian(1,0);
+	
+	internalForce=~B*material->getConstitutiveMatrix()*B*solution;
+	internalForce*=detJ;
 }
 void Quad2::calculateJacobian(Matrix<double>& Jacobian)
 {

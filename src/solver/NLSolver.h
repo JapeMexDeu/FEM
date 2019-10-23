@@ -15,7 +15,7 @@
 class NLSolver
 {
 	public: 
-		NLSolver(ImplAssembly& assembly, double tol=10e-10, int maxIterations=100, int stps=20);
+		NLSolver(ImplAssembly& assembly, double tol=10e-10, int maxIterations=10, int stps=20);
 		
 	public:
 		Vector<Vector<double>> steps;/**<Stores the solution increment vector from every step*/

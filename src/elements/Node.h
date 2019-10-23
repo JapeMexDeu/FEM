@@ -32,6 +32,7 @@ class Node
 		friend std::ostream& operator<<(std::ostream &out, Node& n);
 	private:
 		Force* pointForce;
+		Vector<double> internalForce=Vector<double>(3);
 		Vector<double> position=Vector<double>(3);/**<Stores xyz values*/
 		Vector<double> dofs;/**<Values of DOFs of Node, in Mechanics its nodal displacements of size numDOF*/
 		Vector<int> dofNumbers;/**<Global numbering of the DOFs, each entry will store a number or a -1 depending on the

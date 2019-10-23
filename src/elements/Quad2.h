@@ -22,6 +22,7 @@ class Quad2:public Element
 		//Setters and getters
 		//virtual void setNode(Node* n, int i)override;
 	private:
+		virtual void calculateInternalForce()override;
 		virtual void calculateBReducedIntegration()override;
 		virtual void calculateJacobian(Matrix<double>& Jacobian)override;
 		virtual void calculateG(Matrix<double>& G)override;

@@ -32,9 +32,9 @@ using std::cout;
 int main(int argc, char* argv[])
 {
 	//VonMisesPlaneStress mat1(210,0.25, 350, 10);
-	std::cout<<"\nTEST OF MATERIAL\n";
+	//std::cout<<"\nTEST OF MATERIAL\n";
 	PlaneStrain mat1(210,0.25);
-    cout<<mat1;
+    //cout<<mat1;
 	
 	cout<<"*****CREATION OF MESH\n";
 	Force f(1000,0);
@@ -74,15 +74,19 @@ int main(int argc, char* argv[])
 	
 	solver.solve();
 	
- 	//ass.localSolutionVectorAssemblyRoutine(solver.getU());
-	//mesh.print();
+ 	ass.localSolutionVectorAssemblyRoutine(solver.getU());
+	mesh.print();
+	
+	
+	cout<<(mesh.getElements()[0]->getMatrix()*mesh.getElements()[0]->getElementSolutionVector()).norm()<<"\n";
+	cout<<(mesh.getElements()[0]->getInternalForce()).norm();
 	/*
 	Gnuplot g1=Gnuplot("lines");
 	g1.reset_plot();
 	g1.cmd("set yrange[0:1]");
 	g1.plot_xy(solver.getIterates(), solver.getError(),"funny"); 
 	*/
-	NLSolverCG nlCG(ass,10e-10,100,2);
+	/* NLSolverCG nlCG(ass,10e-10,100,2);
 	nlCG.printNLSolver();
 	nlCG.solve();
 	//sleep(50);
@@ -90,7 +94,7 @@ int main(int argc, char* argv[])
 	cout<<nlCG.getOrdinates();
 	Gnuplot g2=Gnuplot("lines");
 	g2.plot_xy(nlCG.getAbscissae(), nlCG.getOrdinates(),"funny");
-	sleep(50); 
+	sleep(50);  */
 	
 	//
 	//

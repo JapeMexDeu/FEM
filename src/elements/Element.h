@@ -36,7 +36,7 @@ class Element
 		Material* getMaterial();
 		Matrix<double>& getMatrix();
 		Vector<double>& getElementSolutionVector();
-		
+		Vector<double>& getInternalForce();
 		//FUNCTIONS THAT CALCULATE
 		virtual void calculateMatrix()=0;
 		void resizeElementSolutionVector(int n);
@@ -53,6 +53,7 @@ class Element
 		GaussIntegration g;
 		Matrix<double> K;/**<Stiffness Matrix of the Element, calculation is derived-class-dependent*/
 		Matrix<double> B;/**<B-operator matrix*/
+		Vector<double> internalForce;/**<Internal force vector of the element*/
 		Vector<Node*> nodes;/**<Stores nodes that compose the elment, size is type-dependant*/
 		Vector<double> solution;/**<Stores values of solutions for each nodes and number of DOFs per node*/
 		int globalNum;/**<Individual element number*/
@@ -65,6 +66,9 @@ class Element
 		/*!\brief Calculates the B-operator only using 1 Gauss Point at (0,0) in the element
 		 */
 		virtual void calculateBReducedIntegration()=0;
+		/*!\brief Calculates the internal force vector at the 0,0 reduced integration point, result is 8x1
+		 */
+		virtual void calculateInternalForce()=0;
 		/*!\brief Type-dependent implementation, every element declares the jacobian matrix elements as Function instances and call Gauss integration
 		 */
 		virtual void calculateJacobian(Matrix<double>& Jacobian)=0;

@@ -29,12 +29,9 @@ using std::cout;
 int main(int argc, char* argv[])
 {
 	VonMisesPlaneStrain mat1(210,0.25, 350, 10);
-	std::cout<<"\nTEST OF MATERIAL\n";
+
 	
-    cout<<mat1;
-	
-	cout<<"*****CREATION OF MESH\n";
-	Force f(1,0);
+	Force f(20,0);
 	NaiveMesh mesh(1,1);
 	mesh.setElementMaterial(&mat1);
 	mesh.getNode(2)->setPointForce(&f);
@@ -56,24 +53,22 @@ int main(int argc, char* argv[])
 	
 	disc.print();
 	disc.DOFenum();
-	mesh.print();
-	disc.print();
+	//mesh.print();
+	//disc.print();
 	
 	ImplAssembly ass(&disc);
 
-	ass.printImplAssembly();
+	//ass.printImplAssembly();
 	
 	ass.matrixAssemblyRoutine();
-		ass.matrixAssemblyRoutine();
-			ass.matrixAssemblyRoutine();
 	ass.vectorAssemblyRoutine();
 	
 	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-12, 200, true);
 	
-	solver.solve();
+	//solver.solve();
 	if(true)
 	{
-		NLSolverCG nlCG(ass,10e-10,10,2);
+		NLSolverCG nlCG(ass,10e-10,5,100);
 		nlCG.printNLSolver();
 		nlCG.solve();
 		/* cout<<nlCG.getAbscissae();

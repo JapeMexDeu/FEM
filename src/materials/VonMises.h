@@ -68,7 +68,7 @@ class VonMises:public ElastoPlasticMaterial
 		 *DESCRIPTION: 
 		 *Input stresses are already the trial stresses, the strains are needed for the plastic-work scalar
 		 */
-		virtual void radialReturn(Tensor& strains)override;
+		virtual Tensor radialReturn(Tensor& strains)override;
 		/*!\brief Returns the result of evaluating the yield function on a stress state
 		 */
 		virtual double yieldFunction(Tensor& stress)override;
