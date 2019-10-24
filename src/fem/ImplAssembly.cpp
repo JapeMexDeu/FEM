@@ -103,6 +103,11 @@ void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolu
 	}
 	std::cout<<"END: LOCAL SOLUTION VECTOR ASSEMBLY ROUTINE******\n";
 }
+void ImplAssembly::globalInternalForceAssembly()
+{
+	globalInternalForce.resize(disc->getTotalDOF());//Give it the correct size
+	
+}
 int ImplAssembly::connectivityArray(Element* el, int i)
 {
 	//to know which node

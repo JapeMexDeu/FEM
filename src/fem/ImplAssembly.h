@@ -18,10 +18,12 @@ class ImplAssembly:public Assembly
 		virtual void vectorAssemblyRoutine()override;
 		virtual void localSolutionVectorAssemblyRoutine(Vector<double>& globalSolution) override;
 		void printImplAssembly();
+		void globalInternalForceAssembly();
 		/*!\brief Call mesh printing method, we can see nodal values and element-wise results
 		 */
 		void printMesh();
 		//Setters and getters
+		Vector<double>& getGlobalInternalForce();
 		Matrix<double>& getGlobalMatrix();
 		Vector<double>& getGlobalVector();
 		int getTotalDOF();
@@ -37,7 +39,7 @@ class ImplAssembly:public Assembly
 		Discretization* disc;/**<Number of degrees of freedom per Node, comes from Discretization or from size of nodes vector in element*/
 		Matrix<double> globalK;/**<Global stiffness matrix of the given discretized model*/
 		Vector<double> globalF;/**<Global force vector of the given discretized model*/
-		Vector<double> globalFint;/**<Global internal force vector of the model*/
+		Vector<double> globalInternalForce;/**<Global internal force vector of the model*/
 		
 };
 #endif

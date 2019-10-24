@@ -76,10 +76,16 @@ int main(int argc, char* argv[])
 	
  	ass.localSolutionVectorAssemblyRoutine(solver.getU());
 	mesh.print();
-	
-	
+	cout<<"Global Ku: \n";
+	cout<<ass.getGlobalMatrix()*solver.getU();
+	cout<<"Ku: \n";
+	cout<<(mesh.getElements()[0]->getMatrix()*mesh.getElements()[0]->getElementSolutionVector());
 	cout<<(mesh.getElements()[0]->getMatrix()*mesh.getElements()[0]->getElementSolutionVector()).norm()<<"\n";
+	cout<<"True internal force vector:\n";
+	cout<<(mesh.getElements()[0]->getInternalForce());
 	cout<<(mesh.getElements()[0]->getInternalForce()).norm();
+	cout<<"the external forces are: \n";
+	cout<<ass.getGlobalVector();
 	/*
 	Gnuplot g1=Gnuplot("lines");
 	g1.reset_plot();

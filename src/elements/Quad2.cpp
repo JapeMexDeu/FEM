@@ -145,7 +145,7 @@ void Quad2::calculateInternalForce()
 	calculateJacobian(Jacobian);
 	double detJ=Jacobian(0,0)*Jacobian(1,1)-Jacobian(0,1)*Jacobian(1,0);
 	
-	internalForce=~B*material->getConstitutiveMatrix()*B*solution;
+	internalForce=(~B)*material->getConstitutiveMatrix()*B*solution;
 	internalForce*=detJ;
 }
 void Quad2::calculateJacobian(Matrix<double>& Jacobian)
