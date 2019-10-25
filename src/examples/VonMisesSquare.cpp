@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	//solver.solve();
 	if(true)
 	{
-		NLSolverCG nlCG(ass,10e-10,5,1000);
+		NLSolverCG nlCG(ass,10e-8,20,400);
 		nlCG.printNLSolver();
 		nlCG.solve();
 		/* cout<<nlCG.getAbscissae();

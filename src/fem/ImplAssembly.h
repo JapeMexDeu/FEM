@@ -41,5 +41,8 @@ class ImplAssembly:public Assembly
 		Vector<double> globalF;/**<Global force vector of the given discretized model*/
 		Vector<double> globalInternalForce;/**<Global internal force vector of the model*/
 		
+		//Output control
+		bool verbose;
+		
 };
 #endif

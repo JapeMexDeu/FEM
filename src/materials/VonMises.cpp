@@ -13,7 +13,10 @@ void VonMises::rr(Tensor& strain)
 	radialReturn(strain);
 }
 Tensor VonMises::radialReturn(Tensor& strains)
-{	cout<<"BEFORE CALCULATION: "<<C;
+{	
+	bool verbose=false;
+		if(verbose)
+	cout<<"BEFORE CALCULATION: "<<C;
 	double tolerance=10e-8;
 	double yielding=0;
 	//Matrix<double> Ctemp;
@@ -22,9 +25,14 @@ Tensor VonMises::radialReturn(Tensor& strains)
 	dLambda=0;
 	dK=0;
 	//Trial stress
-	cout<<"THE TRIAL STRESS IN THIS LOAD STEP IS: \n";
+	
 	trialStress=Cel*strains;
-	cout<<trialStress;
+	if(verbose)
+	{
+		cout<<"THE TRIAL STRESS IN THIS LOAD STEP IS: \n";
+		cout<<trialStress;
+	}
+	
 	//Take the trial Stress a our initial guess for the stress state...TAKE ZERO...since we come from there
 	stressIncrements=trialStress;
 	
@@ -37,7 +45,7 @@ Tensor VonMises::radialReturn(Tensor& strains)
 	int i=0;
 	int a;
 	if(yielding>0 )
-	{	
+	{	//if(verbose)
 		std::cout<<"\nPLASTIC BEHAVIOR\n";
 		plastic=true;
 		linearProblemUpdate(stressIncrements);
@@ -70,16 +78,23 @@ Tensor VonMises::radialReturn(Tensor& strains)
 			cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma; */
 		
 		}
-		cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n"
+		if(verbose)
+		{
+			cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n"
 			<<i<<"			"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
-				<<"  	  "<<dLambda<<"		"<<dK<<"\n";
+			<<"  	  "<<dLambda<<"		"<<dK<<"\n";
+			cout<<"THE STRESS STATE IS: "<<stressIncrements;
+			cout<<"DLAMBDA: "<<dLambda<<"\n";
+			cout<<"NORMAL IS: "<<dF_dSigma;
+			cout<<"TESTING THE YIELD FUNCTION: "<<equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK<<"\n";	
+		}
+		if(equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK>tolerance)
+			cout<<"PLASTIC CORRECTOR DID NOT CONVERGE\n";
 		
-		cout<<"THE STRESS STATE IS: "<<stressIncrements;
-		cout<<"DLAMBDA: "<<dLambda<<"\n";
-		cout<<"NORMAL IS: "<<dF_dSigma;
-		cout<<"TESTING THE YIELD FUNCTION: "<<equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK<<"\n";
+		
 		updateYieldStress();
-		cout<<"THE YIELD STRESS IS: "<<yieldStress<<"\n";
+		if(verbose)
+			cout<<"THE YIELD STRESS IS: "<<yieldStress<<"\n";
 		//updateYieldStress();
 		assembleTangentModulus();
 		//cout<<Cep;
@@ -89,11 +104,16 @@ Tensor VonMises::radialReturn(Tensor& strains)
 	if(yielding<0)
 	{
 		plastic=false;
-		std::cout<<"\nELASTIC BEHAVIOR\n";
+		if(verbose)
+			std::cout<<"\nELASTIC BEHAVIOR\n";
 		return trialStress;
 	}
 	setConstitutiveMatrix();
-	cout<<"AFTER CALCULATION: "<<C;
+	if(verbose)
+	{
+		cout<<"AFTER CALCULATION: "<<C;
+	}
+
 	return stressIncrements;
 }
 void VonMises::assembleTangentModulus()

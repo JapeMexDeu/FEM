@@ -21,13 +21,14 @@ void NLSolver::solve()
 	//NEED A LOCAL VARIABLE FOR THE CURRENT FORCE INCREMENT
 	Vector<double> current_Force (Assembly.getTotalDOF());//External force
 	Vector<double> current_iForce(Assembly.getTotalDOF());//Internal force
+	//double ls=1;
 	double step_ratio;//for setting the force increments
 	current_iForce=0;
 	//HAVE TO DO FOR AS MANY INCREMENTS numSteps (LOAD STEPS)
 	for(int step=1;step<=numSteps;++step)
 	{
 		//current_iForce;//we dont want the previous value in every new load step
-		std::cout<<"LOAD STEP "<<"NONLINEAR ITERATION "<<" RESIDUUM NORM"<<"\n";
+		std::cout<<"LOAD STEP "<<"NONLINEAR ITERATION "<<" RESIDUUM NORM"<<"RELATIVE ERROR"<<"\n";
 		std::cout<<"        "<<step;
 		step_ratio=(double)step/(double)numSteps;//make sure it is a double
 		current_Force=Assembly.getGlobalVector();
@@ -36,7 +37,7 @@ void NLSolver::solve()
 		r=current_Force-current_iForce;
 		//AT SOME POINT WE BEGIN TO ITERATE THE NON LINEAR PROBLEM
 		int nlIterations=0;
-		std::cout<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
+		std::cout<<"                "<<nlIterations<<"            "<<r.norm()<<"	"<<r.norm()/current_Force.norm()<<"\n";
 		while(nlIterations<maxIterations && r.norm()>tolerance)
 		{
 			//This would represent the  FULL newton raphson
@@ -44,6 +45,7 @@ void NLSolver::solve()
 			
 			lSolver->solve();
 			steps[step-1]+=lSolver->getU();//Implements update, ,sum increment
+			//steps[step-1]*=ls;
 			//AFTER ITERATION WE UPDATE OUR WHOLE PROBLEM
 			Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);//This will find the plastic behavior
 			//HERE WE WILL HAVE TO UPDATE OUR PLOTTING DATA
@@ -55,7 +57,7 @@ void NLSolver::solve()
 			nlIterations++;
 			
 			r=current_Force-current_iForce;//update of residuum within same load step, to see CONVERGENCE
-			//std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
+			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"	"<<r.norm()/current_Force.norm()<<"\n";
 		}
 		std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
 		//We have to disassemble the global displacement vector, and then calculate stresses and strains

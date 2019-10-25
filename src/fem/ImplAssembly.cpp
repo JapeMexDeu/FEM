@@ -5,14 +5,19 @@ ImplAssembly::ImplAssembly(Discretization* d):disc(d)
 	E=disc->getMesh().getNumElements();
 	
 	setN();
-	
+	verbose=false;
 }
 void ImplAssembly::matrixAssemblyRoutine()
 {
-	std::cout<<"\nBEGIN: MATRIX ASSEMBLY ROUTINE****\n";
+	
 	globalK.matrixResize(disc->getTotalDOF(),disc->getTotalDOF());
 	globalK=0;
-	std::cout<<"   THE GLOBAL K HAS BEEN INITILIZED:";
+	if(verbose)
+	{
+		std::cout<<"\nBEGIN: MATRIX ASSEMBLY ROUTINE****\n";
+		std::cout<<"   THE GLOBAL K HAS BEEN INITILIZED:";
+	}
+		
 	//std::cout<<globalK;
 	//std::cout<<"   THE NUMBER OF ELEMENTS IS: "<<E<<"\n\n";
 	//iterate through every element
@@ -43,14 +48,18 @@ void ImplAssembly::matrixAssemblyRoutine()
 		}
 		
 	}
-	std::cout<<"RESULT GLOBAL MATRIX IS: \n";
-	std::cout<<globalK;
+	if(verbose)
+	{
+		std::cout<<"RESULT GLOBAL MATRIX IS: \n";
+		std::cout<<globalK;
+		std::cout<<"END: MATRIX ASSEMBLY ROUTINE****\n";
+	}
 	
-	std::cout<<"END: MATRIX ASSEMBLY ROUTINE****\n";
 }
 void ImplAssembly::vectorAssemblyRoutine()
 {
-	std::cout<<"\nBEGIN: VECTOR ASSEMBLY ROUTINE******\n";
+	if(verbose)
+		std::cout<<"\nBEGIN: VECTOR ASSEMBLY ROUTINE******\n";
 	globalF.resize(disc->getTotalDOF());
 	int totalNodes=disc->getMesh().getNumNodes();
 	int dpn=disc->getDofPerNode();
@@ -74,14 +83,17 @@ void ImplAssembly::vectorAssemblyRoutine()
 		}
 		
 	}
-		
-	std::cout<<globalF;
-
-	std::cout<<"END: VECTOR ASSEMBLY ROUTINE******\n";
+	if(verbose)
+	{
+		std::cout<<globalF;
+		std::cout<<"END: VECTOR ASSEMBLY ROUTINE******\n";
+	}
+	
 }
 void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolution)
 {
-	std::cout<<"\nBEGIN: LOCAL SOLUTION VECTOR ASSEMBLY ROUTINE******\n";
+	if(verbose)
+		std::cout<<"\nBEGIN: LOCAL SOLUTION VECTOR ASSEMBLY ROUTINE******\n";
 	//globalF.resize(disc->getTotalDOF());
 	int totalNodes=disc->getMesh().getNumNodes();
 	int dpn=disc->getDofPerNode();
@@ -101,7 +113,8 @@ void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolu
 		}
 		el->computeTensorialResults();
 	}
-	std::cout<<"END: LOCAL SOLUTION VECTOR ASSEMBLY ROUTINE******\n";
+	if(verbose)
+		std::cout<<"END: LOCAL SOLUTION VECTOR ASSEMBLY ROUTINE******\n";
 }
 void ImplAssembly::globalInternalForceAssembly()
 {
