@@ -139,14 +139,16 @@ void Quad2::calculateBReducedIntegration()
 }
 void Quad2::calculateInternalForce()
 {
-	internalForce.resize(8);//NOT NECESSARY BUT STILL...
+	/* internalForce.resize(8);//NOT NECESSARY BUT STILL...
 	GaussIntegration::setPoint(0,0);
 	Matrix<double> Jacobian(2,2);
 	calculateJacobian(Jacobian);
 	double detJ=Jacobian(0,0)*Jacobian(1,1)-Jacobian(0,1)*Jacobian(1,0);
 	
 	internalForce=(~B)*material->getConstitutiveMatrix()*B*solution;
-	internalForce*=detJ;
+	internalForce*=detJ; */
+	calculateMatrix();
+	internalForce=K*solution;
 }
 void Quad2::calculateJacobian(Matrix<double>& Jacobian)
 {

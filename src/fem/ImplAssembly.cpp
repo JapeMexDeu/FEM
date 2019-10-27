@@ -5,7 +5,7 @@ ImplAssembly::ImplAssembly(Discretization* d):disc(d)
 	E=disc->getMesh().getNumElements();
 	
 	setN();
-	verbose=false;
+	verbose=true;
 }
 void ImplAssembly::matrixAssemblyRoutine()
 {
@@ -118,7 +118,39 @@ void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolu
 }
 void ImplAssembly::globalInternalForceAssembly()
 {
-	globalInternalForce.resize(disc->getTotalDOF());//Give it the correct size
+	globalInternalForce=0;
+	if(verbose)
+		std::cout<<"\nBEGIN: INTERNAL FORCE VECTOR ASSEMBLY ROUTINE******\n";
+	globalInternalForce.resize(disc->getTotalDOF());
+	int totalNodes=disc->getMesh().getNumNodes();
+	int dpn=disc->getDofPerNode();
+	int index;
+	/*
+	 1.-First we access the nodes
+	 2.-Check if the node actually has an assigned point force
+	 3.-Enter the dofNumbers vector, this gives you the global number
+	 4.-Enter the forcce vector and remove the same position as in dofNumbers
+	 5.-assign the value of force vector to the value of globalF a given by the value of dofNumbers-1
+	*/
+	for(int i=0;i<totalNodes;++i)
+	{
+		/* if(disc->getMesh().getNodes()[i].getPointForce()!=nullptr)
+		{ */
+			for(int j=0;j<dpn;++j)
+			{
+				index=disc->getMesh().getNodes()[i].getDOFnumbers()[j];
+				if(index>=0)
+					this->globalInternalForce[index-1]=disc->getMesh().getNodes()[i].getInternalForce()[j];
+			}
+		//}
+		
+	}
+	if(verbose)
+	{
+		std::cout<<globalInternalForce;
+		std::cout<<globalInternalForce.norm()<<"\n";
+		std::cout<<"END: INTERNAL FORCE VECTOR ASSEMBLY ROUTINE******\n";
+	}
 	
 }
 int ImplAssembly::connectivityArray(Element* el, int i)

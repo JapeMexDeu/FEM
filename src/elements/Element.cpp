@@ -76,10 +76,36 @@ void Element::resizeElementSolutionVector(int n)
 }
 void Element::computeTensorialResults()
 {
-	calculateBReducedIntegration();
+	setNodalValues();
+	
+	//calculateBReducedIntegration();
 	calculateInternalForce();
+	setNodalInternalForces();
+	calculateBReducedIntegration();
 	Vector<double> strain_vec=B*solution;//solution is the displacement
 	material->assembleTensors(strain_vec, strain, stress);
+}
+void Element::setNodalValues()
+{
+	nodes[0]->getDOFs()[0]=solution[0];
+	nodes[0]->getDOFs()[1]=solution[1];
+	nodes[1]->getDOFs()[0]=solution[2];
+	nodes[1]->getDOFs()[1]=solution[3];
+	nodes[2]->getDOFs()[0]=solution[4];
+	nodes[2]->getDOFs()[1]=solution[5];
+	nodes[3]->getDOFs()[0]=solution[6];
+	nodes[3]->getDOFs()[1]=solution[7];
+}
+void Element::setNodalInternalForces()
+{
+	nodes[0]->getInternalForce()[0]+=internalForce[0];
+	nodes[0]->getInternalForce()[1]+=internalForce[1];
+	nodes[1]->getInternalForce()[0]+=internalForce[2];
+	nodes[1]->getInternalForce()[1]+=internalForce[3];
+	nodes[2]->getInternalForce()[0]+=internalForce[4];
+	nodes[2]->getInternalForce()[1]+=internalForce[5];
+	nodes[3]->getInternalForce()[0]+=internalForce[6];
+	nodes[3]->getInternalForce()[1]+=internalForce[7];
 }
 std::ostream& operator<<(std::ostream& out, Element& el)
 {

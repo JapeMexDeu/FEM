@@ -41,6 +41,8 @@ class Element
 		virtual void calculateMatrix()=0;
 		void resizeElementSolutionVector(int n);
 		void computeTensorialResults();
+		void setNodalValues();
+		void setNodalInternalForces();
 		//OPERATOR OVERLOAD
 		friend std::ostream& operator<<(std::ostream &out, Element& el);
 		

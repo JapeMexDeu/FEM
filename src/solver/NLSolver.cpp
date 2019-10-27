@@ -21,19 +21,24 @@ void NLSolver::solve()
 	//NEED A LOCAL VARIABLE FOR THE CURRENT FORCE INCREMENT
 	Vector<double> current_Force (Assembly.getTotalDOF());//External force
 	Vector<double> current_iForce(Assembly.getTotalDOF());//Internal force
-	//double ls=1;
+	
 	double step_ratio;//for setting the force increments
 	current_iForce=0;
 	//HAVE TO DO FOR AS MANY INCREMENTS numSteps (LOAD STEPS)
 	for(int step=1;step<=numSteps;++step)
 	{
 		//current_iForce;//we dont want the previous value in every new load step
-		std::cout<<"LOAD STEP "<<"NONLINEAR ITERATION "<<" RESIDUUM NORM"<<"RELATIVE ERROR"<<"\n";
+		std::cout<<"LOAD STEP "<<"NONLINEAR ITERATION "<<" RESIDUUM NORM"<<"	  RELATIVE ERROR"<<
+		"   FORCE CRITERION"<<"\n";
 		std::cout<<"        "<<step;
 		step_ratio=(double)step/(double)numSteps;//make sure it is a double
 		current_Force=Assembly.getGlobalVector();
 		current_Force*=step_ratio;
-		//ordinates.push_back(current_Force.norm());
+		//for FORCE CRITERION 
+		//save 1st residual
+		double fR=0;
+		//assign a tolerance 
+		double tl=10e-3;
 		r=current_Force-current_iForce;
 		//AT SOME POINT WE BEGIN TO ITERATE THE NON LINEAR PROBLEM
 		int nlIterations=0;
@@ -55,9 +60,11 @@ void NLSolver::solve()
 			
 			current_iForce=Assembly.getGlobalMatrix()*steps[step-1];//update of internal force vector
 			nlIterations++;
-			
+			if(nlIterations==1)
+				fR=r.norm();
 			r=current_Force-current_iForce;//update of residuum within same load step, to see CONVERGENCE
-			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"	"<<r.norm()/current_Force.norm()<<"\n";
+			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"	";
+			std::cout<<r.norm()/current_Force.norm()<<"   "<<fR*tl<<"\n";
 		}
 		std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"\n";
 		//We have to disassemble the global displacement vector, and then calculate stresses and strains
@@ -69,7 +76,7 @@ void NLSolver::solve()
 		std::cout<<"\nIN STEP: "<< step<<" THE DISPLACEMENT SO FAR: "<<steps[step-1]<<"\n";
 		if(step<numSteps)
 			steps[step]=steps[step-1];
-		//abscissae.push_back(steps[step-1].norm());
+		
 	}
 }
 void NLSolver::printNLSolver()

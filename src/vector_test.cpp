@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 	cout<<mat1.getConstitutiveMatrix()*t1;
 	cout<<t2.hydrostaticPressure();
 	*/
-	VonMisesPlaneStress mat2(3000000,0.2)
+	
 	PlaneStress mat1(3000000,0.2);
 	CustomMesh cm(8,3);
 	cm.getNodes()[0].setPosition(0,5,0);
@@ -111,10 +111,19 @@ int main(int argc, char* argv[])
 	//std::cout<<ass.getGlobalVector();
 	//std::cout<<ass.getGlobalMatrix();
 	Jacobi jac(&(ass.getGlobalMatrix()));
-	//Solver solver(&(ass.getGlobalMatrix()), &(ass.getGlobalVector()), &jac);
-	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector());
+	//LinearIterativeSolver solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-4, 3000, true, &jac);
+	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-12, 20, true);
 	solver.solve();//solver2.solve();
+	std::cout<<"Ku:\n";
+	std::cout<<ass.getGlobalMatrix()*solver.getU();
+	std::cout<<(ass.getGlobalMatrix()*solver.getU()).norm();
+	std::cout<<ass.getGlobalMatrix();
 	ass.localSolutionVectorAssemblyRoutine(solver.getU());
+	std::cout<<ass.getGlobalMatrix();
+	ass.globalInternalForceAssembly();
+	std::cout<<std::endl;
+	
+	std::cout<<ass.getGlobalMatrix()*solver.getU();
 	cm.print();
 	Gnuplot g1=Gnuplot("lines");
 	 g1.reset_plot();

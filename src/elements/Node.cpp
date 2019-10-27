@@ -64,9 +64,13 @@ Vector<int>& Node::getDOFnumbers()
 {
 	return dofNumbers;
 }
-Vector<double> Node::getDOFs()
+Vector<double>& Node::getDOFs()
 {
 	return dofs;
+}
+Vector<double>& Node::getInternalForce()
+{
+	return internalForce;
 }
 int Node::getNodeNumber()
 {
@@ -77,16 +81,20 @@ void Node::print()
 	std::cout<<"\nNODE "<<globalNum<<"/"<<totalNodes<<"\n";
 	std::cout<<position;
 	std::cout<<dofNumbers;
+	std::cout<<dofs;
 	std::cout<<"FORCE APPLIED:";
 	if(pointForce==nullptr)
 		std::cout<<"NO FORCE\n";
 	else
 		std::cout<<pointForce;
+	std::cout<<"INTERNAL FORCE :";
+	std::cout<<internalForce;
 }
 void Node::setDOF(int dof)
 {
 	dofNumbers.resize(dof);
 	dofs.resize(dof);
+	internalForce.resize(dof);
 }
 void Node::setNumDof(int n)
 {
@@ -108,6 +116,18 @@ std::ostream& operator<<(std::ostream& out, Node& n)
 	for(size_t i=0;i<n.getDOFnumbers().size();++i)
 	{
 		out<<n.getDOFnumbers()[i]<<" ";
+	}
+	out<<")\n";
+	out<<"DOFs values are: "<<":( ";
+	for(size_t i=0;i<n.getDOFs().size();++i)
+	{
+		out<<n.getDOFs()[i]<<" ";
+	}
+	out<<")\n";
+	out<<"Intenal Force is: "<<":( ";
+	for(size_t i=0;i<n.getDOFs().size();++i)
+	{
+		out<<n.getInternalForce()[i]<<" ";
 	}
 	out<<")\n";
 	if(n.pointForce!=nullptr)

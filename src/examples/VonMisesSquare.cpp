@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	VonMisesPlaneStrain mat1(210,0.25, 350, 10);
 
 	
-	Force f(20,0);
+	Force f(100,0);
 	NaiveMesh mesh(1,1);
 	mesh.setElementMaterial(&mat1);
 	mesh.getNode(2)->setPointForce(&f);
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	//solver.solve();
 	if(true)
 	{
-		NLSolverCG nlCG(ass,10e-8,20,400);
+		NLSolverCG nlCG(ass,10e-8,20,50);
 		nlCG.printNLSolver();
 		nlCG.solve();
 		/* cout<<nlCG.getAbscissae();

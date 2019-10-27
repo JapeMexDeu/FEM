@@ -19,7 +19,8 @@ class Node
 		//*****VECTOR MEMBER ACCESS
 		Vector<double> getPosition();
 		Vector<int>& getDOFnumbers();
-		Vector<double> getDOFs();
+		Vector<double>& getDOFs();
+		Vector<double>& getInternalForce();
 		//Vector<int> getDOFnumbersPtr();
 		static int getNodesTotalNumber();
 		void setDOF(int dof);/**<Should resize vectors dofs and dofNumbers to the size of dof*/
