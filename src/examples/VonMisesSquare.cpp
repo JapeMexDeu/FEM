@@ -28,7 +28,9 @@ using std::cout;
 
 int main(int argc, char* argv[])
 {
-	VonMisesPlaneStrain mat1(210,0.25, 350, 10);
+	//1.-MATERIAL DEFINITION
+	VonMisesPlaneStrain mat1(210,0.25, 210, 10);
+	//ys 350
 
 	
 	Force f(100,0);
@@ -68,15 +70,10 @@ int main(int argc, char* argv[])
 	//solver.solve();
 	if(true)
 	{
-		NLSolverCG nlCG(ass,10e-8,20,50);
+		NLSolverCG nlCG(ass,10e-8,8,13);
 		nlCG.printNLSolver();
 		nlCG.solve();
-		/* cout<<nlCG.getAbscissae();
-		cout<<nlCG.getOrdinates();
-		Gnuplot g2=Gnuplot("lines");
-		g2.plot_xy(nlCG.getAbscissae(), nlCG.getOrdinates(),"funny");
-		sleep(50); */  
-		
+		mesh.print();
 	}
 	
 	

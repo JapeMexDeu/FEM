@@ -25,6 +25,20 @@ Node* Mesh::getNode(int key)
 	}
 	return nullptr;
 }
+Element* Mesh::getElement(int key)
+{
+	
+	int i=0;
+	while(i<elements.size())
+	{
+		if(elements[i]->getElementNum()==key)
+		{
+			return elements[i];
+		}
+		++i;
+	}
+	return nullptr;
+}
 int Mesh::getNumElements()
 {
 	return numElements;

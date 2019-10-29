@@ -24,9 +24,10 @@ class Mesh
 		 */
 		virtual void print();
 		//*****SETTERS AND GETTERS
-		/*!\brief Pointer to a node depending on the node local number starts at 0
+		/*!\brief Pointer to a node depending on the node local number starts at 1
 		 */
 		Node* getNode(int key);
+		Element* getElement(int key);
 		virtual void setNumElements(int n, int m)=0;
 		int getNumElements();
 		virtual void setNumNodes(int n, int m)=0;

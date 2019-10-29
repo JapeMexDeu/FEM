@@ -37,6 +37,8 @@ class Element
 		Matrix<double>& getMatrix();
 		Vector<double>& getElementSolutionVector();
 		Vector<double>& getInternalForce();
+		Tensor& getStress();
+		Tensor& getStrain();
 		//FUNCTIONS THAT CALCULATE
 		virtual void calculateMatrix()=0;
 		void resizeElementSolutionVector(int n);

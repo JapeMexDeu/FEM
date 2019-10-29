@@ -46,6 +46,18 @@ Material* Element::getMaterial()
 {
 	return material;
 }
+Tensor& Element::getStress()
+{
+	return stress;
+}
+Tensor& Element::getStrain()
+{
+	/* if(!(material->isPlastic()))
+		return strain;
+	if(material->isPlastic())
+		return material->getPlasticStrain(); */
+	return strain;
+}
 void Element::setNode(Node* n, int i)
 {
 	nodes[i]=n;
@@ -98,14 +110,22 @@ void Element::setNodalValues()
 }
 void Element::setNodalInternalForces()
 {
-	nodes[0]->getInternalForce()[0]+=internalForce[0];
+/* 	nodes[0]->getInternalForce()[0]+=internalForce[0];
 	nodes[0]->getInternalForce()[1]+=internalForce[1];
 	nodes[1]->getInternalForce()[0]+=internalForce[2];
 	nodes[1]->getInternalForce()[1]+=internalForce[3];
 	nodes[2]->getInternalForce()[0]+=internalForce[4];
 	nodes[2]->getInternalForce()[1]+=internalForce[5];
 	nodes[3]->getInternalForce()[0]+=internalForce[6];
-	nodes[3]->getInternalForce()[1]+=internalForce[7];
+	nodes[3]->getInternalForce()[1]+=internalForce[7];  */
+ 	nodes[0]->getInternalForce()[0]=internalForce[0];
+	nodes[0]->getInternalForce()[1]=internalForce[1];
+	nodes[1]->getInternalForce()[0]=internalForce[2];
+	nodes[1]->getInternalForce()[1]=internalForce[3];
+	nodes[2]->getInternalForce()[0]=internalForce[4];
+	nodes[2]->getInternalForce()[1]=internalForce[5];
+	nodes[3]->getInternalForce()[0]=internalForce[6];
+	nodes[3]->getInternalForce()[1]=internalForce[7]; 
 }
 std::ostream& operator<<(std::ostream& out, Element& el)
 {

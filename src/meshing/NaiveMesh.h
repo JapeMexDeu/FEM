@@ -18,6 +18,11 @@ class NaiveMesh:public Mesh
 		virtual void setNumElements(int n, int m)override;
  		virtual void setNumNodes(int n, int m)override;
 		virtual void setElementMaterial(Material* mat)override;
+		
+		//SET GENERATION, EXCLUSIVE FOR THIS MESH CLASS
+		Vector<int> setLeftInclusive();
+		Vector<int> setRightInclusive();
+		
 	//protected:
 		
 	private:

@@ -5,8 +5,9 @@ ImplAssembly::ImplAssembly(Discretization* d):disc(d)
 	E=disc->getMesh().getNumElements();
 	
 	setN();
-	verbose=true;
+	verbose=false;
 }
+
 void ImplAssembly::matrixAssemblyRoutine()
 {
 	
@@ -118,7 +119,7 @@ void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolu
 }
 void ImplAssembly::globalInternalForceAssembly()
 {
-	globalInternalForce=0;
+	//globalInternalForce=0;
 	if(verbose)
 		std::cout<<"\nBEGIN: INTERNAL FORCE VECTOR ASSEMBLY ROUTINE******\n";
 	globalInternalForce.resize(disc->getTotalDOF());
@@ -151,6 +152,7 @@ void ImplAssembly::globalInternalForceAssembly()
 		std::cout<<globalInternalForce.norm()<<"\n";
 		std::cout<<"END: INTERNAL FORCE VECTOR ASSEMBLY ROUTINE******\n";
 	}
+	//std::cout<<globalInternalForce;
 	
 }
 int ImplAssembly::connectivityArray(Element* el, int i)
@@ -186,7 +188,15 @@ Vector<double>& ImplAssembly::getGlobalVector()
 {
 	return this->globalF;
 }
+Vector<double>& ImplAssembly::getGlobalInternalForce()
+{
+	return this->globalInternalForce;
+}
 int ImplAssembly::getTotalDOF()
 {
 	return disc->getTotalDOF();
+}
+Discretization* ImplAssembly::getDiscretization()
+{
+	return disc;
 }

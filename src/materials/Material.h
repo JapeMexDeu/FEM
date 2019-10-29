@@ -31,6 +31,8 @@ class Material
 		double getModulus();
 		double getYieldStress();
 		double getPlasticModulus();
+		Tensor& getPlasticStrain();
+		bool isPlastic();
 		/*!\brief Receives strain as vector and modifies tensors to 6x1 results
 		 *DESCRIPTION: modifies strains and stresses tensors inside the element through reference. The stress is 
 					   calculated inside this function as a temporary Vector object then it is resized to a correct 6x1.

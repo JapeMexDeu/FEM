@@ -12,6 +12,8 @@
 #include"../fem/ImplAssembly.h"
 #include"LSolver.h"
 #include"../plotter/gnuplot_i.hpp"
+#include"../plotter/Plotter.h"
+
 class NLSolver
 {
 	public: 

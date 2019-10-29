@@ -1,18 +1,25 @@
 #include"gnuplot_i.hpp"
 #include"../fem/ImplAssembly.h"
-class Plotter:public gnuplot_i
+class Plotter:public Gnuplot
 {
 	public:
-		Plotter(string sytle="lines", ImplAssembly* model=nullptr );
+		Plotter(ImplAssembly* model=nullptr, string style="points", string title="NODAL FORCE-DISPLACEMENT");
 	
-		void plot();
-		void setNode(int n);
+		
+		
 		void updateNodeData();
+		void updateElementData();
 		void addX(double x);
 		void addY(double y);
-		
+		void printData();
+		void plot();
+		void plotElement();
 		//setters and getters
-		void setModel(ImplAssembly* model)
+		void setNode(int n);
+		void setElement(int n);
+		void setPlotter(string xlabel, string ylabel, ImplAssembly* mod, int dir, int node);
+		void setSPlotter(string xlabel, string ylabel, ImplAssembly* mod, int dir, int element);
+		void setModel(ImplAssembly* model);
 		void setLabels(string& xLabel, string& yLabel);
 		void setTitle(string &title);
 		void setPlottingDirection(int xyz);
@@ -28,4 +35,6 @@ class Plotter:public gnuplot_i
 		Vector<double> y;
 		int plotDirection;
 		string title;
+		string xlabel;
+		string ylabel;
 };

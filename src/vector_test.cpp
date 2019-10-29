@@ -13,6 +13,7 @@
 #include"materials/PlaneStress.h"
 #include"materials/VonMisesPlaneStress.h"
 #include"plotter/gnuplot_i.hpp"
+#include"plotter/Plotter.h"
 #include"fem/ImplAssembly.h"
 #include"solver/LSolver.h"
 #include"solver/Jacobi.h"
@@ -103,7 +104,14 @@ int main(int argc, char* argv[])
 	//disc.print();
 	
 	ImplAssembly ass(&disc);
-
+	Plotter plotter;
+	/* string xl="Displacement";
+	string yl="Force";
+	plotter.setLabels(xl, yl);
+	plotter.setModel(&ass);
+	plotter.setPlottingDirection(1);
+	plotter.setNode(6); */
+	plotter.setPlotter("D","F",&ass,1,6);
 	//ass.printImplAssembly();
 	ass.vectorAssemblyRoutine();
 	ass.matrixAssemblyRoutine();
@@ -122,9 +130,11 @@ int main(int argc, char* argv[])
 	std::cout<<ass.getGlobalMatrix();
 	ass.globalInternalForceAssembly();
 	std::cout<<std::endl;
-	
+	plotter.updateNodeData();
+	plotter.printData();
 	std::cout<<ass.getGlobalMatrix()*solver.getU();
 	cm.print();
+	plotter.plot();
 	Gnuplot g1=Gnuplot("lines");
 	 g1.reset_plot();
 	 g1.cmd("set yrange[0:1]");

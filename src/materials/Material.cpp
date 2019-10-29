@@ -27,6 +27,14 @@ Matrix<double>& Material::getConstitutiveMatrix()
 {
 	return C;
 }
+Tensor& Material::getPlasticStrain()
+{
+	return plasticStrain;
+}
+bool Material::isPlastic()
+{
+	return plastic;
+}
 std::string Material::getType()
 {
 	return type;

@@ -88,10 +88,10 @@ Tensor VonMises::radialReturn(Tensor& strains)
 			cout<<"NORMAL IS: "<<dF_dSigma;
 			cout<<"TESTING THE YIELD FUNCTION: "<<equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK<<"\n";	
 		}
-		if(equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK>tolerance)
+		if(abs(equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK)>tolerance)
 			cout<<"PLASTIC CORRECTOR DID NOT CONVERGE\n";
 		
-		
+		calculatePlasticStrains();
 		updateYieldStress();
 		if(verbose)
 			cout<<"THE YIELD STRESS IS: "<<yieldStress<<"\n";
@@ -122,7 +122,7 @@ void VonMises::assembleTangentModulus()
 	Matrix<double> Num;
 	double den;
 	
-	den=dF_dSigma*(Cel*dF_dSigma)-plasticModulus;
+	den=dF_dSigma*(Cel*dF_dSigma)+plasticModulus;
 	Ctemp.OuterProduct(dF_dSigma,dF_dSigma);
 	
 	Num=Cel*Ctemp*Cel;
@@ -309,7 +309,7 @@ void VonMises::dissasembleSolution()
 
 void VonMises::calculatePlasticStrains()
 {
-	plasticStrain+=dF_dSigma*dLambda;
+	plasticStrain=dF_dSigma*dLambda;
 }
 void VonMises::updateYieldStress()
 {

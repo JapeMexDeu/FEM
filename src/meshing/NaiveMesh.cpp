@@ -5,8 +5,8 @@ NaiveMesh::NaiveMesh(int n/*=2*/, int m/*=2*/):n(n),m(m)
 	//std::cout<<"\nInitalize mesh\n";
 	a=0;
 	c=0;
-	b=1;
-	d=1;
+	b=10;
+	d=10;
 	typeOfElement="4-NODE QUAD";
 	setNumElements(n,m);
 	setNumNodes(n,m);
@@ -106,4 +106,36 @@ void NaiveMesh::InitializeMesh()
 	std::cout<<"   ELEMENTS CREATED: "<<numElements<<"\n";
 	std::cout<<"END: INITIALIZE MESH****\n";
 	
+}
+Vector<int> NaiveMesh::setLeftInclusive()
+{
+	Vector<int> set;
+	for(int i=0;i<nodes.size();++i)
+	{
+		for(int j=0;j<=m;++j)
+		{
+			if(nodes[i].getNodeNumber()==(1+(n+1)*j))
+			{
+				set.push_back(nodes[i].getNodeNumber());
+			}
+		}
+		
+	}
+	return set;
+}
+Vector<int> NaiveMesh::setRightInclusive()
+{
+	Vector<int> set;
+	for(int i=0;i<nodes.size();++i)
+	{
+		for(int j=0;j<=m+1;++j)
+		{
+			if(nodes[i].getNodeNumber()==(n+1)*(j+1))
+			{
+				set.push_back(nodes[i].getNodeNumber());
+			}
+		}
+		
+	}
+	return set;
 }

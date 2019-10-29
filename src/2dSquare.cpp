@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 	
 	
 	
-	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-10, 200, true);
+	/* ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-10, 200, true);
 	
 	solver.solve();
 	
@@ -85,22 +85,22 @@ int main(int argc, char* argv[])
 	cout<<(mesh.getElements()[0]->getInternalForce());
 	cout<<(mesh.getElements()[0]->getInternalForce()).norm();
 	cout<<"the external forces are: \n";
-	cout<<ass.getGlobalVector();
+	cout<<ass.getGlobalVector(); */
 	/*
 	Gnuplot g1=Gnuplot("lines");
 	g1.reset_plot();
 	g1.cmd("set yrange[0:1]");
 	g1.plot_xy(solver.getIterates(), solver.getError(),"funny"); 
 	*/
-	/* NLSolverCG nlCG(ass,10e-10,100,2);
+	NLSolverCG nlCG(ass,10e-10,100,10);
 	nlCG.printNLSolver();
 	nlCG.solve();
 	//sleep(50);
-	cout<<nlCG.getAbscissae();
+	/* cout<<nlCG.getAbscissae();
 	cout<<nlCG.getOrdinates();
 	Gnuplot g2=Gnuplot("lines");
 	g2.plot_xy(nlCG.getAbscissae(), nlCG.getOrdinates(),"funny");
-	sleep(50);  */
+	sleep(50);  */ 
 	
 	//
 	//

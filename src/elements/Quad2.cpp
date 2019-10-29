@@ -149,6 +149,7 @@ void Quad2::calculateInternalForce()
 	internalForce*=detJ; */
 	calculateMatrix();
 	internalForce=K*solution;
+	//std::cout<<internalForce;
 }
 void Quad2::calculateJacobian(Matrix<double>& Jacobian)
 {
