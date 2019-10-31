@@ -104,6 +104,8 @@ void ImplAssembly::localSolutionVectorAssemblyRoutine(Vector<double>& globalSolu
 		Element* el=disc->getMesh().getElements()[e];
 		//********HUGE PROBLEM: THIS MUST BE DONE SOMEWHRE ELSE; THIS CAN MODIFY OUR LOCAL VALUES,AND ITS STUPID WORK
 		el->resizeElementSolutionVector(n);
+		//here we can bring the internal vector to zero to assemble it later
+		el->getInternalForce()=0;
 		for(int i=0;i<n;++i)
 		{
 			int index=connectivityArray(el,i);
@@ -152,7 +154,7 @@ void ImplAssembly::globalInternalForceAssembly()
 		std::cout<<globalInternalForce.norm()<<"\n";
 		std::cout<<"END: INTERNAL FORCE VECTOR ASSEMBLY ROUTINE******\n";
 	}
-	//std::cout<<globalInternalForce;
+
 	
 }
 int ImplAssembly::connectivityArray(Element* el, int i)
@@ -190,6 +192,11 @@ Vector<double>& ImplAssembly::getGlobalVector()
 }
 Vector<double>& ImplAssembly::getGlobalInternalForce()
 {
+	/* for(int i=0;i<globalInternalForce.size();++i)
+	{
+		if(abs(globalInternalForce[i])<10e-15)
+			globalInternalForce[i]=0;
+	} */
 	return this->globalInternalForce;
 }
 int ImplAssembly::getTotalDOF()
@@ -199,4 +206,12 @@ int ImplAssembly::getTotalDOF()
 Discretization* ImplAssembly::getDiscretization()
 {
 	return disc;
+}
+void ImplAssembly::zeroNodalInternalForce()
+{
+	int s=disc->getMesh().getNodes().size();
+	for(int i=0;i<s;++i)
+	{
+		disc->getMesh().getNodes()[i].getInternalForce()=0;
+	}
 }

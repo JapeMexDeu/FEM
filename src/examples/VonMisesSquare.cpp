@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	//ys 350
 
 	
-	Force f(100,0);
+	Force f(1000,0);
 	NaiveMesh mesh(1,1);
 	mesh.setElementMaterial(&mat1);
 	mesh.getNode(2)->setPointForce(&f);
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 	//solver.solve();
 	if(true)
 	{
-		NLSolverCG nlCG(ass,10e-8,8,13);
+		NLSolverCG nlCG(ass,10e-8,8,20);
 		nlCG.printNLSolver();
 		nlCG.solve();
 		mesh.print();

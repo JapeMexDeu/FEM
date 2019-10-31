@@ -96,6 +96,7 @@ void Element::computeTensorialResults()
 	calculateBReducedIntegration();
 	Vector<double> strain_vec=B*solution;//solution is the displacement
 	material->assembleTensors(strain_vec, strain, stress);
+	
 }
 void Element::setNodalValues()
 {
@@ -110,22 +111,22 @@ void Element::setNodalValues()
 }
 void Element::setNodalInternalForces()
 {
-/* 	nodes[0]->getInternalForce()[0]+=internalForce[0];
+ 	nodes[0]->getInternalForce()[0]+=internalForce[0];
 	nodes[0]->getInternalForce()[1]+=internalForce[1];
 	nodes[1]->getInternalForce()[0]+=internalForce[2];
 	nodes[1]->getInternalForce()[1]+=internalForce[3];
 	nodes[2]->getInternalForce()[0]+=internalForce[4];
 	nodes[2]->getInternalForce()[1]+=internalForce[5];
 	nodes[3]->getInternalForce()[0]+=internalForce[6];
-	nodes[3]->getInternalForce()[1]+=internalForce[7];  */
- 	nodes[0]->getInternalForce()[0]=internalForce[0];
+	nodes[3]->getInternalForce()[1]+=internalForce[7];  
+/*  	nodes[0]->getInternalForce()[0]=internalForce[0];
 	nodes[0]->getInternalForce()[1]=internalForce[1];
 	nodes[1]->getInternalForce()[0]=internalForce[2];
 	nodes[1]->getInternalForce()[1]=internalForce[3];
 	nodes[2]->getInternalForce()[0]=internalForce[4];
 	nodes[2]->getInternalForce()[1]=internalForce[5];
 	nodes[3]->getInternalForce()[0]=internalForce[6];
-	nodes[3]->getInternalForce()[1]=internalForce[7]; 
+	nodes[3]->getInternalForce()[1]=internalForce[7];  */
 }
 std::ostream& operator<<(std::ostream& out, Element& el)
 {

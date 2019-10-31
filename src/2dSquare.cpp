@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     //cout<<mat1;
 	
 	cout<<"*****CREATION OF MESH\n";
-	Force f(1000,0);
+	Force f(10,0);
 	NaiveMesh mesh(1,1);
 	mesh.setElementMaterial(&mat1);
 	mesh.getNode(2)->setPointForce(&f);

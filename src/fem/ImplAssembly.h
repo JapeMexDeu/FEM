@@ -44,6 +44,8 @@ class ImplAssembly:public Assembly
 		
 		//Output control
 		bool verbose;
+	public: //JUST AS TEST
+		void zeroNodalInternalForce();
 		
 };
 #endif

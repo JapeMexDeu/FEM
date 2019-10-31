@@ -20,7 +20,7 @@ void NLSolver::solve()
 	Plotter plotter(nullptr, "linespoints");
 	Plotter splotter(nullptr, "linespoints");
 	plotter.setPlotter("D","F",&Assembly,0,2);
-	splotter.setSPlotter("D","F",&Assembly,0,1);
+	splotter.setSPlotter("Strain","Stress",&Assembly,0,1);
 	std::cout<<"\nBEGIN: NON LINEAR SOLVE ROUTINE\n";
 	//NEED A LOCAL VARIABLE FOR THE CURRENT FORCE INCREMENT
 	Vector<double> current_Force (Assembly.getTotalDOF());//External force
@@ -29,7 +29,8 @@ void NLSolver::solve()
 	double tl=10e-3;
 	double step_ratio;//for setting the force increments
 	current_iForce=0;
-	Vector<double> firstInternal;
+	Vector<double> firstInternal(Assembly.getTotalDOF());
+	firstInternal=1;
 	//HAVE TO DO FOR AS MANY INCREMENTS numSteps (LOAD STEPS)
 	for(int step=1;step<=numSteps;++step)
 	{
@@ -40,19 +41,22 @@ void NLSolver::solve()
 		step_ratio=(double)step/(double)numSteps;//make sure it is a double
 		current_Force=Assembly.getGlobalVector();
 		current_Force*=step_ratio;
-		
-		
+		//current_iForce=0;
+		//firstInternal=current_Force-current_iForce;
 		r=current_Force-current_iForce;
 		//AT SOME POINT WE BEGIN TO ITERATE THE NON LINEAR PROBLEM
 		int nlIterations=0;
-		//std::cout<<"                "<<nlIterations<<"            "<<r.norm()<<"	"<<r.norm()/current_Force.norm()<<"\n";
-		while(nlIterations<maxIterations && r.norm()>tolerance)
+		std::cout<<"                "<<nlIterations<<"            "<<r.norm()<<"	   "<<r.norm()/firstInternal.norm()
+				 <<"      "<<firstInternal.norm()*tl<<"\n";
+		//while(nlIterations<maxIterations && r.norm()>(tl*firstInternal.norm()))
+		while((nlIterations<maxIterations && r.norm()>tl*firstInternal.norm() || nlIterations==0)&& r.norm()>10e-10 )
 		{
+			Assembly.zeroNodalInternalForce();
 			//This would represent the  FULL newton raphson
 			Assembly.matrixAssemblyRoutine();
 			
 			lSolver->solve();
-			steps[step-1]+=lSolver->getU();//Implements update, ,sum increment
+			steps[step-1]+=(lSolver->getU());//Implements update, ,sum increment
 			nlIterations++;
 			//cout<<steps[step-1];
 			//steps[step-1]*=ls;
@@ -60,15 +64,19 @@ void NLSolver::solve()
 			Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);//This will find the plastic behavior
 			splotter.updateElementData();
 			
-			Assembly.matrixAssemblyRoutine();
-			current_iForce=Assembly.getGlobalMatrix()*steps[step-1];//update of internal force vector
-			std::cout<<"GLOBAL INTERNAL FORCE; CALCULATED:"<<current_iForce;
-			std::cout<<"NORM IS: "<<(current_Force-current_iForce).norm()<<"\n";
-			Assembly.globalInternalForceAssembly();
-			std::cout<<"GLOBAL INTERNAL FORCE VECTOR ASSEMBLED:";
-			std::cout<<Assembly.getGlobalInternalForce();
-			std::cout<<"NORM IS: "<<(current_Force-Assembly.getGlobalInternalForce()).norm()<<"\n";
-			//current_iForce=Assembly.getGlobalInternalForce();
+			//INTERNAL FORCE VECTOR WITH KU
+			if(false)
+			{
+				Assembly.matrixAssemblyRoutine();
+				current_iForce=Assembly.getGlobalMatrix()*steps[step-1];
+			}
+			
+			//INTERNAL FORCE VECTOR WITH ASSEMBLY AND LOCAL VALUES
+			if(true)
+			{
+				Assembly.globalInternalForceAssembly();
+				current_iForce=Assembly.getGlobalInternalForce();
+			}
 			
 			//********************************************
 			if(nlIterations==1)
@@ -76,22 +84,22 @@ void NLSolver::solve()
 			//********************************************
 			
 			r=current_Force-current_iForce;//update of residuum within same load step, to see CONVERGENCE
-			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"	";
-			std::cout<<r.norm()/current_Force.norm()<<"   "<<firstInternal.norm()*tl<<"\n";
+			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"	   ";
+			std::cout<<r.norm()/firstInternal.norm()<<"      "<<firstInternal.norm()*tl<<"\n";
+			if(nlIterations!=1)
+				plotter.updateNodeData();
 			
-			std::cout<<"\nVALUE IS: "<<(current_Force-Assembly.getGlobalInternalForce()).norm()<<"\n";
-			plotter.updateNodeData();
-		}
+		}//endwhile
 
 		
 		
-		std::cout<<"\n*******IN STEP: "<< step<<" THE DISPLACEMENT SO FAR: "<<steps[step-1]<<"********\n";
+		//std::cout<<"\n*******IN STEP: "<< step<<" THE DISPLACEMENT SO FAR: "<<steps[step-1]<<"********\n";
 		if(step<numSteps)
-			steps[step]=steps[step-1];
+			steps[step]=steps[step-1]; 
 		
 	}
 	
-	plotter.printData();
+	//plotter.printData();
 	plotter.plot();
 	splotter.plot();
 	sleep(50);

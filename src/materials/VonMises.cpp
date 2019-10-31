@@ -15,9 +15,9 @@ void VonMises::rr(Tensor& strain)
 Tensor VonMises::radialReturn(Tensor& strains)
 {	
 	bool verbose=false;
-		if(verbose)
-	cout<<"BEFORE CALCULATION: "<<C;
-	double tolerance=10e-8;
+	if(verbose)
+		cout<<"BEFORE CALCULATION: "<<C;
+	double tolerance=10e-10;
 	double yielding=0;
 	//Matrix<double> Ctemp;
 	//Matrix<double> Num;
@@ -46,7 +46,7 @@ Tensor VonMises::radialReturn(Tensor& strains)
 	int a;
 	if(yielding>0 )
 	{	//if(verbose)
-		std::cout<<"\nPLASTIC BEHAVIOR\n";
+		//std::cout<<"\nPLASTIC BEHAVIOR\n";
 		plastic=true;
 		linearProblemUpdate(stressIncrements);
 		updateSolution();
@@ -90,7 +90,7 @@ Tensor VonMises::radialReturn(Tensor& strains)
 		}
 		if(abs(equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK)>tolerance)
 			cout<<"PLASTIC CORRECTOR DID NOT CONVERGE\n";
-		
+		//linearProblemUpdate(stressIncrements);//added later
 		calculatePlasticStrains();
 		updateYieldStress();
 		if(verbose)
@@ -100,7 +100,7 @@ Tensor VonMises::radialReturn(Tensor& strains)
 		//cout<<Cep;
 		
 		//return stressIncrements;
-	}
+	}//if yielding
 	if(yielding<0)
 	{
 		plastic=false;
@@ -122,7 +122,7 @@ void VonMises::assembleTangentModulus()
 	Matrix<double> Num;
 	double den;
 	
-	den=dF_dSigma*(Cel*dF_dSigma)+plasticModulus;
+	den=dF_dSigma*(Cel*dF_dSigma)+plasticModulus*(2.0/3.0);
 	Ctemp.OuterProduct(dF_dSigma,dF_dSigma);
 	
 	Num=Cel*Ctemp*Cel;
@@ -132,7 +132,7 @@ void VonMises::assembleTangentModulus()
 	{
 		for(int j=0;j<Cep.getColumns();++j)
 		{
-			if(abs(Cep(i,j))<1e-5)
+			if(abs(Cep(i,j))<1e-9)
 				Cep(i,j)=0;
 		}
 	}

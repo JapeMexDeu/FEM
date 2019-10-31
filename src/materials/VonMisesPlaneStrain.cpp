@@ -15,18 +15,20 @@ void VonMisesPlaneStrain::assembleTensors(Vector<double>& v, Tensor& strains, Te
 	strains[0]+=v[0];
 	strains[1]+=v[1];
 	strains[3]+=v[2];
-	if(res)
+	if(false)
 	{
-		stresses[0]+=s[0];
-		stresses[1]+=s[1];
-		stresses[3]+=s[2];
-		stresses[2]+=E*mu*(v[0]+v[1])/((1+mu)*(1-2*mu));
+		stresses[0]=s[0];
+		stresses[1]=s[1];
+		stresses[3]=s[2];
+		stresses[2]=E*mu*(v[0]+v[1])/((1+mu)*(1-2*mu));
 	}
  	 
 
 	//HERE WE CHECK for plastic behavior with the strains
-	if(!res)
-	stresses=radialReturn(strains);
+	if(true)
+		stresses=radialReturn(strains);
+	//setConstitutiveMatrix();
+
 	
 }
 void VonMisesPlaneStrain::setConstitutiveMatrix()

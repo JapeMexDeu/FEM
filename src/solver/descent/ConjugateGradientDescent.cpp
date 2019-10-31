@@ -10,6 +10,7 @@ ConjugateGradientDescent::ConjugateGradientDescent(Matrix<double>& A_, Vector<do
 }
 void ConjugateGradientDescent::solve()
 {
+	u=0;// added later
 	if(verbose)
 		std::cout<<"\nBEGIN: LINEAR SOLVER: GRADIENT DESCENT METHOD\n";
 		

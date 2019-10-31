@@ -18,15 +18,15 @@ using std::cout;
 int main(int argc, char* argv[])
 {
 	
-	PlaneStrain mat1(210,0.25);
+	VonMisesPlaneStrain mat1(210,0.25, 100, 70);
 	
-	NaiveMesh mesh(2,2);
+	NaiveMesh mesh(1,1);
 	Vector<int> leftInclusive=mesh.setLeftInclusive();
 	Vector<int> rightInclusive=mesh.setRightInclusive();
-	//mesh.print();
+	mesh.print();
 	mesh.setElementMaterial(&mat1);
 	
-	Force f(10,0);
+	Force f(150,0);
 	for(int i=0;i<rightInclusive.size();++i)
 	{
 		mesh.getNode(rightInclusive[i])->setPointForce(&f);
@@ -37,8 +37,7 @@ int main(int argc, char* argv[])
 	MechanicalBoundaryConditions encastre(true,true,false);
 	encastre.setNodes(leftInclusive);
 	
-	//mesh.getNode(2)->setPointForce(&f);
-	//mesh.getNode(4)->setPointForce(&f);
+	
 	//mesh.print();
 	disc.addBoundaryCondition(encastre);
 	disc.DOFenum();
@@ -51,16 +50,13 @@ int main(int argc, char* argv[])
 	ass.vectorAssemblyRoutine();
 	
 	
-	/* 
-	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-10, 200, true);
 	
-	solver.solve(); */
 	
-	NLSolverCG solver(ass,10e-10,8,10);
+	NLSolverCG solver(ass,10e-10,20,50);
 	solver.printNLSolver();
 	solver.solve();
 	
-	
+	//mesh.print();
 	
  	/* ass.localSolutionVectorAssemblyRoutine(solver.getU());
 	ass.globalInternalForceAssembly();
@@ -71,5 +67,5 @@ int main(int argc, char* argv[])
 	cout<<ass.getGlobalVector()-ass.getGlobalInternalForce();
 	cout<<(ass.getGlobalVector()-ass.getGlobalInternalForce()).norm(); */
 	
-	mesh.print();
+	
 }
