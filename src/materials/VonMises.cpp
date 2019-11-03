@@ -14,6 +14,7 @@ void VonMises::rr(Tensor& strain)
 }
 Tensor VonMises::radialReturn(Tensor& strains)
 {	
+	initializeModel();
 	bool verbose=false;
 	if(verbose)
 		cout<<"BEFORE CALCULATION: "<<C;
@@ -71,11 +72,14 @@ Tensor VonMises::radialReturn(Tensor& strains)
 			//cout<<"THE SYMMETRIC PROBLEM IS: "<<ASym;
 			//cout<<residualSym;
 			
-			/* cout<<"THE MATRIX IS: "<<A;
-			cout<<"THE RESIDUAL IS: "<<residual;
-			cout<<"THE STRESS STATE IS: "<<stressIncrements;
-			cout<<"THE TRIAL STRESS STATE: "<<trialStress;
-			cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma; */
+			if(verbose)
+			{
+				cout<<"THE MATRIX IS: "<<A;
+				cout<<"THE RESIDUAL IS: "<<residual;
+				cout<<"THE STRESS STATE IS: "<<stressIncrements;
+				cout<<"THE TRIAL STRESS STATE: "<<trialStress;
+				cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma; 
+			}		
 		
 		}
 		if(verbose)
@@ -122,20 +126,20 @@ void VonMises::assembleTangentModulus()
 	Matrix<double> Num;
 	double den;
 	
-	den=dF_dSigma*(Cel*dF_dSigma)+plasticModulus*(2.0/3.0);
+	den=dF_dSigma*(Cel*dF_dSigma)+plasticModulus*0.666666666;
 	Ctemp.OuterProduct(dF_dSigma,dF_dSigma);
 	
 	Num=Cel*Ctemp*Cel;
 	Num*=(1/den);
 	Cep=Cel-Num;
-	for(int i=0;i<Cep.getColumns();++i)
+/* 	for(int i=0;i<Cep.getColumns();++i)
 	{
 		for(int j=0;j<Cep.getColumns();++j)
 		{
 			if(abs(Cep(i,j))<1e-9)
 				Cep(i,j)=0;
 		}
-	}
+	} */
 }
 double VonMises::yieldFunction(Tensor& stresses)
 {
@@ -168,7 +172,8 @@ double VonMises::equivalentStress(Tensor& stresses)
 	P(0,2)=P(2,0);
 	P(2,1)=P(0,1);
 	P(1,2)=P(1,0);
-	return sqrt((stresses*(P*stresses))*(3.0/2.0)); 
+	
+	return sqrt((stresses*(P*stresses))*(1.5)); 
 }
 double VonMises::plasticWork()
 {
@@ -268,7 +273,7 @@ void VonMises::calculateResidual(Tensor& previousStress)
 {
 	Tensor temp;
 	//dF_dSigma MUST BE UPDATED EXTERNALLY
-	temp=previousStress-trialStress+((Cel*dF_dSigma)*dLambda);//this is a 6x1
+	temp=previousStress-trialStress+(Cel*dF_dSigma*dLambda);//this is a 6x1
 	
 	//COPY TEMP INTO 6 FIRST ELEMENTS OF RESIDUAL
 	for(int i=0;i<6;i++)

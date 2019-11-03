@@ -17,10 +17,10 @@ NLSolver::NLSolver(ImplAssembly& assembly,double tol/*=10e-10*/,int iterations/*
 
 void NLSolver::solve()
 {
-	Plotter plotter(nullptr, "linespoints");
+	/* Plotter plotter(nullptr, "linespoints");
 	Plotter splotter(nullptr, "linespoints");
 	plotter.setPlotter("D","F",&Assembly,0,2);
-	splotter.setSPlotter("Strain","Stress",&Assembly,0,1);
+	splotter.setSPlotter("Strain","Stress",&Assembly,0,1); */
 	std::cout<<"\nBEGIN: NON LINEAR SOLVE ROUTINE\n";
 	//NEED A LOCAL VARIABLE FOR THE CURRENT FORCE INCREMENT
 	Vector<double> current_Force (Assembly.getTotalDOF());//External force
@@ -32,6 +32,7 @@ void NLSolver::solve()
 	Vector<double> firstInternal(Assembly.getTotalDOF());
 	firstInternal=1;
 	//HAVE TO DO FOR AS MANY INCREMENTS numSteps (LOAD STEPS)
+	
 	for(int step=1;step<=numSteps;++step)
 	{
 		
@@ -48,46 +49,48 @@ void NLSolver::solve()
 		int nlIterations=0;
 		std::cout<<"                "<<nlIterations<<"            "<<r.norm()<<"	   "<<r.norm()/firstInternal.norm()
 				 <<"      "<<firstInternal.norm()*tl<<"\n";
-		//while(nlIterations<maxIterations && r.norm()>(tl*firstInternal.norm()))
-		while((nlIterations<maxIterations && r.norm()>tl*firstInternal.norm() || nlIterations==0)&& r.norm()>10e-10 )
+		while(nlIterations<maxIterations && r.norm()>tolerance)
+		//while((nlIterations<maxIterations && r.norm()>tl*firstInternal.norm() || nlIterations==0)&& r.norm()>10e-10 )
 		{
 			Assembly.zeroNodalInternalForce();
 			//This would represent the  FULL newton raphson
 			Assembly.matrixAssemblyRoutine();
-			
+		/* 	cout<<"\n********************\n";
+			cout<<Assembly.getGlobalMatrix();
+			cout<<r;
+			cout<<"********************\n"; */
 			lSolver->solve();
+			
 			steps[step-1]+=(lSolver->getU());//Implements update, ,sum increment
 			nlIterations++;
 			//cout<<steps[step-1];
-			//steps[step-1]*=ls;
+		
 			//AFTER ITERATION WE UPDATE OUR WHOLE PROBLEM
 			Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);//This will find the plastic behavior
-			splotter.updateElementData();
-			
+			//splotter.updateElementData();
 			//INTERNAL FORCE VECTOR WITH KU
 			if(false)
 			{
 				Assembly.matrixAssemblyRoutine();
 				current_iForce=Assembly.getGlobalMatrix()*steps[step-1];
 			}
-			
 			//INTERNAL FORCE VECTOR WITH ASSEMBLY AND LOCAL VALUES
 			if(true)
 			{
 				Assembly.globalInternalForceAssembly();
 				current_iForce=Assembly.getGlobalInternalForce();
 			}
-			
 			//********************************************
 			if(nlIterations==1)
+			{
 				firstInternal=current_Force-current_iForce;
+			}
 			//********************************************
-			
 			r=current_Force-current_iForce;//update of residuum within same load step, to see CONVERGENCE
 			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"	   ";
 			std::cout<<r.norm()/firstInternal.norm()<<"      "<<firstInternal.norm()*tl<<"\n";
-			if(nlIterations!=1)
-				plotter.updateNodeData();
+			//if(nlIterations!=1)
+				//plotter.updateNodeData();
 			
 		}//endwhile
 
@@ -100,9 +103,9 @@ void NLSolver::solve()
 	}
 	
 	//plotter.printData();
-	plotter.plot();
+	/* plotter.plot();
 	splotter.plot();
-	sleep(50);
+	sleep(50); */
 }
 void NLSolver::printNLSolver()
 {

@@ -30,7 +30,7 @@ set(SOURCES src/algebra/Vector.h
 			src/materials/ElastoPlasticMaterial.cpp
 			
 			src/solver/Jacobi.cpp
-			#src/solver/LinearIteration.cpp
+
 			src/solver/LinearIterativeSolver.cpp
 			src/solver/descent/DescentMethod.cpp
 			src/solver/descent/GradientDescent.cpp
@@ -63,6 +63,7 @@ set(SOURCES src/algebra/Vector.h
 add_library(FEM ${SOURCES})
 
 #creation of project
+#add_executable(fem_test src/vonMisesTest.cpp)
 #add_executable(fem_test src/plot_test.cpp)
 #add_executable(fem_test src/2dSquare.cpp)
 #add_executable(fem_test src/vector_test.cpp)

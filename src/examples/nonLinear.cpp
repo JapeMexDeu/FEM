@@ -18,7 +18,7 @@ using std::cout;
 int main(int argc, char* argv[])
 {
 	
-	VonMisesPlaneStrain mat1(210,0.25, 100, 70);
+	VonMisesPlaneStrain mat1(210,0.25, 24, 70);
 	
 	NaiveMesh mesh(1,1);
 	Vector<int> leftInclusive=mesh.setLeftInclusive();
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	mesh.print();
 	mesh.setElementMaterial(&mat1);
 	
-	Force f(150,0);
+	Force f(200,0);
 	for(int i=0;i<rightInclusive.size();++i)
 	{
 		mesh.getNode(rightInclusive[i])->setPointForce(&f);
@@ -52,11 +52,11 @@ int main(int argc, char* argv[])
 	
 	
 	
-	NLSolverCG solver(ass,10e-10,20,50);
+	NLSolverCG solver(ass,10e-10,20,10);
 	solver.printNLSolver();
 	solver.solve();
 	
-	//mesh.print();
+	mesh.print();
 	
  	/* ass.localSolutionVectorAssemblyRoutine(solver.getU());
 	ass.globalInternalForceAssembly();

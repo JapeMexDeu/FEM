@@ -61,7 +61,8 @@ void ConjugateGradientDescent::solve()
 		std::cout<<u;
 		std::cout<<"END: DESCENT METHOD\n";
 	}
-	
+	if(norm=residuum.norm()>tolerance)
+		std::cout<<"\nLINEAR PROBLEM DID NOT CONVERGE\n";
 }
 void ConjugateGradientDescent::setDescentDirection()
 {
