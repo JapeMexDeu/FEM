@@ -16,6 +16,7 @@ void ConjugateGradientDescent::solve()
 		
 	residuum=b-A*u;
 	Vector<double> z(residuum.size());
+	z=0;
 	int count=1;
 	double num, den, alpha, norm, num2;
 	norm=residuum.norm();
@@ -61,8 +62,8 @@ void ConjugateGradientDescent::solve()
 		std::cout<<u;
 		std::cout<<"END: DESCENT METHOD\n";
 	}
-	if(norm=residuum.norm()>tolerance)
-		std::cout<<"\nLINEAR PROBLEM DID NOT CONVERGE\n";
+	if(residuum.norm()>tolerance)
+		std::cout<<"\nLINEAR PROBLEM DID NOT CONVERGE: "<<residuum.norm()<<"\n";
 }
 void ConjugateGradientDescent::setDescentDirection()
 {

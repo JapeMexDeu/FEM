@@ -7,7 +7,15 @@ ImplAssembly::ImplAssembly(Discretization* d):disc(d)
 	setN();
 	verbose=false;
 }
-
+std::string ImplAssembly::status()
+{
+	for(int i=0;i<E;++i)
+	{
+		if(disc->getMesh().getElements()[i]->getMaterial()->isPlastic())
+			return "PLASTIC";
+	}
+	return "ELASTIC";
+}
 void ImplAssembly::matrixAssemblyRoutine()
 {
 	
@@ -196,7 +204,7 @@ Vector<double>& ImplAssembly::getGlobalInternalForce()
 	{
 		if(abs(globalInternalForce[i])<10e-15)
 			globalInternalForce[i]=0;
-	} */
+	} */ 
 	return this->globalInternalForce;
 }
 int ImplAssembly::getTotalDOF()

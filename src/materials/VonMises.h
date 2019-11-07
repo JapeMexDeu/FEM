@@ -84,7 +84,7 @@ class VonMises:public ElastoPlasticMaterial
 		Vector<double> residual=Vector<double>(7);
 		Matrix<double> A=Matrix<double>(7,7);
 		Vector<double> solution=Vector<double>(7);
-		ConjugateGradientDescent cg=ConjugateGradientDescent(ASym,residualSym,10e-12,12,false);
+		ConjugateGradientDescent cg=ConjugateGradientDescent(ASym,residualSym,10e-12,50,false);
 		Jacobi jac=Jacobi(&A);
 		LinearIterativeSolver lsolver=LinearIterativeSolver(A,residual,10e-4,100,true,&jac);
 		

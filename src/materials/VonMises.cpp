@@ -18,7 +18,7 @@ Tensor VonMises::radialReturn(Tensor& strains)
 	bool verbose=false;
 	if(verbose)
 		cout<<"BEFORE CALCULATION: "<<C;
-	double tolerance=10e-10;
+	double tolerance=10e-12;
 	double yielding=0;
 	//Matrix<double> Ctemp;
 	//Matrix<double> Num;
@@ -93,7 +93,7 @@ Tensor VonMises::radialReturn(Tensor& strains)
 			cout<<"TESTING THE YIELD FUNCTION: "<<equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK<<"\n";	
 		}
 		if(abs(equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK)>tolerance)
-			cout<<"PLASTIC CORRECTOR DID NOT CONVERGE\n";
+			cout<<"PLASTIC CORRECTOR DID NOT CONVERGE: "<<abs(equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK)<<"\n";
 		//linearProblemUpdate(stressIncrements);//added later
 		calculatePlasticStrains();
 		updateYieldStress();
@@ -318,5 +318,5 @@ void VonMises::calculatePlasticStrains()
 }
 void VonMises::updateYieldStress()
 {
-	yieldStress+=plasticModulus*dK;
+	yieldStress+=(plasticModulus*dK);
 }

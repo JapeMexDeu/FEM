@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 	
 	
 	
-	NLSolverCG solver(ass,10e-10,20,10);
+	NLSolverCG solver(ass,10e-10,10,20);
 	solver.printNLSolver();
 	solver.solve();
 	

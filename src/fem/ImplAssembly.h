@@ -19,6 +19,7 @@ class ImplAssembly:public Assembly
 		virtual void localSolutionVectorAssemblyRoutine(Vector<double>& globalSolution) override;
 		void printImplAssembly();
 		void globalInternalForceAssembly();
+		std::string status();
 		/*!\brief Call mesh printing method, we can see nodal values and element-wise results
 		 */
 		void printMesh();
