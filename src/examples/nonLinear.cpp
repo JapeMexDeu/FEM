@@ -52,11 +52,11 @@ int main(int argc, char* argv[])
 	
 	
 	
-	NLSolverCG solver(ass,10e-10,10,20);
+	NLSolverCG solver(ass,10e-14,10,20);
 	solver.printNLSolver();
-	solver.solve();
+	solver.solve2();
 	
-	mesh.print();
+	//mesh.print();
 	
  	/* ass.localSolutionVectorAssemblyRoutine(solver.getU());
 	ass.globalInternalForceAssembly();

@@ -13,6 +13,7 @@ NLSolver::NLSolver(ImplAssembly& assembly,double tol/*=10e-10*/,int iterations/*
 	}
 	r.resize(Assembly.getTotalDOF());
 	u_total.resize(Assembly.getTotalDOF());
+	u_total=0;
 }
 
 void NLSolver::solve()
@@ -56,50 +57,68 @@ void NLSolver::solve()
 			
 			Assembly.zeroNodalInternalForce();
 			//use continuation method
-			if(nlIterations==0 && Assembly.status()=="PLASTIC")
+			if(nlIterations==0 && Assembly.status()=="PLASTIC" && false)
 			{
+				//Assembly.matrixAssemblyRoutine();
 				std::cout<<"\n CONTINUATION METHOD\n";
 				std::cout<<"RATIO IS: "<<step_ratio/old_ratio<<"\n";
-				
+				steps[step-1]*=(step_ratio/old_ratio);
+				nlIterations++;
+				Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);
+				if(true)
+				{
+					Assembly.globalInternalForceAssembly();
+					current_iForce=Assembly.getGlobalInternalForce();
+				}
 			}
-			else
+			else//normal procedure
 			{
+				//Assembly.matrixAssemblyRoutine();
+				lSolver->solve();
+				//Here goes te LINE SEARCH
+				double s0=(current_Force-Assembly.getGlobalMatrix()*(steps[step-1]))*lSolver->getU();
+				double s1=(current_Force-Assembly.getGlobalMatrix()*(steps[step-1]+lSolver->getU()))*lSolver->getU();
+				double nu=s0/(s1-s0);
+				nu*=-1;
+				/* if(nu<0)
+				{
+					nu=0.0001;
+				} */
+				double s=(current_Force-Assembly.getGlobalMatrix()*(steps[step-1]+(lSolver->getU()*nu)))*lSolver->getU();
+				std::cout<<"THE s0 is: "<<s0 <<"\n";
+				std::cout<<"THE s1 is: "<<s1;
+				std::cout<<"\nEXTRAPOLATION nu: "<<nu<<"\n";
+				std::cout<<"NEW s: "<<s<<"\n";
+				std::cout<<1+s1/(s0-s1)<<"\n"; 
+				std::cout<<lSolver->getU()*0<<"\n";
+				/* std::cout<<steps[step-1];
+				std::cout<<steps[step-1]+(lSolver->getU()*0.0); */
 				
+				steps[step-1]+=(lSolver->getU()*nu);
+				nlIterations++;
+				Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);
+				//splotter.updateElementData();
+				//INTERNAL FORCE VECTOR WITH KU
+				if(false)
+				{
+					Assembly.matrixAssemblyRoutine();
+					current_iForce=Assembly.getGlobalMatrix()*steps[step-1];
+				}
+				//INTERNAL FORCE VECTOR WITH ASSEMBLY AND LOCAL VALUES
+				if(true)
+				{
+					Assembly.globalInternalForceAssembly();
+					current_iForce=Assembly.getGlobalInternalForce();
+				}
+				//********************************************
+				if(nlIterations==1)
+				{
+					firstInternal=current_Force-current_iForce;
+				}
+				//********************************************
 			}
-			//This would represent the  FULL newton raphson
 			Assembly.matrixAssemblyRoutine();
 			
-		/* 	cout<<"\n********************\n";
-			cout<<Assembly.getGlobalMatrix();
-			cout<<r;
-			cout<<"********************\n"; */
-			lSolver->solve();
-			
-			steps[step-1]+=(lSolver->getU());//Implements update, ,sum increment
-			nlIterations++;
-			//cout<<steps[step-1];
-		
-			//AFTER ITERATION WE UPDATE OUR WHOLE PROBLEM
-			Assembly.localSolutionVectorAssemblyRoutine(steps[step-1]);//This will find the plastic behavior
-			//splotter.updateElementData();
-			//INTERNAL FORCE VECTOR WITH KU
-			if(false)
-			{
-				Assembly.matrixAssemblyRoutine();
-				current_iForce=Assembly.getGlobalMatrix()*steps[step-1];
-			}
-			//INTERNAL FORCE VECTOR WITH ASSEMBLY AND LOCAL VALUES
-			if(true)
-			{
-				Assembly.globalInternalForceAssembly();
-				current_iForce=Assembly.getGlobalInternalForce();
-			}
-			//********************************************
-			if(nlIterations==1)
-			{
-				firstInternal=current_Force-current_iForce;
-			}
-			//********************************************
 			r=current_Force-current_iForce;//update of residuum within same load step, to see CONVERGENCE
 			std::cout<<"        "<<step<<"                "<<nlIterations<<"            "<<r.norm()<<"	   ";
 			std::cout<<r.norm()/firstInternal.norm()<<"      "<<firstInternal.norm()*tl
@@ -124,6 +143,51 @@ void NLSolver::solve()
 	/* plotter.plot();
 	splotter.plot();
 	sleep(50); */
+}
+void NLSolver::solve2()
+{
+	std::cout<<"\nBEGIN: NON LINEAR SOLVE ROUTINE\n";
+	
+	Vector<double> increment;
+	Vector<double> current_Force (Assembly.getTotalDOF());//External force
+	Vector<double> current_iForce(Assembly.getTotalDOF());//Internal force
+	current_iForce=0;
+	current_Force=Assembly.getGlobalVector();
+	double step_ratio;//for setting the force increments
+	int nlIterations=0;
+	for(int step=1;step<=numSteps;++step)
+	{
+		current_Force=Assembly.getGlobalVector();
+		nlIterations=0;
+		step_ratio=(double)step/(double)numSteps;//make sure it is a double
+		current_Force*=step_ratio;
+		r=current_Force-current_iForce;
+		std::cout<<"EXTERNAL FORCE: "<<current_Force;
+		std::cout<<"INTERNAL FORCE: "<<current_iForce;
+		std::cout<<"DISPLACEMENT: "<<u_total;
+		std::cout<<step<<"   "<<nlIterations<<"   "<<r.norm()<<"   "<<Assembly.status()<<"\n";
+		
+		while(nlIterations<maxIterations && r.norm()>tolerance)
+		{
+			Assembly.zeroNodalInternalForce();
+			lSolver->solve();
+			increment=lSolver->getU();
+			//std::cout<<"INCREMENT: "<<increment;
+			u_total+=increment;
+			
+			Assembly.localSolutionVectorAssemblyRoutine(u_total);
+			
+			Assembly.globalInternalForceAssembly();
+			current_iForce=Assembly.getGlobalInternalForce();
+			//std::cout<<"GLOBAL INTERNAL FORCE: "<<current_iForce;
+			//current_iForce=Kt*lSolver->getU();
+			r=current_Force-current_iForce;
+			Assembly.matrixAssemblyRoutine();
+			nlIterations++;
+			std::cout<<step<<"   "<<nlIterations<<"   "<<r.norm()<<"   "<<Assembly.status()<<"\n";
+		}
+		
+	}
 }
 void NLSolver::printNLSolver()
 {
