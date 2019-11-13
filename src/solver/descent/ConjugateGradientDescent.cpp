@@ -14,11 +14,11 @@ void ConjugateGradientDescent::solve()
 	if(verbose)
 		std::cout<<"\nBEGIN: LINEAR SOLVER: GRADIENT DESCENT METHOD\n";
 		
-	residuum=b-A*u;
+	residuum=b-(A*u);
 	Vector<double> z(residuum.size());
 	z=0;
 	int count=1;
-	double num, den, alpha, norm, num2;
+	double num, den, alpha, norm, num2, alpha2;
 	norm=residuum.norm();
 	double max=norm;
 	setDescentDirection();
@@ -34,18 +34,19 @@ void ConjugateGradientDescent::solve()
 		iterates.push_back(count);
 		
 		num=residuum*descentDirection;
-		den=z*descentDirection;
+		//den=z*descentDirection;
+		den=descentDirection*z;
 		alpha=num/den;
 		
 		//u=u-alpha*descentDirection;
-		u=u+descentDirection*alpha;
-		residuum=residuum-z*alpha;
+		u=u+(descentDirection*alpha);
+		residuum=residuum-(z*alpha);
 		
 		//update descent direction
 		
 		num2=residuum*z;
-		alpha=num2/den;
-		descentDirection=residuum-descentDirection*alpha;
+		alpha2=num2/den;
+		descentDirection=residuum-(descentDirection*alpha2);
 		
 		norm=residuum.norm();
 		

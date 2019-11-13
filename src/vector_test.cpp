@@ -15,11 +15,14 @@
 #include"plotter/gnuplot_i.hpp"
 #include"plotter/Plotter.h"
 #include"fem/ImplAssembly.h"
+
 #include"solver/LSolver.h"
 #include"solver/Jacobi.h"
 #include"solver/descent/ConjugateGradientDescent.h"
 #include"solver/descent/GradientDescent.h"
 #include"solver/descent/DescentMethod.h"
+#include"solver/descent/BiCGStab.h"
+
 #include <unistd.h>
 #include"meshing/CustomMesh.h"
 
@@ -105,22 +108,16 @@ int main(int argc, char* argv[])
 	
 	ImplAssembly ass(&disc);
 	Plotter plotter;
-	/* string xl="Displacement";
-	string yl="Force";
-	plotter.setLabels(xl, yl);
-	plotter.setModel(&ass);
-	plotter.setPlottingDirection(1);
-	plotter.setNode(6); */
+
 	plotter.setPlotter("D","F",&ass,1,6);
 	//ass.printImplAssembly();
 	ass.vectorAssemblyRoutine();
 	ass.matrixAssemblyRoutine();
-	//
-	//std::cout<<ass.getGlobalVector();
-	//std::cout<<ass.getGlobalMatrix();
+
 	Jacobi jac(&(ass.getGlobalMatrix()));
 	//LinearIterativeSolver solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-4, 3000, true, &jac);
-	ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-12, 20, true);
+	//ConjugateGradientDescent solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-12, 20, true);
+	BiCGStab solver(ass.getGlobalMatrix(), ass.getGlobalVector(), 10e-12, 20, true);
 	solver.solve();//solver2.solve();
 	std::cout<<"Ku:\n";
 	std::cout<<ass.getGlobalMatrix()*solver.getU();
@@ -135,7 +132,7 @@ int main(int argc, char* argv[])
 	std::cout<<ass.getGlobalMatrix()*solver.getU();
 	cm.print();
 	plotter.plot();
-	Gnuplot g1=Gnuplot("lines");
+	Gnuplot g1=Gnuplot("linepoints");
 	 g1.reset_plot();
 	 g1.cmd("set yrange[0:1]");
 	g1.plot_xy(solver.getIterates(), solver.getError(),"funny");

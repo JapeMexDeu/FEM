@@ -5,7 +5,7 @@
   
   DESCRIPTION: Experimental implementation of a non-linear arc-length control method based on the Criesfield 
 			   approach. We want to compare to our Newton Rapshon poorman's approach. The linear solver is 
-			   defined as a Conjugate Gradient method. 
+			   defined as a Conjugate Gradient method. Add then the BiCGStab method.
 			   
 */
 #ifndef ARCLENGTH_H
@@ -19,7 +19,7 @@
 class ArcLength
 {
 	public: 
-		ArcLength(ImplAssembly& Assembly, double tol=10e-10, int maxIterations=10);
+		ArcLength(ImplAssembly& assembly, double ds=0.0001, double tol=10e-10, int maxIterations=10);
 		
 	public:
 		Vector<Vector<double>> steps;/**<Stores the solution increment vector from every step*/
@@ -39,8 +39,12 @@ class ArcLength
 		double ds;/**<Arc length user-defined parameter*/
 	private:
 		void setLSolver();
-	public:
-		
+		void initializeSolver();
+		void zero();
+	private:
+		int dofs;
+		Vector<double> aI;
+		Vector<double> aII;
 		
 	
 };

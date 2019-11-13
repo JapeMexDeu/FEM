@@ -66,6 +66,108 @@ class Matrix
 			}
 			
 		}
+		void random()
+		{
+			std::srand(time(0));
+			
+			for(int i=0;i<rows;++i)
+			{
+				for(int j=0;j<columns;j++)
+				{
+					data[i][j]=std::rand()%100;
+				}
+			}
+		}
+		Matrix inverse()
+		{
+			int order=this->rows;//could also be columns
+			//1.-This will be our augmented matrix
+			Matrix Augmented(order, order*2);
+			Matrix Inverse(order,order);
+			//std::cout<<Augmented;
+			//2.-Put this into augmented
+			for(int i=0;i<order;i++)
+			{
+				for(int j=0;j<order;++j)
+				{
+					Augmented(i,j)=data[i][j];
+				}
+			}
+			//std::cout<<Augmented;
+			//2.1 Assign identity to the augmented matrix
+			for(int i=0;i<order;i++)
+			{
+				for(int j=0;j<order*2;++j)
+				{
+					if(j==(order+i))
+						Augmented(i,j)=1;
+				}
+			}
+			//std::cout<<Augmented;
+			//3.- Interchange of rows from the last row upwards
+			Vector<T> row(order*2);
+			for(int i=order-1;i>0;--i)
+			{
+				if(Augmented(i-1,0)<Augmented(i,0))
+				{
+					//Swap rows
+					//3.1 Fill temp row[i]
+					for(int r=0;r<order*2;++r)
+					{
+						row[r]=Augmented(i,r);
+					}
+					//std::cout<<row;
+					//3.2 Copy upper row into lower row
+					for(int r=0;r<order*2;++r)
+					{
+						Augmented(i,r)=Augmented(i-1,r);
+					}
+					//3.3 Assign row -which holds lower row, into upper row
+					for(int r=0;r<order*2;++r)
+					{
+						Augmented(i-1,r)=row[r];
+					}
+				}//endif 
+			}
+			//std::cout<<Augmented;
+			//4.- Make pivot zero
+			double temp;
+			for(int i=0;i<order;i++)
+			{
+				for(int j=0;j<order;++j)
+				{
+					if(j!=i)
+					{
+						temp=Augmented(j,i)/Augmented(i,i);
+						for(int k=0;k<2*order;++k)
+						{
+							Augmented(j,k)-=Augmented(i,k)*temp;
+						}
+					}
+				}
+			}
+			//std::cout<<Augmented;
+			//5.-Eliminate diagonal of this matrix inside Augmented
+			for(int i=0;i<order;i++)
+			{
+				temp=Augmented(i,i);
+				for(int j=0;j<order*2;++j)
+				{
+					Augmented(i,j)=Augmented(i,j)/temp;
+				}
+			}
+			//std::cout<<Augmented;
+			//pack it up and return Inverse
+			for(int i=0;i<order;i++)
+			{
+				for(int j=0;j<order;++j)
+				{
+					Inverse(i,j)=Augmented(i,j+order);
+				}
+			}
+			return Inverse;
+			
+		}
 		//******OVERLOADED OPERATORS*******
 		/*!\brief Fills matrix with value in all entries
 		 */

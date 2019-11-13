@@ -8,6 +8,7 @@
 #include"../fem/ImplAssembly.h"
 #include"../solver/descent/ConjugateGradientDescent.h"
 #include"../solver/NLSolverCG.h"
+#include"../solver/NLSolverBiCGStab.h"
 #include <unistd.h>
 #include"meshing/CustomMesh.h"
 #include"tensors/Tensor.h"
@@ -52,7 +53,7 @@ int main(int argc, char* argv[])
 	
 	
 	
-	NLSolverCG solver(ass,10e-14,10,20);
+	NLSolverBiCGStab solver(ass,10e-14,10,20);
 	solver.printNLSolver();
 	solver.solve2();
 	
