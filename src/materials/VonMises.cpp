@@ -14,8 +14,8 @@ void VonMises::rr(Tensor& strain)
 }
 Tensor VonMises::radialReturn(Tensor& strains)
 {	
-	initializeModel();
-	bool verbose=false;
+	//initializeModel();
+	bool verbose=true;
 	if(verbose)
 		cout<<"BEFORE CALCULATION: "<<C;
 	double tolerance=10e-12;
@@ -25,6 +25,7 @@ Tensor VonMises::radialReturn(Tensor& strains)
 	//double den;
 	dLambda=0;
 	dK=0;
+	
 	//Trial stress
 	
 	trialStress=Cel*strains;
@@ -41,17 +42,22 @@ Tensor VonMises::radialReturn(Tensor& strains)
 	//cout<<"THE YIELD FUNCTIONS VALUE IS: \n";
 	//cout<<yielding<<"\n";
 	
-	int count=100;
+	int count=10;
 	
 	int i=0;
 	int a;
 	if(yielding>0 )
-	{	//if(verbose)
-		//std::cout<<"\nPLASTIC BEHAVIOR\n";
+	{	
 		plastic=true;
 		linearProblemUpdate(stressIncrements);
 		updateSolution();
 		//cout<<"THE SOLUTION IS: "<<solution;
+		if(verbose)
+		{
+			cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n"
+			<<i<<"			"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
+				<<"  	  "<<dLambda<<"		"<<dK<<"\n"; 
+		}
 		
 		while(i<count && residual.norm()>tolerance)
 		{
@@ -66,9 +72,13 @@ Tensor VonMises::radialReturn(Tensor& strains)
 			//updateSolution();
 	
 			i++;
-			/* cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n"
-			<<i<<"			"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
-				<<"  	  "<<dLambda<<"		"<<dK<<"\n"; */ 
+			//cout<<"STEP		"<<"NORM RESIDUUM		"<<"VALUE OF YIELD FUNCTION    "<<"DLAMBDA		"<<"DK\n"
+			if(verbose)
+			{
+				cout<<i<<"			"<<residual.norm()<<"			"<<yieldFunction(stressIncrements)
+				<<"  	  "<<dLambda<<"		"<<dK<<"\n"; 
+			}
+			
 			//cout<<"THE SYMMETRIC PROBLEM IS: "<<ASym;
 			//cout<<residualSym;
 			
@@ -77,6 +87,7 @@ Tensor VonMises::radialReturn(Tensor& strains)
 				cout<<"THE MATRIX IS: "<<A;
 				cout<<"THE RESIDUAL IS: "<<residual;
 				cout<<"THE STRESS STATE IS: "<<stressIncrements;
+				cout<<"THE EQUIVALENT STRESS IS:"<<equivalentStress(stressIncrements)<<"\n";
 				cout<<"THE TRIAL STRESS STATE: "<<trialStress;
 				cout<<"THE FLOW DIRECTION IS: "<<dF_dSigma; 
 			}		
@@ -90,20 +101,21 @@ Tensor VonMises::radialReturn(Tensor& strains)
 			cout<<"THE STRESS STATE IS: "<<stressIncrements;
 			cout<<"DLAMBDA: "<<dLambda<<"\n";
 			cout<<"NORMAL IS: "<<dF_dSigma;
+			cout<<"THE EQUIVALENT STRESS IS:"<<equivalentStress(stressIncrements)<<"\n";
 			cout<<"TESTING THE YIELD FUNCTION: "<<equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK<<"\n";	
 		}
 		if(abs(equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK)>tolerance)
 			cout<<"PLASTIC CORRECTOR DID NOT CONVERGE: "<<abs(equivalentStress(stressIncrements)-yieldStress-plasticModulus*dK)<<"\n";
-		//linearProblemUpdate(stressIncrements);//added later
+		
 		calculatePlasticStrains();
 		updateYieldStress();
 		if(verbose)
 			cout<<"THE YIELD STRESS IS: "<<yieldStress<<"\n";
-		//updateYieldStress();
+		
 		assembleTangentModulus();
 		//cout<<Cep;
 		
-		//return stressIncrements;
+
 	}//if yielding
 	if(yielding<0)
 	{
@@ -196,7 +208,10 @@ double VonMises::plasticWork()
 }
 void VonMises::derivativeFSigma(Tensor& stress)
 {
-	double scalar=0.5/yieldStress;
+	//double scalar=0.5/yieldStress;
+	//Since we are updating the yield stress only after each step, we will use the eq stress
+	//double scalar=0.5/yieldStress;
+	double scalar=0.5/equivalentStress(stress);
 	dF_dSigma[0]=2*stress[0]-stress[1]-stress[2];
 	dF_dSigma[1]=2*stress[1]-stress[0]-stress[2];
 	dF_dSigma[2]=2*stress[2]-stress[1]-stress[0];
@@ -213,7 +228,7 @@ void VonMises::initializeModel()
 	df_dK=plasticModulus;
 	dLambda=0;
 	dK=0;
-	double scalar=0.5/yieldStress;
+	/* double scalar=0.5/yieldStress;
 	Jacobian(0,0)=2;
 	Jacobian(1,1)=2;
 	Jacobian(2,2)=2;
@@ -227,8 +242,93 @@ void VonMises::initializeModel()
 	Jacobian(4,4)=6;
 	Jacobian(5,5)=6;
 	//cout<<Jacobian;
-	Jacobian*=scalar;
+	Jacobian*=scalar; */
+	calculateJacobian(stressIncrements);
 	
+}
+void VonMises::calculateJacobian(Tensor& stress)
+{
+	double f=equivalentStress(stress);
+	double den=0.5;
+	//****************************
+	double sxxd=2*stress[0]-stress[1]-stress[2];
+	double syyd=2*stress[1]-stress[0]-stress[2];
+	double szzd=2*stress[2]-stress[0]-stress[1];
+	double sxyd=6*stress[3];
+	double syzd=6*stress[4];
+	double sxzd=6*stress[5];
+	//****************************
+	
+	//****JACOBIAN DEFINTION, first the diagonal
+	Jacobian(0,0)=2/f-0.5*pow(sxxd,2)/pow(f,3);
+	Jacobian(1,1)=2/f-0.5*pow(syyd,2)/pow(f,3);
+	Jacobian(2,2)=2/f-0.5*pow(szzd,2)/pow(f,3);
+	Jacobian(3,3)=3/f-0.5*pow(sxyd,2)/pow(f,3);
+	Jacobian(4,4)=3/f-0.5*pow(syzd,2)/pow(f,3);
+	Jacobian(5,5)=3/f-0.5*pow(sxzd,2)/pow(f,3);
+	
+	//****Now fill the columns
+	//1st COLUMN
+	Jacobian(1,0)=-1/f-0.5*(sxxd)*(syyd)/pow(f,3);
+	Jacobian(2,0)=-1/f-0.5*(sxxd)*(szzd)/pow(f,3);
+	Jacobian(3,0)=-1/f-0.5*(sxxd)*(sxyd)/pow(f,3);
+	Jacobian(4,0)=-1/f-0.5*(sxxd)*(sxyd)/pow(f,3);
+	Jacobian(5,0)=-1/f-0.5*(sxxd)*(sxzd)/pow(f,3);
+	//2nd COLUMN
+	Jacobian(0,1)=-1/f-0.5*(sxxd)*(syyd)/pow(f,3);
+	Jacobian(2,1)=-1/f-0.5*(szzd)*(syyd)/pow(f,3);
+	Jacobian(3,1)=-1/f-0.5*(sxyd)*(syyd)/pow(f,3);
+	Jacobian(4,1)=-1/f-0.5*(syzd)*(syyd)/pow(f,3);
+	Jacobian(5,1)=-1/f-0.5*(sxzd)*(syyd)/pow(f,3);
+	
+	//3rd COLUMN
+	Jacobian(0,2)=-1/f-0.5*(sxxd)*(szzd)/pow(f,3);
+	Jacobian(1,2)=-1/f-0.5*(szzd)*(syyd)/pow(f,3);
+	Jacobian(3,2)=-1/f-0.5*(sxyd)*(szzd)/pow(f,3);
+	Jacobian(4,2)=-1/f-0.5*(syzd)*(szzd)/pow(f,3);
+	Jacobian(5,2)=-1/f-0.5*(sxzd)*(szzd)/pow(f,3);
+	
+	//4th COLUMN
+	Jacobian(0,3)=-0.5*(sxyd)*(sxxd)/pow(f,3);
+	Jacobian(1,3)=-0.5*(sxyd)*(syyd)/pow(f,3);
+	Jacobian(2,3)=-0.5*(sxyd)*(szzd)/pow(f,3);
+	Jacobian(4,3)=-0.5*(sxyd)*(syzd)/pow(f,3);
+	Jacobian(5,3)=-0.5*(sxyd)*(sxzd)/pow(f,3);
+	
+	//5th COLUMN
+	Jacobian(0,4)=-0.5*(syzd)*(sxxd)/pow(f,3);
+	Jacobian(1,4)=-0.5*(syzd)*(syyd)/pow(f,3);
+	Jacobian(2,4)=-0.5*(syzd)*(szzd)/pow(f,3);
+	Jacobian(3,4)=-0.5*(syzd)*(sxyd)/pow(f,3);
+	Jacobian(5,4)=-0.5*(syzd)*(sxzd)/pow(f,3);
+	
+	//6th COLUMN
+	Jacobian(0,5)=-0.5*(sxzd)*(sxxd)/pow(f,3);
+	Jacobian(1,5)=-0.5*(sxzd)*(syyd)/pow(f,3);
+	Jacobian(2,5)=-0.5*(sxzd)*(szzd)/pow(f,3);
+	Jacobian(3,5)=-0.5*(sxzd)*(sxyd)/pow(f,3);
+	Jacobian(4,5)=-0.5*(sxzd)*(syzd)/pow(f,3);
+	
+	cout<<"THE JACOBIAN WITH STRESSES IS:\n";
+	Jacobian*=den;
+	cout<<Jacobian;
+	/* double scalar=0.5/yieldStress;
+	Jacobian(0,0)=2;
+	Jacobian(1,1)=2;
+	Jacobian(2,2)=2;
+	Jacobian(0,1)=-1;
+	Jacobian(0,2)=-1;
+	Jacobian(1,2)=-1;
+	Jacobian(2,1)=-1;
+	Jacobian(1,0)=Jacobian(0,1);
+	Jacobian(2,0)=Jacobian(0,2);
+	Jacobian(3,3)=6;
+	Jacobian(4,4)=6;
+	Jacobian(5,5)=6;
+	//cout<<Jacobian
+	cout<<"THE JACOBIAN WITH CONSTANTS IS:\n";
+	cout<<Jacobian;
+	Jacobian*=scalar; */
 }
 void VonMises::assembleA(Tensor& previousStress)
 {
@@ -287,6 +387,7 @@ void VonMises::calculateResidual(Tensor& previousStress)
 void VonMises::linearProblemUpdate(Tensor& stressIncrements)
 {
 	//updateYieldStress();
+	calculateJacobian(stressIncrements);
 	derivativeFSigma(stressIncrements);
 	calculatePlasticStrains();
 	assembleA(stressIncrements);

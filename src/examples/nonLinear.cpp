@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 	
 	
 	
-	NLSolverBiCGStab solver(ass,10e-14,10,20);
+	NLSolverBiCGStab solver(ass,10e-14,15,20);
 	solver.printNLSolver();
 	solver.solve2();
 	

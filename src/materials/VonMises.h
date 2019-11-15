@@ -98,6 +98,7 @@ class VonMises:public ElastoPlasticMaterial
 	protected:
 		//THIS FUNCTIONS SET UP THE VON MISES MODEL AND THE VALUES USED FOR THE ALGEBRAIC CALCULATIONS
 		void initializeModel();
+		void calculateJacobian(Tensor& stressIncrement);
 		void derivativeFSigma(Tensor& stress);
 		void updateYieldStress();
 		void assembleA(Tensor& previousStress);
