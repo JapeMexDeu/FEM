@@ -93,7 +93,7 @@ class Matrix
 					Augmented(i,j)=data[i][j];
 				}
 			}
-			//std::cout<<Augmented;
+			std::cout<<Augmented;
 			//2.1 Assign identity to the augmented matrix
 			for(int i=0;i<order;i++)
 			{
@@ -103,7 +103,7 @@ class Matrix
 						Augmented(i,j)=1;
 				}
 			}
-			//std::cout<<Augmented;
+			std::cout<<Augmented;
 			//3.- Interchange of rows from the last row upwards
 			Vector<T> row(order*2);
 			for(int i=order-1;i>0;--i)
@@ -129,7 +129,7 @@ class Matrix
 					}
 				}//endif 
 			}
-			//std::cout<<Augmented;
+			std::cout<<Augmented;
 			//4.- Make pivot zero
 			double temp;
 			for(int i=0;i<order;i++)
@@ -146,7 +146,7 @@ class Matrix
 					}
 				}
 			}
-			//std::cout<<Augmented;
+			std::cout<<Augmented;
 			//5.-Eliminate diagonal of this matrix inside Augmented
 			for(int i=0;i<order;i++)
 			{
@@ -156,7 +156,7 @@ class Matrix
 					Augmented(i,j)=Augmented(i,j)/temp;
 				}
 			}
-			//std::cout<<Augmented;
+			std::cout<<Augmented;
 			//pack it up and return Inverse
 			for(int i=0;i<order;i++)
 			{
@@ -380,7 +380,7 @@ std::ostream& operator<<(std::ostream& out, const Matrix<T> m)
 	{
 		for(int j=0;j<m.getColumns();j++)
 		{
-			out<<std::setprecision(3)<<std::setw(10)<<std::right;
+			out<<std::setprecision(4)<<std::setw(10)<<std::right;
 			out<<m(i,j)<<"   ";
 		}
 		out<<"\n";

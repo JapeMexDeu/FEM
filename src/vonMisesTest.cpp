@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	cout<<"TESTING THE MATERIAL\n";
 	VonMisesPlaneStress mat1(210,0.25, 350, 1);
 	VonMisesPlaneStrain mat2(210, 0.25, 24, 0);
-	Tensor strainState {6,5,0,0,0,0};
+	Tensor strainState {0.15,0.15,0,0,0,0};
 	cout<<"THE STRAIN STATE IS: "<<strainState;
 	cout<<mat1;
 	cout<<mat2;

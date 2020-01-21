@@ -27,7 +27,7 @@ void VonMisesPlaneStrain::assembleTensors(Vector<double>& v, Tensor& strains, Te
 	//HERE WE CHECK for plastic behavior with the strains
 	if(true)
 		stresses=radialReturn(strains);
-	//setConstitutiveMatrix();
+	setConstitutiveMatrix();
 
 	
 }

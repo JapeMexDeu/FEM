@@ -11,6 +11,7 @@
 #ifndef ARCLENGTH_H
 #define ARCLENGTH_H
 
+#include"descent/BiCGStab.h"
 #include"../fem/ImplAssembly.h"
 #include"LSolver.h"
 #include"../plotter/gnuplot_i.hpp"
@@ -19,32 +20,60 @@
 class ArcLength
 {
 	public: 
-		ArcLength(ImplAssembly& assembly, double ds=0.0001, double tol=10e-10, int maxIterations=10);
+		ArcLength(ImplAssembly& assembly, double ds=0.0001, int maxSteps=1, 
+				  double tol=10e-10, int maxIterations=10);
 		
 	public:
-		Vector<Vector<double>> steps;/**<Stores the solution increment vector from every step*/
+
 		void solve();
 		void printArcLength();
 		
+	public:
+		bool debug;
+		bool verbose;
+		
 	protected:
-		ConjugateGradientDescent cg=ConjugateGradientDescent(Kt,r);
+
 		//MEMBER ATTRIBUTES PROPER TO A NONLINEAR INCREMENTAL APPROACH
 		ImplAssembly& Assembly;
-		LSolver* lSolver;/**<Linear Solver that solves linearized problem for the displacement*/
+		//LSolver* lSolver;/**<Linear Solver that solves linearized problem for the displacement*/
 		Matrix<double>& Kt;/**<Reference to the matrix stored in the Assembly*/
 		Vector<double> u_total;/**<Accumulation of solution vectors per step*///also called u_current
-		Vector<double> r;/**<Represents \f$f_ext-f_int\f$*/
-		double tolerance;/**<minimal value of norm searched for*/
+		Vector<double> r;/**<Represents \f$f_{ext}-f_{int}\f$*/
+		Vector<double> fext;/**<Normalized external load vector*/
+		Vector<double> fint;/**<Internal force vector*/
+		double tolerance;/**<Error reduction target*/
 		int maxIterations;/**<control max amount of iterations*/
 		double ds;/**<Arc length user-defined parameter*/
+		double dLambda;
+		double Lambda;
+		
+		Vector<double> uprev;
+		double lambdaprev;
+		
+		
 	private:
-		void setLSolver();
+		/*!\brief Implements formula \f$ &Delta a_{j+1}=&Delta a_{j}+d&lambda_{j+1}da^{I}_{j+1}+da^{II}_{j+1}
+		 */
+		void updateValues();
+		/*!\brief utility function to assign non-zero initial values and resize according to problem size
+		 */
 		void initializeSolver();
-		void zero();
+		/*!\brief Utility function to initialize to zero
+		 */
+		void initialValues();
+		
 	private:
-		int dofs;
-		Vector<double> aI;
-		Vector<double> aII;
+		int lIts;/**<Counter for amount of iterations per step*/
+		int steps;/**<Bookkeeping how many load steps so far*/
+		int maxSteps;
+		double normfext;/**<Store the norm of the external force*/
+		double maxLambda;/**<Maximum value of lambda to be reached*/
+		int dofs;/**<Bookkeeping size of problem*/
+		Vector<double> daI;/**<Equivalent to \f$K^{-1}f_{ext}\f$*/
+		Vector<double> daII;/**<Equivalent to \f$K^{-1}r\f$*/
+		Vector<double> da;/**<Increment to nodal values*/
+		
 		
 	
 };

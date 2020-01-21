@@ -40,7 +40,7 @@ set(SOURCES src/algebra/Vector.h
 			src/solver/LSolver.cpp
 			src/solver/NLSolverCG.cpp
 			src/solver/NLSolverBiCGStab.cpp
-			
+			src/solver/ArcLength.cpp
 			
 			src/tensors/Tensor.cpp
 			src/tensors/Stress.cpp
@@ -65,12 +65,13 @@ set(SOURCES src/algebra/Vector.h
 add_library(FEM ${SOURCES})
 
 #creation of project
-add_executable(fem_test src/vonMisesTest.cpp)
+#add_executable(fem_test src/vonMisesTest.cpp)
 #add_executable(fem_test src/plot_test.cpp)
 #add_executable(fem_test src/2dSquare.cpp)
 #add_executable(fem_test src/vector_test.cpp)
 #add_executable(fem_test src/examples/vonMisesSquare.cpp)
 #add_executable(fem_test src/examples/meshSets.cpp)
 #add_executable(fem_test src/examples/nonLinear.cpp)
+add_executable(fem_test src/examples/arcLengthTest.cpp)
 target_link_libraries(fem_test FEM)
 target_include_directories(fem_test PUBLIC src/ src/plotter/)
